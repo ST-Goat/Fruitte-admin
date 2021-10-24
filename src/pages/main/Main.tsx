@@ -12,7 +12,7 @@ const Main: React.FC = () =>{
       <div className="flex-row h-full w-full">
         <Header className={'w-full'}/>
         <MainContainer className={'h-4/5'} />
-        <Footer className={''} />
+        <Footer/>
       </div>
      </div>
    </div>

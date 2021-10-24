@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Redirect, Route, RouteProps, useLocation } from "react-router";
 import { RootState } from "../../../features/store";
