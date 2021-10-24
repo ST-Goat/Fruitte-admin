@@ -9,7 +9,7 @@ const ProtectedRoute: React.FC<RouteProps> = (props) =>{
   const currentLocation = useLocation();
   // get auth status from state
   const authStatus = useSelector((state:RootState) =>{
-    return "state";
+    return "Authenticated";
   })
   if( authStatus === 'Authenticated'){
     return <Route {...props} />
