@@ -1,0 +1,12 @@
+{
+    "common": {
+        "email": "Email",
+        "password": "Password"
+    },
+    "pages": {
+        "login": {
+            "title": "Admin",
+            "submit": "Login"
+        }
+    }
+}
