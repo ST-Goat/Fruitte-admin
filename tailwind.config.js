@@ -27,6 +27,13 @@ module.exports = {
           200: "#d2eff8",
           500: "#3fc1e8",
           600: "#22a2c8",
+          default: "#4C9C2E"
+        },
+        secondary1: {
+          default: "#483729"
+        },
+        secondary2: {
+          default: "#003057"
         },
         opacity: {
           white50: "rgba(255, 255, 255, 0.5)",
