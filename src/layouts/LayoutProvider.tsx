@@ -22,7 +22,7 @@ const LayoutProvider = (props: { children: React.ReactNode }) => {
         <NavBar />
         <div className="flex">
           <SidebarNav />
-          <div className="flex-grow p-4">{props.children}</div>
+          <div className="flex-grow p-8">{props.children}</div>
         </div>
       </LayoutValueContext.Provider>
     </LayoutDispatchContext.Provider>

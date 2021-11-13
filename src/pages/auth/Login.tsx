@@ -10,7 +10,8 @@ import {
 } from "formik";
 import EyesHide from "assets/icons/eyes-hide.svg";
 import EyesShow from "assets/icons/eyes-show.svg";
-import Input from "pages/common/Form/Input";
+import Input from "pages/common/Formik/Input";
+import NavBar from "pages/common/NavBar";
 
 function validateEmail(value: string) {
   let error;
@@ -51,8 +52,9 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login__wrapper pt-32">
-      <div className="login__form-wrapper w-1/3 m-auto bg-grey-100">
+    <div className="login__wrapper">
+      <NavBar />
+      <div className="login__form-wrapper pt-32 w-1/3 m-auto bg-grey-100">
         <h1 className="text-5xl text-center font-bold mb-16">
           {t("pages.login.title")}
         </h1>

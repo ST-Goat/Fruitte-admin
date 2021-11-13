@@ -16,6 +16,7 @@ import "./index.scss";
 const SidebarNav: React.FC = () => {
   const location = useLocation();
   const [isCollapse, isCollapseSet] = useState(false);
+
   return (
     <div id="sidebar__nav">
       <Sidebar collapse={isCollapse}>
@@ -31,16 +32,20 @@ const SidebarNav: React.FC = () => {
             <div
               className={cn(
                 "transition duration-500 ease-in-out overflow-hidden",
-                "text-base flex-grow",
+                "text-xl font-bold flex-grow",
                 !isCollapse ? "block" : "hidden"
               )}
             >
-              <Text color={Color.WHITE}>Main Menu</Text>
+              <Text color={Color.WHITE}>MAIN MENU</Text>
             </div>
             <div
-              className={cn("menu cursor-pointer", {
-                "menu-collapsed": isCollapse,
-              })}
+              className={cn(
+                "menu cursor-pointer",
+                "flex items-center justify-center",
+                {
+                  "menu-collapsed": isCollapse,
+                }
+              )}
               onClick={() => isCollapseSet(!isCollapse)}
             >
               <Icon name={isCollapse ? "circle-arrow-right" : "nav-menu"} />
