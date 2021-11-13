@@ -1,12 +1,26 @@
 {
     "common": {
         "email": "Email",
-        "password": "Password"
+        "password": "Password",
+        "mainMenu": "MAIN MENU",
+        "search": "Search"
     },
     "pages": {
         "login": {
             "title": "Admin",
             "submit": "Login"
+        },
+        "dashboard": {
+            "title": "Dashboard"
+        },
+        "userManagement": {
+            "title": "Common User Management",
+            "searchPlaceHolder": "Search by name, email, phone number...",
+            "name": "Name",
+            "email": "Email",
+            "phone": "Phone",
+            "status": "Status",
+            "createDate": "Create Date"
         }
     }
 }

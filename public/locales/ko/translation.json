@@ -1,12 +1,26 @@
 {
     "common": {
         "email": "아이디",
-        "password": "비밀번호"
+        "password": "비밀번호",
+        "mainMenu": "MAIN MENU",
+        "search": "검색"
     },
     "pages": {
         "login": {
             "title": "관리자",
             "submit": "로그인"
+        },
+        "dashboard": {
+            "title": "대쉬보드"
+        },
+        "userManagement": {
+            "title": "회원 관리",
+            "searchPlaceHolder": "Search by name, email, phone number...",
+            "name": "이름",
+            "email": "이메일",
+            "phone": "전화번호",
+            "status": "상태",
+            "createDate": "생성일"
         }
     }
 }

@@ -4,19 +4,26 @@ import "./App.scss";
 import LayoutProvider from "./layouts/LayoutProvider";
 import ProtectedRoute from "./pages/auth/components/ProtectedRoute";
 import Login from "./pages/auth/Login";
-import Main from "./pages/main/Main";
 
-import { homepageUrl, loginUrl } from "./routes";
+import { menuItems } from "shared/menu.item";
+import { loginUrl } from "./routes";
 
 const App: React.FC = () => {
   return (
     <div className="flex flex-col">
-      <LayoutProvider>
-        <Switch>
-          <Route path={loginUrl} component={Login} />
-          <ProtectedRoute path={homepageUrl} component={Main} />
-        </Switch>
-      </LayoutProvider>
+      <Switch>
+        <Route path={loginUrl} component={Login} />
+        <LayoutProvider>
+          {menuItems.map((item) => (
+            <ProtectedRoute
+              {...item}
+              key={item.key}
+              path={item.to}
+              component={item.component}
+            />
+          ))}
+        </LayoutProvider>
+      </Switch>
     </div>
   );
 };

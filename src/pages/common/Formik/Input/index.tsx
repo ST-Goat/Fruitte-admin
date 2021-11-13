@@ -27,7 +27,7 @@ function Input({
   EndIcon,
   StartIcon,
   styledWrapper,
-  styledInput,
+  styledInput = "w-full py-2 px-4 rounded-xl shadow-md",
   styledIconWrapper,
   onClickIcon,
 }: InputProps) {
@@ -44,7 +44,7 @@ function Input({
           <input
             type={type}
             autoFocus={autoFocus}
-            className={cn("w-full py-2 px-4 rounded-xl shadow-md", styledInput)}
+            className={styledInput}
             placeholder={placeholder}
             {...field}
             onChange={(value) => {

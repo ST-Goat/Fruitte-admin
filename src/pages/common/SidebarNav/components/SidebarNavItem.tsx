@@ -5,6 +5,7 @@ import Icon from "pages/common/components/Icon";
 import { Link } from "pages/common/components/Link";
 import SidebarMenuItem from "./SidebarMenuItem";
 import SidebarSubMenuItem from "./SidebarSubMenuItem";
+import { useTranslation } from "react-i18next";
 
 type SidebarNavItemProps = {
   k?: string;
@@ -21,6 +22,7 @@ const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
   collapsed,
   location,
 }) => {
+  const { t } = useTranslation();
   return (
     <>
       {items.map((item, index) => {
@@ -35,12 +37,12 @@ const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
                 ) : null
               }
               collapsed={collapsed}
-              open={
-                !!matchPath(
+              open={Boolean(
+                matchPath(
                   location.pathname,
                   `${pathPrefix ? pathPrefix : ""}${item.to}`
                 )
-              }
+              )}
             >
               <SidebarNavItem
                 items={item.items}
@@ -56,25 +58,30 @@ const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
         const isActive =
           `${pathPrefix ? pathPrefix : ""}${item.to}` === homepageUrl
             ? location.pathname === homepageUrl
-            : !!matchPath(
-                location.pathname,
-                `${pathPrefix ? pathPrefix : ""}${item.to}`
+            : Boolean(
+                matchPath(
+                  location.pathname,
+                  `${pathPrefix ? pathPrefix : ""}${item.to}`
+                )
               );
         return (
-          <SidebarMenuItem
+          <Link
             key={`${k + "_" ?? ""}${item.key}_${index}`}
-            icon={
-              item.icon ? (
-                <Icon name={item.icon} className={!collapsed ? "mr-4" : ""} />
-              ) : null
-            }
-            active={isActive}
-            collapsed={collapsed}
+            to={`${pathPrefix ? pathPrefix : ""}${item.to}`}
+            target=""
           >
-            <Link to={`${pathPrefix ? pathPrefix : ""}${item.to}`} target="">
-              {item.label}
-            </Link>
-          </SidebarMenuItem>
+            <SidebarMenuItem
+              icon={
+                item.icon ? (
+                  <Icon name={item.icon} className={!collapsed ? "mr-4" : ""} />
+                ) : null
+              }
+              active={isActive}
+              collapsed={collapsed}
+            >
+              {t(item.label)}
+            </SidebarMenuItem>
+          </Link>
         );
       })}
     </>
