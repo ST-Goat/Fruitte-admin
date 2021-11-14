@@ -3,7 +3,8 @@
         "email": "아이디",
         "password": "비밀번호",
         "mainMenu": "MAIN MENU",
-        "search": "검색"
+        "search": "검색",
+        "noData": "데이터 없음"
     },
     "pages": {
         "login": {
@@ -20,7 +21,16 @@
             "email": "이메일",
             "phone": "전화번호",
             "status": "상태",
-            "createDate": "생성일"
+            "createDate": "생성일",
+            "userDetails": "회원 상세",
+            "deleteMember": "회원 삭제",
+            "resetPassword": "비밀번호 초기화",
+            "farmAuthorization": "농장 권한",
+            "date": "날짜",
+            "farmInformation": "농장 정보",
+            "price": "금액",
+            "reservationDate": "예약일",
+            "cancelReservation": "예약 취소"
         }
     }
 }

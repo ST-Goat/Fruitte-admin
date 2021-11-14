@@ -1,5 +1,6 @@
 import React from "react";
 import Pagination from "@mui/material/Pagination";
+
 import { PaginationDefault } from "shared/comom.enum";
 
 export type TablePaginationProps = {
@@ -19,20 +20,21 @@ function TablePaginations({
   handleChangePage,
   handleChangeRowsPerPage,
 }: TablePaginationProps) {
+  const start = (page - 1) * rowsPerPage + 1;
+  const end = page * rowsPerPage;
   return (
     <>
       {children}
       <div className="flex justify-between w-full py-3 pl-2">
         <div>
-          <p>{`${page * rowsPerPage} -  ${
-            (page + 1) * rowsPerPage
-          } of ${count}`}</p>
+          <p>{`${start} -  ${end > count ? count : end} of ${count}`}</p>
         </div>
         <Pagination
           siblingCount={0}
           boundaryCount={2}
-          count={count}
+          count={Boolean(count) ? Math.ceil(count / rowsPerPage) : 0}
           page={page}
+          color="primary"
           onChange={(event: React.ChangeEvent<unknown>, value: number) =>
             handleChangePage(value)
           }

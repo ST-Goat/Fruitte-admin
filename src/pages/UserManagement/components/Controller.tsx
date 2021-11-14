@@ -1,13 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { useCallback, useState } from "react";
 
 import Autocomplete from "@mui/material/Autocomplete";
 import SearchField from "./SearchField";
-import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 
-import { useDebounce } from "utilities";
+import { Filters } from "../Container";
+import ButtonCustomizer from "pages/common/Button";
 
 const listInfor = [
   { id: 1, label: "Name", value: "name" },
@@ -20,35 +19,16 @@ const listStatus = [
   { id: 2, label: "DeActive", value: "deactive" },
   { id: 3, label: "Request", value: "request" },
 ];
-function Controller({ onSubmit }: { onSubmit: (data: any) => void }) {
+function Controller({
+  filters,
+  onChange,
+  onSubmit,
+}: {
+  filters: Filters;
+  onChange: (name: string, value: string | undefined) => void;
+  onSubmit: () => void;
+}) {
   const { t } = useTranslation();
-  const [filters, setFilters] = useState<{
-    search: string;
-    infor: string;
-    status: string;
-  }>({
-    search: "",
-    infor: "",
-    status: "",
-  });
-  const searchDebounce = useDebounce(filters.search, 300);
-
-  const handleChange = useCallback(
-    (name: string, value: string | undefined) => {
-      console.log(name, value);
-      setFilters((prev) => ({ ...prev, [name]: value }));
-    },
-    []
-  );
-  const handleSubmit = useCallback(() => {
-    // fetch api with data
-    const dataSubmit = {
-      search: searchDebounce,
-      infor: filters.infor,
-      status: filters.status,
-    };
-    onSubmit(dataSubmit);
-  }, []);
   return (
     <div className="mt-6">
       <Grid container spacing={2}>
@@ -65,19 +45,19 @@ function Controller({ onSubmit }: { onSubmit: (data: any) => void }) {
             <SearchField
               name="search"
               onChange={(e: React.ChangeEvent<any>) =>
-                handleChange(e.target.name, e.target.value)
+                onChange(e.target.name, e.target.value)
               }
               placeholder={t("pages.userManagement.searchPlaceHolder")}
             />
           </Grid>
           <Grid item>
-            <Button
-              style={{ height: "40px" }}
-              variant="contained"
-              onClick={handleSubmit}
+            <ButtonCustomizer
+              variant="primary"
+              className="text-white font-bold"
+              onClick={onSubmit}
             >
               {t("common.search")}
-            </Button>
+            </ButtonCustomizer>
           </Grid>
         </Grid>
         <Grid
@@ -95,7 +75,7 @@ function Controller({ onSubmit }: { onSubmit: (data: any) => void }) {
               size="small"
               options={listInfor}
               getOptionLabel={(option) => option.label}
-              onChange={(e, value) => handleChange("infor", value?.value)}
+              onChange={(e, value) => onChange("infor", value?.value)}
               renderInput={(params: any) => (
                 <TextField {...params} name="infor" label="Field" />
               )}
@@ -107,7 +87,7 @@ function Controller({ onSubmit }: { onSubmit: (data: any) => void }) {
               size="small"
               options={listStatus}
               getOptionLabel={(option) => option.label}
-              onChange={(e, value) => handleChange("status", value?.value)}
+              onChange={(e, value) => onChange("status", value?.value)}
               renderInput={(params: any) => (
                 <TextField {...params} name="status" label="Status" />
               )}

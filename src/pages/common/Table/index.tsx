@@ -1,3 +1,4 @@
+import React from "react";
 import { styled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 
@@ -8,6 +9,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Skeleton from "@mui/material/Skeleton";
+import { PaginationDefault } from "shared/comom.enum";
+
+import "./index.scss";
 
 const StyledTableCell = styled(TableCell)(({ theme, ...props }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -16,29 +21,17 @@ const StyledTableCell = styled(TableCell)(({ theme, ...props }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
+    cursor: "pointer",
   },
   ...props,
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
+  borderBottom: "2px solid #bbc1c6",
+  "&:last-child td, &:last-child": {
     border: 0,
   },
 }));
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
 
 type StyledHead = {
   [key: string]: any;
@@ -59,16 +52,38 @@ export type HeaderItem = {
 
 export type DataItem = {
   id: string | number;
-} & { [key: string]: string | number | React.ReactElement };
+} & { [key: string]: any };
 
 export type TableCustomizerProps = {
   headers: Array<HeaderItem>;
   data: Array<DataItem>;
+  handleClickRow?: (item: DataItem) => void;
+  hover?: Boolean;
+  loading: Boolean;
+  totalRow?: number;
+  RowLoadingCustom?: React.ReactElement;
+};
+
+const NewHOC = (PassedComponent: any) => {
+  return class extends React.Component {
+    render() {
+      return (
+        <div>
+          <PassedComponent {...this.props} />
+        </div>
+      );
+    }
+  };
 };
 
 export default function TableCustomizer({
   headers,
   data,
+  handleClickRow,
+  hover = false,
+  loading = false,
+  totalRow = PaginationDefault.PAGE,
+  RowLoadingCustom,
 }: TableCustomizerProps) {
   const { t } = useTranslation();
 
@@ -89,15 +104,59 @@ export default function TableCustomizer({
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
-            <StyledTableRow key={row.id}>
-              {headers.map((head, i) => (
-                <StyledTableCell align="center" {...head.styledBodyCol} key={i}>
-                  {row[head.keyData] ?? ""}
-                </StyledTableCell>
+          {Boolean(loading) ? (
+            <>
+              {Array.from(Array(totalRow).keys()).map((item) => (
+                <TableRow key={`skeleton__loading-${item}`}>
+                  {Boolean(RowLoadingCustom)
+                    ? RowLoadingCustom
+                    : headers.map((head, i) => (
+                        <TableCell align="center" key={i}>
+                          <Skeleton
+                            sx={{ bgcolor: "grey.400" }}
+                            variant="rectangular"
+                            animation="wave"
+                          />
+                        </TableCell>
+                      ))}
+                </TableRow>
               ))}
-            </StyledTableRow>
-          ))}
+            </>
+          ) : data.length > 0 ? (
+            data.map((row) => (
+              <StyledTableRow
+                className={hover ? "row__hover-bg-grey" : ""}
+                onClick={() => handleClickRow && handleClickRow(row)}
+                key={row.id}
+              >
+                {headers.map((head, i) => {
+                  const isComponent = typeof row[head.keyData] === "function";
+                  const NewContent = !isComponent
+                    ? () => <div />
+                    : NewHOC(row[head.keyData]);
+                  return (
+                    <React.Fragment key={i}>
+                      {isComponent ? (
+                        <TableCell align="center" {...head.styledBodyCol}>
+                          <NewContent />
+                        </TableCell>
+                      ) : (
+                        <StyledTableCell align="center" {...head.styledBodyCol}>
+                          {row[head.keyData] ?? ""}
+                        </StyledTableCell>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </StyledTableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={headers.length} align="center">
+                {t("common.noData")}
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

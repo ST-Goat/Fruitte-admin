@@ -44,6 +44,8 @@ import { ReactComponent as CBChecked } from "assets/icons/cb-checked.svg";
 import { ReactComponent as CBUncheck } from "assets/icons/cb-uncheck.svg";
 import { ReactComponent as AddPrimary } from "assets/icons/add-primary.svg";
 import { ReactComponent as RemoveBlack } from "assets/icons/remove-black.svg";
+import { ReactComponent as KoFlag } from "assets/icons/korea-flag.svg";
+import { ReactComponent as EnFlag } from "assets/icons/english-flag.svg";
 
 export const ICON_SET: Record<string, FC<SVGProps<SVGSVGElement>>> = {
   "eyes-hide": EyesHide,
@@ -91,4 +93,6 @@ export const ICON_SET: Record<string, FC<SVGProps<SVGSVGElement>>> = {
   "cb-uncheck": CBUncheck,
   "add-primary": AddPrimary,
   "remove-black": RemoveBlack,
+  "ko-flag": KoFlag,
+  "en-flag": EnFlag,
 };
