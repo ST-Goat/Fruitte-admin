@@ -3,7 +3,8 @@
         "email": "Email",
         "password": "Password",
         "mainMenu": "MAIN MENU",
-        "search": "Search"
+        "search": "Search",
+        "noData": "No Data"
     },
     "pages": {
         "login": {
@@ -20,7 +21,16 @@
             "email": "Email",
             "phone": "Phone",
             "status": "Status",
-            "createDate": "Create Date"
+            "createDate": "Create Date",
+            "userDetails": "User Details",
+            "deleteMember": "Delete member",
+            "resetPassword": "Reset Password",
+            "farmAuthorization": "Farm Authorization",
+            "date": "Date",
+            "farmInformation": "Farm Information",
+            "price": "Price",
+            "reservationDate": "Reservation Date",
+            "cancelReservation": "Cancel Reservation"
         }
     }
 }

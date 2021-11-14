@@ -1,12 +1,26 @@
+import { useHistory } from "react-router";
+import { useLocation } from "react-router-dom";
+
 import BreadCrumb from "pages/common/BreadCrumb";
 import TablePaginations from "pages/common/Paginations";
 import Controller from "./components/Controller";
 import TableCustomizer from "pages/common/Table";
 
 import type { TablePaginationProps } from "pages/common/Paginations";
+import type { Filters } from "./Container";
 
-type UserManagementViewProps = Omit<TablePaginationProps, "children"> & {
-  handleFilter: (data: any) => void;
+import type { UserListResponse } from "services/userManagement";
+import { gettotalRowCurrent } from "utilities";
+
+type UserManagementViewProps = Omit<
+  Omit<TablePaginationProps, "children">,
+  "count"
+> & {
+  filters: Filters;
+  users: UserListResponse;
+  loading: Boolean;
+  submitFilters: () => void;
+  onChangeFilters: (name: string, value: any) => void;
 };
 
 const headers = [
@@ -54,39 +68,29 @@ const headers = [
   },
 ];
 
-const fakeData = [
-  {
-    id: "Lizzie Wang",
-    name: "Lizzie Wang",
-    email: "lz.wang@gmail.com",
-    phone: "010-1231-1234",
-    status: "active",
-    create: "10/23/2021",
-  },
-  {
-    id: "Sean Tran",
-    name: "Sean Tran",
-    email: "sean@gmail.com",
-    phone: "010-1231-1234",
-    status: "active",
-    create: "10/23/2021",
-  },
-];
-
 function UserManagementView({
-  count,
+  filters,
+  submitFilters,
+  onChangeFilters,
+  users,
+  loading,
   rowsPerPage,
   page,
   handleChangePage,
-  handleFilter,
 }: UserManagementViewProps) {
+  const history = useHistory();
+  const location = useLocation();
   return (
     <div>
       <BreadCrumb />
-      <Controller onSubmit={handleFilter} />
+      <Controller
+        filters={filters}
+        onSubmit={submitFilters}
+        onChange={onChangeFilters}
+      />
       <div className="mt-6">
         <TablePaginations
-          count={count}
+          count={users.total}
           rowsPerPage={rowsPerPage}
           page={page}
           handleChangePage={handleChangePage}
@@ -94,7 +98,16 @@ function UserManagementView({
           <div className="rounded-md border-2 border-grey-300">
             <TableCustomizer
               headers={headers}
-              data={fakeData.map((user, i) => ({ ...user, no: page * 10 + i }))}
+              hover
+              loading={loading}
+              totalRow={gettotalRowCurrent(users.total, page, rowsPerPage)}
+              data={users.data.map((item, i) => ({
+                ...item,
+                no: (page - 1) * rowsPerPage + i + 1,
+              }))}
+              handleClickRow={(row) => {
+                history.push(`${location.pathname}/${row.id}`);
+              }}
             />
           </div>
         </TablePaginations>

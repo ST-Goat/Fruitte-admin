@@ -75,7 +75,7 @@ export enum UserStatus {
 }
 
 export enum PaginationDefault {
-  PAGE = 0,
+  PAGE = 1,
   PAGE_SIZE = 10,
 }
 

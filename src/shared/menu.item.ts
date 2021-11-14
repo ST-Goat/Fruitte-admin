@@ -1,7 +1,8 @@
-import { UseManagemetUrl } from "routes";
+import { userManagementUrl } from "routes";
 
 import Main from "pages/main/Main";
 import UserManagement from "pages/UserManagement";
+import UserDetail from "pages/UserManagement/UserDetail";
 
 export type MenuItemProps = {
   key: string;
@@ -9,6 +10,7 @@ export type MenuItemProps = {
   to: string;
   icon?: string;
   items?: MenuItemProps[];
+  subPath?: MenuItemProps[];
   exact?: boolean;
   component: React.FC<any>;
 };
@@ -24,7 +26,16 @@ export const menuItems: MenuItemProps[] = [
   {
     key: "user-management",
     label: "pages.userManagement.title",
-    to: UseManagemetUrl,
+    to: userManagementUrl,
     component: UserManagement,
+    exact: true,
+    subPath: [
+      {
+        key: "user-management-detail",
+        label: "",
+        to: `${userManagementUrl}/:id`,
+        component: UserDetail,
+      },
+    ],
   },
 ];
