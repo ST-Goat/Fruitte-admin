@@ -24,9 +24,6 @@ module.exports = {
       },
       colors: {
         primary: {
-          200: "#d2eff8",
-          500: "#3fc1e8",
-          600: "#22a2c8",
           default: "#4C9C2E"
         },
         secondary1: {
@@ -42,9 +39,11 @@ module.exports = {
           500: "#262c30",
         },
         grey: {
-          100: "#e3e7ea",
-          400: "#bbc1c6",
-          500: "#76848d",
+          100: "#E0E0E0",
+          300: "#BDBDBD",
+          500: "#4F4F4F",
+          700: "#333333",
+          default: "#828282"
         },
         red: {
           100: "#FD7474",
@@ -58,12 +57,21 @@ module.exports = {
           300: "#4370C8",
           500: "#2F80ED",
         },
+        black: {
+          500: '#282828',
+          700: '#1D1D1D',
+          default: "#000000"
+        },
+        white: {
+          default: "#FFFFFF"
+        },
         info: {
           100: "#E6F1FF",
           200: "#A9D0FF",
           500: "#459AFE",
           700: "#0171F4",
           800: "#0152B2",
+          default: "#2F80ED"
         },
         success: {
           100: "#D5F6E3",
@@ -71,6 +79,7 @@ module.exports = {
           500: "#12b782",
           700: "#249E58",
           800: "#1A7441",
+          default: "#27AE60"
         },
         warning: {
           100: "#FFECCC",
@@ -78,6 +87,7 @@ module.exports = {
           500: "#FFB53B",
           700: "#CC7F00",
           800: "#804F00",
+          default: "#E2B93B"
         },
         error: {
           100: "#FEE8E7",
@@ -85,6 +95,7 @@ module.exports = {
           500: "#F44336",
           700: "#D5190C",
           800: "#C1170B",
+          default: "#EB5757"
         },
       },
       padding: {

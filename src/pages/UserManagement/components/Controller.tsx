@@ -60,7 +60,7 @@ function Controller({
             </ButtonCustomizer>
           </Grid>
         </Grid>
-        <Grid
+        {/* <Grid
           container
           direction="row"
           justifyContent="flex-start"
@@ -93,7 +93,7 @@ function Controller({
               )}
             />
           </Grid>
-        </Grid>
+        </Grid> */}
       </Grid>
     </div>
   );

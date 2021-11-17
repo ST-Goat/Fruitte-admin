@@ -3,6 +3,7 @@ import { Field, FieldInputProps, FieldMetaProps } from "formik";
 import cn from "classnames";
 
 export type InputProps = {
+  id?: string | undefined;
   name: string;
   type: string;
   onChange?: (value: any) => void;
@@ -18,6 +19,7 @@ export type InputProps = {
 };
 
 function Input({
+  id,
   name,
   type,
   placeholder,
@@ -40,8 +42,9 @@ function Input({
         field: FieldInputProps<any>;
         meta: FieldMetaProps<any>;
       }) => (
-        <div className={cn("relative mb-6", styledWrapper)}>
+        <div className={cn("relative", styledWrapper)}>
           <input
+            id={id}
             type={type}
             autoFocus={autoFocus}
             className={styledInput}
