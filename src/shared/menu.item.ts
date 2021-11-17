@@ -1,8 +1,10 @@
-import { userManagementUrl } from "routes";
+import { userManagementUrl, farmManagementUrl } from "routes";
 
 import Main from "pages/main/Main";
 import UserManagement from "pages/UserManagement";
 import UserDetail from "pages/UserManagement/UserDetail";
+import FarmManagement from "pages/FarmManagement";
+import FarmDetail from "pages/FarmManagement/FarmDetail";
 
 export type MenuItemProps = {
   key: string;
@@ -35,6 +37,21 @@ export const menuItems: MenuItemProps[] = [
         label: "",
         to: `${userManagementUrl}/:id`,
         component: UserDetail,
+      },
+    ],
+  },
+  {
+    key: "farm-management",
+    label: "pages.farmManagement.title",
+    to: farmManagementUrl,
+    component: FarmManagement,
+    exact: true,
+    subPath: [
+      {
+        key: "farm-management-detail",
+        label: "",
+        to: `${farmManagementUrl}/:id`,
+        component: FarmDetail,
       },
     ],
   },

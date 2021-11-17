@@ -4,7 +4,9 @@
         "password": "Password",
         "mainMenu": "MAIN MENU",
         "search": "Search",
-        "noData": "No Data"
+        "noData": "No Data",
+        "goBack": "Go Back",
+        "send": "Send"
     },
     "pages": {
         "login": {
@@ -31,6 +33,23 @@
             "price": "Price",
             "reservationDate": "Reservation Date",
             "cancelReservation": "Cancel Reservation"
+        },
+        "farmManagement": {
+            "title": "Reservation Management",
+            "reservationList": "Reservation List",
+            "farmName": "Farm Name",
+            "experienceName": "Experiance Name",
+            "userName": "User Name",
+            "productName": "Product Name",
+            "price": "Price",
+            "paymentStatus": "Payment Status",
+            "refundAmount": "Refund Amount",
+            "reservationDate": "Reservation Date",
+            "feedback": "Feedback",
+            "reservationDetail": "Reservation Detail",
+            "cancelReservation": "Cancel Reservation",
+            "complete": "complete",
+            "process": "process"
         }
     }
 }

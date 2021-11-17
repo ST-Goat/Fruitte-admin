@@ -4,7 +4,9 @@
         "password": "비밀번호",
         "mainMenu": "MAIN MENU",
         "search": "검색",
-        "noData": "데이터 없음"
+        "noData": "데이터 없음",
+        "goBack": "뒤로",
+        "send": "전송"
     },
     "pages": {
         "login": {
@@ -31,6 +33,23 @@
             "price": "금액",
             "reservationDate": "예약일",
             "cancelReservation": "예약 취소"
+        },
+        "farmManagement": {
+            "title": "예약관리",
+            "reservationList": "예약 목록",
+            "farmName": "농장명",
+            "experienceName": "체험명",
+            "userName": "유저명",
+            "productName": "상품명",
+            "price": "가격",
+            "paymentStatus": "결제 상태",
+            "refundAmount": "환불금액",
+            "reservationDate": "예약일",
+            "feedback": "피드백",
+            "reservationDetail": "예약 상세",
+            "cancelReservation": "예약취소",
+            "complete": "완료",
+            "process": "처리"
         }
     }
 }

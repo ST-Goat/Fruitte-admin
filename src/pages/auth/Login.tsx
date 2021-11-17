@@ -61,28 +61,33 @@ const Login: React.FC = () => {
         <Formik initialValues={{ email: "", password: "" }} onSubmit={onSubmit}>
           {(props: FormikProps<any>) => (
             <Form>
-              <Input
-                type="text"
-                autoFocus
-                name="email"
-                validate={validateEmail}
-                placeholder={`${t("common.email")}/ID`}
-              />
+              <div className="mb-6">
+                <Input
+                  type="text"
+                  autoFocus
+                  name="email"
+                  validate={validateEmail}
+                  placeholder={`${t("common.email")}/ID`}
+                />
+              </div>
+              <div className="mb-12">
+                {" "}
+                <Input
+                  type={passIsShowred ? "text" : "password"}
+                  name="password"
+                  validate={validatePassword}
+                  placeholder={`${t("common.email")}/ID`}
+                  onClickIcon={hideOrShowPass}
+                  EndIcon={
+                    <img
+                      className="cursor-pointer"
+                      alt="hideOrShowPass"
+                      src={!passIsShowred ? EyesShow : EyesHide}
+                    />
+                  }
+                />
+              </div>
 
-              <Input
-                type={passIsShowred ? "text" : "password"}
-                name="password"
-                validate={validatePassword}
-                placeholder={`${t("common.email")}/ID`}
-                onClickIcon={hideOrShowPass}
-                EndIcon={
-                  <img
-                    className="cursor-pointer"
-                    alt="hideOrShowPass"
-                    src={!passIsShowred ? EyesShow : EyesHide}
-                  />
-                }
-              />
               <button
                 className="w-full p-2 rounded-lg bg-primary-default"
                 type="submit"
