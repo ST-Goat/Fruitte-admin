@@ -14,7 +14,14 @@
             "submit": "로그인"
         },
         "dashboard": {
-            "title": "대쉬보드"
+            "title": "대쉬보드",
+            "recentReservations": "최근 예약",
+            "nextSettlement": "다음 정산",
+            "unprocessed": "미처리",
+            "settlementDay": "정산일",
+            "totalAmount": "총 금액",
+            "question": "문의",
+            "proposal": "제안"
         },
         "userManagement": {
             "title": "회원 관리",

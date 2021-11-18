@@ -1,16 +1,11 @@
 import { useTranslation } from "react-i18next";
-import {
-  Form,
-  Formik,
-  FormikProps,
-  FormikHelpers as FormikActions,
-} from "formik";
+import { Form, Formik, FormikProps } from "formik";
 import Input from "pages/common/Formik/Input";
 import Text from "pages/common/components/Text";
 import ButtonCustomizer from "pages/common/Button";
 import TextBox from "pages/common/Formik/TextBox";
 
-const MIN_LEFT_WIDTH = "120px";
+const MIN_LEFT_WIDTH = "150px";
 const FieldWithLabel = ({
   id,
   name,
@@ -159,7 +154,6 @@ function FarmForm() {
                 name={item.name}
                 type={item.type}
                 label={t(item.keyLabel)}
-                styledInput="w-full py-2 px-4 rounded-xl border border-grey-500"
               />
             </div>
           ))}

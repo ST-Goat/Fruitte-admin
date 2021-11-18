@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Icon from "pages/common/components/Icon";
 import Text from "pages/common/components/Text";
 import { Size } from "shared/comom.enum";
-
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 function LocaleTrans({ onChange }: { onChange?: (value: string) => void }) {
   const { i18n } = useTranslation();
   const handleChange = (event: SelectChangeEvent) => {
@@ -15,9 +15,17 @@ function LocaleTrans({ onChange }: { onChange?: (value: string) => void }) {
   };
   return (
     <Select
-      sx={{ height: "32px", backgroundColor: "#ffffff" }}
+      sx={{
+        height: "32px",
+        backgroundColor: "#ffffff",
+        "& fieldset": {
+          borderColor: "none !important",
+          borderWidth: "0px !important",
+        },
+      }}
       value={i18n.language}
       onChange={handleChange}
+      IconComponent={KeyboardArrowDownIcon}
     >
       <MenuItem value="en">
         <div className="flex">

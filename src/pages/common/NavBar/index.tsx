@@ -1,19 +1,41 @@
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
-import LocaleTrans from "../LocaleTrans";
-
 import Avatar from "@mui/material/Avatar";
-
+import LocaleTrans from "../LocaleTrans";
 import "./index.scss";
 
-function NavBar() {
+export const LogoHeader = () => (
+  <div className="w-24 cursor-pointer">
+    <Link to="/">
+      <img src="/Logo.png" alt="main_logo" />
+    </Link>
+  </div>
+);
+
+function NavBar({
+  sideBarExpend,
+  handleExpendSideBar,
+}: {
+  sideBarExpend?: boolean;
+  handleExpendSideBar?: () => void;
+}) {
   return (
-    <div id="navbar" className="w-full px-8 py-3 flex bg-secondary2-default">
-      <div className="navbar__left flex-grow">
-        <div className="w-24 cursor-pointer">
-          <Link to="/">
-            <img src="/Logo.png" alt="main_logo" />
-          </Link>
-        </div>
+    <div id="navbar" className="w-full pl-5 pr-8 py-3 flex bg-primary-default">
+      <div className="navbar__left flex items-center flex-grow">
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleExpendSideBar}
+          edge="start"
+          sx={{
+            marginRight: "36px",
+            ...(sideBarExpend && { display: "none" }),
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+        {!sideBarExpend && <LogoHeader />}
       </div>
       <div className="flex items-center navbar__right">
         <div className="navbar__locale-trans">

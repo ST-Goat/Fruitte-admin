@@ -14,7 +14,14 @@
             "submit": "Login"
         },
         "dashboard": {
-            "title": "Dashboard"
+            "title": "Dashboard",
+            "recentReservations": "Recent reservations",
+            "nextSettlement": "Next settlement",
+            "unprocessed": "Unprocessed",
+            "settlementDay": "Settlement day",
+            "totalAmount": "Total amount",
+            "question": "문의",
+            "proposal": "제안"
         },
         "userManagement": {
             "title": "Common User Management",

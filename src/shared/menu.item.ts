@@ -6,11 +6,15 @@ import UserDetail from "pages/UserManagement/UserDetail";
 import FarmManagement from "pages/FarmManagement";
 import FarmDetail from "pages/FarmManagement/FarmDetail";
 
+import PeopleIcon from "@mui/icons-material/People";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+
 export type MenuItemProps = {
   key: string;
   label: string;
   to: string;
-  icon?: string;
+  icon?: any;
   items?: MenuItemProps[];
   subPath?: MenuItemProps[];
   exact?: boolean;
@@ -22,6 +26,7 @@ export const menuItems: MenuItemProps[] = [
     key: "dashboard",
     label: "pages.dashboard.title",
     to: "/",
+    icon: DashboardIcon,
     component: Main,
     exact: true,
   },
@@ -30,6 +35,7 @@ export const menuItems: MenuItemProps[] = [
     label: "pages.userManagement.title",
     to: userManagementUrl,
     component: UserManagement,
+    icon: PeopleIcon,
     exact: true,
     subPath: [
       {
@@ -46,6 +52,7 @@ export const menuItems: MenuItemProps[] = [
     to: farmManagementUrl,
     component: FarmManagement,
     exact: true,
+    icon: BusinessCenterIcon,
     subPath: [
       {
         key: "farm-management-detail",

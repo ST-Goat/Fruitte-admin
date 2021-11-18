@@ -28,7 +28,7 @@ function FarmView() {
           </Text>
         </div>
         <ButtonCustomizer
-          className="mr-16 text-lg"
+          className="mr-16 text-lg underline"
           color="other"
           variant="other"
         >

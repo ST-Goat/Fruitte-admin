@@ -17,9 +17,9 @@ export type ButtonProps = {
 };
 
 const bgColor: Record<NonNullable<ButtonProps["color"]>, string> = {
-  primary: "bg-blue-500",
-  green: "bg-green-500",
-  red: "bg-red-100",
+  primary: "bg-primary-default text-white-default",
+  green: "bg-green-500 text-white-default",
+  red: "bg-red-100 text-white-default",
   other: "",
 };
 

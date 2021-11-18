@@ -54,7 +54,7 @@ const Login: React.FC = () => {
   return (
     <div className="login__wrapper">
       <NavBar />
-      <div className="login__form-wrapper pt-32 w-1/3 m-auto bg-grey-100">
+      <div className="login__form-wrapper pt-32 w-1/3 m-auto bg-white-default">
         <h1 className="text-5xl text-center font-bold mb-16">
           {t("pages.login.title")}
         </h1>
@@ -98,7 +98,7 @@ const Login: React.FC = () => {
           )}
         </Formik>
       </div>
-      <div className="login__footer w-full h-16 absolute bottom-0 bg-secondary2-default"></div>
+      <div className="login__footer w-full h-16 absolute bottom-0 bg-primary-default"></div>
     </div>
   );
 };
