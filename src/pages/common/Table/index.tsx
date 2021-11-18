@@ -16,7 +16,7 @@ import "./index.scss";
 
 const StyledTableCell = styled(TableCell)(({ theme, ...props }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#003057",
+    backgroundColor: "#483729",
     color: theme.palette.grey[100],
   },
   [`&.${tableCellClasses.body}`]: {

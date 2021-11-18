@@ -19,11 +19,7 @@ const LayoutProvider = (props: { children: React.ReactNode }) => {
   return (
     <LayoutDispatchContext.Provider value={setLayout}>
       <LayoutValueContext.Provider value={layout}>
-        <NavBar />
-        <div className="flex">
-          <SidebarNav />
-          <div className="flex-grow p-8">{props.children}</div>
-        </div>
+        <SidebarNav NavBar={NavBar}>{props.children}</SidebarNav>
       </LayoutValueContext.Provider>
     </LayoutDispatchContext.Provider>
   );

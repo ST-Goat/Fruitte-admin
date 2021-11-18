@@ -66,35 +66,15 @@ module.exports = {
           default: "#FFFFFF"
         },
         info: {
-          100: "#E6F1FF",
-          200: "#A9D0FF",
-          500: "#459AFE",
-          700: "#0171F4",
-          800: "#0152B2",
           default: "#2F80ED"
         },
         success: {
-          100: "#D5F6E3",
-          200: "#eefaf7",
-          500: "#12b782",
-          700: "#249E58",
-          800: "#1A7441",
           default: "#27AE60"
         },
         warning: {
-          100: "#FFECCC",
-          200: "#FFDCA3",
-          500: "#FFB53B",
-          700: "#CC7F00",
-          800: "#804F00",
           default: "#E2B93B"
         },
         error: {
-          100: "#FEE8E7",
-          200: "#FAA59E",
-          500: "#F44336",
-          700: "#D5190C",
-          800: "#C1170B",
           default: "#EB5757"
         },
       },

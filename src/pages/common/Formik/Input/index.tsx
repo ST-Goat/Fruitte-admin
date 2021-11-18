@@ -18,6 +18,12 @@ export type InputProps = {
   onClickIcon?: (event: React.MouseEvent) => void;
 };
 
+const styledInputDefault = cn(
+  "w-full py-4 px-5",
+  "border border-primary-default rounded-xl shadow-md",
+  "focus:outline-none focus:border-2 focus:border-primary-default"
+);
+
 function Input({
   id,
   name,
@@ -29,7 +35,7 @@ function Input({
   EndIcon,
   StartIcon,
   styledWrapper,
-  styledInput = "w-full py-2 px-4 rounded-xl shadow-md",
+  styledInput,
   styledIconWrapper,
   onClickIcon,
 }: InputProps) {
@@ -41,38 +47,52 @@ function Input({
       }: {
         field: FieldInputProps<any>;
         meta: FieldMetaProps<any>;
-      }) => (
-        <div className={cn("relative", styledWrapper)}>
-          <input
-            id={id}
-            type={type}
-            autoFocus={autoFocus}
-            className={styledInput}
-            placeholder={placeholder}
-            {...field}
-            onChange={(value) => {
-              field.onChange(value);
-              onChange && onChange(value);
-            }}
-          />
-          {(EndIcon || StartIcon) && (
-            <div
-              onClick={onClickIcon}
-              className={cn(
-                "absolute top-2",
-                EndIcon && "right-2",
-                StartIcon && "left-2",
-                styledIconWrapper
-              )}
-            >
-              {EndIcon ?? StartIcon}
-            </div>
-          )}
-          {validate && meta.touched && meta.error && (
-            <div className="error ml-2 text-red-700 italic">{meta.error}</div>
-          )}
-        </div>
-      )}
+      }) => {
+        const isError = validate && meta.touched && meta.error;
+        return (
+          <div className={cn("relative", styledWrapper)}>
+            <input
+              id={id}
+              type={type}
+              autoFocus={autoFocus}
+              className={
+                Boolean(styledInput)
+                  ? styledInput
+                  : styledInputDefault.replaceAll(
+                      isError
+                        ? "border-primary-default"
+                        : "border-error-default",
+                      isError
+                        ? "border-error-default"
+                        : "border-primary-default"
+                    )
+              }
+              placeholder={placeholder}
+              {...field}
+              onChange={(value) => {
+                field.onChange(value);
+                onChange && onChange(value);
+              }}
+            />
+            {(EndIcon || StartIcon) && (
+              <div
+                onClick={onClickIcon}
+                className={cn(
+                  "absolute top-4",
+                  EndIcon && "right-5",
+                  StartIcon && "left-5",
+                  styledIconWrapper
+                )}
+              >
+                {EndIcon ?? StartIcon}
+              </div>
+            )}
+            {isError && (
+              <div className="error ml-2 text-red-700 italic">{meta.error}</div>
+            )}
+          </div>
+        );
+      }}
     </Field>
   );
 }

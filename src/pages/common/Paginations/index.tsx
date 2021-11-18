@@ -10,6 +10,7 @@ export type TablePaginationProps = {
   page: number;
   handleChangePage: (newPage: number) => void;
   handleChangeRowsPerPage?: (newRowsPerPage: number) => void;
+  bgSelected?: string;
 };
 
 function TablePaginations({
@@ -19,6 +20,7 @@ function TablePaginations({
   page = PaginationDefault.PAGE,
   handleChangePage,
   handleChangeRowsPerPage,
+  bgSelected = "#483729 !important",
 }: TablePaginationProps) {
   const start = (page - 1) * rowsPerPage + 1;
   const end = page * rowsPerPage;
@@ -34,7 +36,13 @@ function TablePaginations({
           boundaryCount={2}
           count={Boolean(count) ? Math.ceil(count / rowsPerPage) : 0}
           page={page}
-          color="primary"
+          sx={{
+            "& .Mui-selected": {
+              backgroundColor: bgSelected,
+              color: "#ffffff",
+            },
+          }}
+          // color="primary"
           onChange={(event: React.ChangeEvent<unknown>, value: number) =>
             handleChangePage(value)
           }
