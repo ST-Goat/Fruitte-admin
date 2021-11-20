@@ -16,25 +16,29 @@ export const LogoHeader = () => (
 function NavBar({
   sideBarExpend,
   handleExpendSideBar,
+  disableExpand = false,
 }: {
   sideBarExpend?: boolean;
   handleExpendSideBar?: () => void;
+  disableExpand?: boolean;
 }) {
   return (
     <div id="navbar" className="w-full pl-5 pr-8 py-3 flex bg-primary-default">
       <div className="navbar__left flex items-center flex-grow">
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleExpendSideBar}
-          edge="start"
-          sx={{
-            marginRight: "36px",
-            ...(sideBarExpend && { display: "none" }),
-          }}
-        >
-          <MenuIcon />
-        </IconButton>
+        {!disableExpand && (
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleExpendSideBar}
+            edge="start"
+            sx={{
+              marginRight: "36px",
+              ...(sideBarExpend && { display: "none" }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
         {!sideBarExpend && <LogoHeader />}
       </div>
       <div className="flex items-center navbar__right">
