@@ -53,7 +53,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="login__wrapper">
-      <NavBar />
+      <NavBar disableExpand />
       <div className="login__form-wrapper pt-32 w-1/3 m-auto bg-white-default">
         <h1 className="text-5xl text-center font-bold mb-16">
           {t("pages.login.title")}

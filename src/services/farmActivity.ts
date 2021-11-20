@@ -7,13 +7,13 @@ export type FarmProps = {
   userName: string;
   productName: string;
   price: string;
-  state: string;
+  paymentStatus: string;
   refundAmount: string;
   reservationDate: string;
   feedback: string;
 };
 
-export type FarmListResponse = {
+export type FarmActivityResponses = {
   data: Array<FarmProps>;
   total: number;
 };
@@ -26,7 +26,7 @@ const fakeFarmList: Array<FarmProps> = [
     userName: "4인팀+옵션",
     productName: "10,000원",
     price: "완료",
-    state: "일반",
+    paymentStatus: "-",
     refundAmount: "1,000원",
     reservationDate: "10/23/2021",
     feedback: "미처리",
@@ -38,7 +38,7 @@ const fakeFarmList: Array<FarmProps> = [
     userName: "4인팀+옵션",
     productName: "10,000원",
     price: "완료",
-    state: "일반",
+    paymentStatus: "-",
     refundAmount: "1,000원",
     reservationDate: "10/23/2021",
     feedback: "미처리",
@@ -50,14 +50,14 @@ const fakeFarmList: Array<FarmProps> = [
     userName: "4인팀+옵션",
     productName: "10,000원",
     price: "완료",
-    state: "일반",
+    paymentStatus: "-",
     refundAmount: "1,000원",
     reservationDate: "10/23/2021",
     feedback: "미처리",
   },
 ];
 
-export const fetchFarmList = async (
+export const fetchFarmActivities = async (
   params: {
     pagination: {
       page: number;
@@ -71,7 +71,7 @@ export const fetchFarmList = async (
     },
     filters: {},
   }
-): Promise<FarmListResponse> => {
+): Promise<FarmActivityResponses> => {
   const { page, pageSize } = params.pagination;
   return new Promise((resolve, reject) => {
     setTimeout(() => {

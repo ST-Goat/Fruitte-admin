@@ -9,7 +9,7 @@ import Text from "pages/common/components/Text";
 import type { TablePaginationProps } from "pages/common/Paginations";
 import type { Filters } from "./Container";
 
-import { FarmListResponse } from "services/farmManagement";
+import { FarmActivityResponses } from "services/farmActivity";
 import { gettotalRowCurrent } from "utilities";
 
 type FarmManagementProps = Omit<
@@ -17,7 +17,7 @@ type FarmManagementProps = Omit<
   "count"
 > & {
   filters: Filters;
-  farms: FarmListResponse;
+  farms: FarmActivityResponses;
   loading: Boolean;
   submitFilters: () => void;
   onChangeFilters: (name: string, value: any) => void;
@@ -31,32 +31,52 @@ const headers = [
   },
   {
     id: "Farm-col",
-    keyLabel: "pages.farmManagement.farmName",
+    keyLabel: "pages.farmActivity.farmName",
     keyData: "farmName",
   },
   {
     id: "Experience-name-col",
-    keyLabel: "pages.farmManagement.experienceName",
+    keyLabel: "pages.farmActivity.experienceName",
     keyData: "experienceName",
   },
   {
+    id: "User-name-col",
+    keyLabel: "pages.farmActivity.userName",
+    keyData: "userName",
+  },
+  {
+    id: "Product-name-col",
+    keyLabel: "pages.farmActivity.productName",
+    keyData: "productName",
+  },
+  {
     id: "Price-col",
-    keyLabel: "pages.farmManagement.price",
+    keyLabel: "pages.farmActivity.price",
     keyData: "price",
   },
   {
-    id: "State-stautus-col",
-    keyLabel: "pages.farmManagement.state",
-    keyData: "state",
+    id: "Payment-stautus-col",
+    keyLabel: "pages.farmActivity.paymentStatus",
+    keyData: "paymentStatus",
+  },
+  {
+    id: "Refund-amount-col",
+    keyLabel: "pages.farmActivity.refundAmount",
+    keyData: "refundAmount",
   },
   {
     id: "Reservation-date-col",
-    keyLabel: "pages.farmManagement.reservationDate",
+    keyLabel: "pages.farmActivity.reservationDate",
     keyData: "reservationDate",
+  },
+  {
+    id: "Feedback-col",
+    keyLabel: "pages.farmActivity.feedback",
+    keyData: "feedback",
   },
 ];
 
-function FarmManagementView({
+function FarmActivityView({
   filters,
   submitFilters,
   onChangeFilters,
@@ -73,10 +93,10 @@ function FarmManagementView({
     <div>
       <div>
         <Text className="font-bold text-lg">
-          {t("pages.farmManagement.title")}
+          {t("pages.farmActivity.title")}
         </Text>
         <Text className="font-bold text-2xl">
-          {t("pages.farmManagement.reservationList")}
+          {t("pages.farmActivity.reservationList")}
         </Text>
       </div>
       <Controller
@@ -102,7 +122,7 @@ function FarmManagementView({
                 no: (page - 1) * rowsPerPage + i + 1,
               }))}
               handleClickRow={(row) => {
-                history.push(`${location.pathname}/${row.id}`);
+                // history.push(`${location.pathname}/${row.id}`);
               }}
             />
           </div>
@@ -112,4 +132,4 @@ function FarmManagementView({
   );
 }
 
-export default FarmManagementView;
+export default FarmActivityView;

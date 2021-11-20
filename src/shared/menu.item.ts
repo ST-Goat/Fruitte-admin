@@ -1,14 +1,16 @@
-import { userManagementUrl, farmManagementUrl } from "routes";
+import { userManagementUrl, farmManagementUrl, farmActivityUrl } from "routes";
 
 import Main from "pages/main/Main";
 import UserManagement from "pages/UserManagement";
 import UserDetail from "pages/UserManagement/UserDetail";
 import FarmManagement from "pages/FarmManagement";
 import FarmDetail from "pages/FarmManagement/FarmDetail";
+import FarmActivity from "pages/FarmActivity";
 
 import PeopleIcon from "@mui/icons-material/People";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import LocalActivityIcon from "@mui/icons-material/LocalActivity";
 
 export type MenuItemProps = {
   key: string;
@@ -61,5 +63,13 @@ export const menuItems: MenuItemProps[] = [
         component: FarmDetail,
       },
     ],
+  },
+  {
+    key: "farm-activity",
+    label: "pages.farmActivity.title",
+    to: farmActivityUrl,
+    component: FarmActivity,
+    exact: true,
+    icon: LocalActivityIcon,
   },
 ];
