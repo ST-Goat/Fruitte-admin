@@ -3,7 +3,7 @@ import { PaginationDefault } from "shared/comom.enum";
 export type FarmProps = {
   id: string;
   farmName: string;
-  experienceName: string;
+  activityName: string;
   userName: string;
   productName: string;
   price: string;
@@ -22,7 +22,7 @@ const fakeFarmList: Array<FarmProps> = [
   {
     id: "농장명-1",
     farmName: "체험명",
-    experienceName: "체험명",
+    activityName: "체험명",
     userName: "4인팀+옵션",
     productName: "10,000원",
     price: "완료",
@@ -34,7 +34,7 @@ const fakeFarmList: Array<FarmProps> = [
   {
     id: "농장명-2",
     farmName: "농장명-2",
-    experienceName: "체험명",
+    activityName: "체험명",
     userName: "4인팀+옵션",
     productName: "10,000원",
     price: "완료",
@@ -46,7 +46,7 @@ const fakeFarmList: Array<FarmProps> = [
   {
     id: "농장명-3",
     farmName: "농장명-3",
-    experienceName: "체험명",
+    activityName: "체험명",
     userName: "4인팀+옵션",
     productName: "10,000원",
     price: "완료",

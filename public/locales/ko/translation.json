@@ -6,7 +6,11 @@
         "search": "검색",
         "noData": "데이터 없음",
         "goBack": "뒤로",
-        "send": "전송"
+        "send": "전송",
+        "farm": "농장",
+        "reservation": "예약",
+        "phoneNumber": "전화번호",
+        "address": "주소"
     },
     "pages": {
         "login": {
@@ -42,10 +46,10 @@
             "cancelReservation": "예약 취소"
         },
         "farmManagement": {
-            "title": "예약관리",
-            "reservationList": "예약 목록",
+            "title": "농장관리",
+            "farmList": "농장 목록",
             "farmName": "농장명",
-            "experienceName": "체험명",
+            "activityName": "체험명",
             "userName": "유저명",
             "productName": "상품명",
             "price": "가격",
@@ -57,13 +61,22 @@
             "reservationDetail": "예약 상세",
             "cancelReservation": "예약취소",
             "complete": "완료",
-            "process": "처리"
+            "process": "처리",
+            "activityList": "농장 목록 보기",
+            "activities": "체험",
+            "settlementCycle": "정산주기",
+            "accountHolder": "예금주",
+            "nameOfBank": "은행명",
+            "accountNumber": "계좌번호",
+            "settlementRate": "정산 비율",
+            "farmUser": "농장 유저",
+            "addFarmUser": "농장 유저 추가"
         },
         "farmActivity": {
             "title": "Farm Activity",
             "reservationList": "예약 목록",
             "farmName": "농장명",
-            "experienceName": "체험명",
+            "activityName": "체험명",
             "userName": "유저명",
             "productName": "상품명",
             "price": "가격",

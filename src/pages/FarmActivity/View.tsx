@@ -35,9 +35,9 @@ const headers = [
     keyData: "farmName",
   },
   {
-    id: "Experience-name-col",
-    keyLabel: "pages.farmActivity.experienceName",
-    keyData: "experienceName",
+    id: "Activity-name-col",
+    keyLabel: "pages.farmActivity.activityName",
+    keyData: "activityName",
   },
   {
     id: "User-name-col",

@@ -1,9 +1,16 @@
-import { userManagementUrl, farmManagementUrl, farmActivityUrl } from "routes";
+import {
+  userManagementUrl,
+  farmManagementUrl,
+  farmActivityUrl,
+  farmCreationUrl,
+  farmDetailUrl,
+} from "routes";
 
 import Main from "pages/main/Main";
 import UserManagement from "pages/UserManagement";
 import UserDetail from "pages/UserManagement/UserDetail";
 import FarmManagement from "pages/FarmManagement";
+import FarmCreation from "pages/FarmManagement/Create";
 import FarmDetail from "pages/FarmManagement/FarmDetail";
 import FarmActivity from "pages/FarmActivity";
 
@@ -57,9 +64,16 @@ export const menuItems: MenuItemProps[] = [
     icon: BusinessCenterIcon,
     subPath: [
       {
+        key: "farm-management-creation",
+        label: "",
+        to: farmCreationUrl,
+        exact: true,
+        component: FarmCreation,
+      },
+      {
         key: "farm-management-detail",
         label: "",
-        to: `${farmManagementUrl}/:id`,
+        to: `${farmDetailUrl}/:id`,
         component: FarmDetail,
       },
     ],

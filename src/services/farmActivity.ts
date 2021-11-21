@@ -1,9 +1,9 @@
 import { PaginationDefault } from "shared/comom.enum";
 
-export type FarmProps = {
+export type Activity = {
   id: string;
   farmName: string;
-  experienceName: string;
+  activityName: string;
   userName: string;
   productName: string;
   price: string;
@@ -11,18 +11,19 @@ export type FarmProps = {
   refundAmount: string;
   reservationDate: string;
   feedback: string;
+  phone?: string;
 };
 
 export type FarmActivityResponses = {
-  data: Array<FarmProps>;
+  data: Array<Activity>;
   total: number;
 };
 
-const fakeFarmList: Array<FarmProps> = [
+const fakeFarmList: Array<Activity> = [
   {
     id: "농장명-1",
     farmName: "체험명",
-    experienceName: "체험명",
+    activityName: "체험명",
     userName: "4인팀+옵션",
     productName: "10,000원",
     price: "완료",
@@ -30,11 +31,12 @@ const fakeFarmList: Array<FarmProps> = [
     refundAmount: "1,000원",
     reservationDate: "10/23/2021",
     feedback: "미처리",
+    phone: "010-1234-1234",
   },
   {
     id: "농장명-2",
     farmName: "농장명-2",
-    experienceName: "체험명",
+    activityName: "체험명",
     userName: "4인팀+옵션",
     productName: "10,000원",
     price: "완료",
@@ -42,11 +44,12 @@ const fakeFarmList: Array<FarmProps> = [
     refundAmount: "1,000원",
     reservationDate: "10/23/2021",
     feedback: "미처리",
+    phone: "010-1234-1234",
   },
   {
     id: "농장명-3",
     farmName: "농장명-3",
-    experienceName: "체험명",
+    activityName: "체험명",
     userName: "4인팀+옵션",
     productName: "10,000원",
     price: "완료",
@@ -54,6 +57,7 @@ const fakeFarmList: Array<FarmProps> = [
     refundAmount: "1,000원",
     reservationDate: "10/23/2021",
     feedback: "미처리",
+    phone: "010-1234-1234",
   },
 ];
 
