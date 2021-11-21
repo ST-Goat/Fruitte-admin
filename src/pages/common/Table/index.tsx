@@ -11,6 +11,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
 import { PaginationDefault } from "shared/comom.enum";
+import { NewHOC } from "utilities/useHOC";
 
 import "./index.scss";
 
@@ -62,18 +63,6 @@ export type TableCustomizerProps = {
   loading: Boolean;
   totalRow?: number;
   RowLoadingCustom?: React.ReactElement;
-};
-
-const NewHOC = (PassedComponent: any) => {
-  return class extends React.Component {
-    render() {
-      return (
-        <div>
-          <PassedComponent {...this.props} />
-        </div>
-      );
-    }
-  };
 };
 
 export default function TableCustomizer({

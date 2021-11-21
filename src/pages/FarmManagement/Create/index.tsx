@@ -1,30 +1,21 @@
 import { useState } from "react";
 import LeftHeader from "../components/LeftHeader";
-import Feedback from "../Feedback";
 import TabHeader from "../components/TabHeader";
 import AddOrEdit from "../components/AddOrEdit";
-import Reservation from "./Reservation";
-import Activities from "./Activities";
 
+const tabList = [
+  {
+    id: 0,
+    children: <AddOrEdit isCreate />,
+    keyLabel: "common.farm",
+  },
+];
 type TabPanelProps = {
   children?: React.ReactNode;
   current: number;
   id: number;
 };
 
-const fakeFarmData = {
-  farmName: "농장명",
-  email: "abc@gmail.com",
-  phone: "010-1234-1234",
-  address: "경기도 광주시, 1234",
-  settlementCycle: "2주/ 4주",
-  paymentStatus: "홍길동",
-  accountHolder: "신한은행",
-  nameOfBank: "123-134-1234-134",
-  accountNumber: "40%",
-  settlementRate: "이메일",
-  farmUser: "농장 유저 추가",
-};
 function TabPanel(props: TabPanelProps) {
   const { children, id, current, ...other } = props;
 
@@ -43,29 +34,6 @@ function TabPanel(props: TabPanelProps) {
 
 function FarmDetail() {
   const [tabIdCurrent, setTabIdCurrent] = useState(0);
-
-  const tabList = [
-    {
-      id: 0,
-      children: <AddOrEdit isCreate={false} data={fakeFarmData} />,
-      keyLabel: "common.farm",
-    },
-    {
-      id: 1,
-      children: <Activities />,
-      keyLabel: "pages.farmManagement.activities",
-    },
-    {
-      id: 2,
-      children: <Reservation />,
-      keyLabel: "common.reservation",
-    },
-    {
-      id: 3,
-      children: Feedback,
-      keyLabel: "pages.farmManagement.feedback",
-    },
-  ];
   return (
     <div>
       <LeftHeader />

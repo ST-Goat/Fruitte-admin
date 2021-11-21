@@ -1,46 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { Form, Formik, FormikProps } from "formik";
-import Input from "pages/common/Formik/Input";
 import Text from "pages/common/components/Text";
 import ButtonCustomizer from "pages/common/Button";
 import TextBox from "pages/common/Formik/TextBox";
-
-const MIN_LEFT_WIDTH = "150px";
-const FieldWithLabel = ({
-  id,
-  name,
-  type,
-  placeholder = "",
-  label,
-  ...props
-}: {
-  id: string;
-  name: string;
-  type: string;
-  placeholder?: string;
-  label: string;
-} & { [key: string]: string }) => {
-  return (
-    <div className="flex flex-start items-center">
-      <label
-        style={{ minWidth: MIN_LEFT_WIDTH }}
-        className="mr-16"
-        htmlFor={id}
-      >
-        {label}
-      </label>
-      <div className="flex-grow">
-        <Input
-          {...props}
-          id={id}
-          type={type}
-          name={name}
-          placeholder={placeholder}
-        />
-      </div>
-    </div>
-  );
-};
+import InputWithLabel, {
+  MIN_LEFT_WIDTH,
+} from "pages/common/Formik/Input/InputWithLabel";
 
 const FeedbackBox = ({ t }: { t: (text: string) => string }) => {
   return (
@@ -98,9 +63,9 @@ const ListField = [
     type: "text",
   },
   {
-    id: "experienceName__field",
-    keyLabel: "pages.farmManagement.experienceName",
-    name: "experienceName",
+    id: "activityName__field",
+    keyLabel: "pages.farmManagement.activityName",
+    name: "activityName",
     type: "text",
   },
   {
@@ -141,7 +106,7 @@ const ListField = [
   },
 ];
 
-function FarmForm() {
+function FeedbackForm() {
   const { t } = useTranslation();
   return (
     <Formik initialValues={{ email: "", password: "" }} onSubmit={() => {}}>
@@ -149,7 +114,7 @@ function FarmForm() {
         <Form>
           {ListField.map((item) => (
             <div className="w-2/3 max-w-7xl mb-8" key={item.id}>
-              <FieldWithLabel
+              <InputWithLabel
                 id={item.id}
                 name={item.name}
                 type={item.type}
@@ -166,4 +131,4 @@ function FarmForm() {
   );
 }
 
-export default FarmForm;
+export default FeedbackForm;

@@ -131,7 +131,11 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      borderColor: ['disabled'],
+      borderWidth: ['disabled'],
+      cursor: ['disabled'],
+    },
     position: ["responsive"],
     opacity: ["responsive", "hover", "focus", "disabled"],
     boxShadow: ["responsive", "hover", "focus", "active"],

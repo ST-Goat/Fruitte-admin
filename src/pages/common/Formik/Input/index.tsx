@@ -1,5 +1,6 @@
 import React from "react";
 import { Field, FieldInputProps, FieldMetaProps } from "formik";
+import InputWithLabel from "./InputWithLabel";
 import cn from "classnames";
 
 export type InputProps = {
@@ -16,12 +17,14 @@ export type InputProps = {
   styledWrapper?: string;
   styledIconWrapper?: string;
   onClickIcon?: (event: React.MouseEvent) => void;
+  disabled?: boolean;
 };
 
 const styledInputDefault = cn(
   "w-full py-4 px-5",
   "border border-primary-default rounded-xl shadow-md",
-  "focus:outline-none focus:border-2 focus:border-primary-default"
+  "focus:outline-none focus:border-2 focus:border-primary-default",
+  "disabled:outline-none disabled:border-1 disabled:border-grey-default disabled:opacity-60"
 );
 
 function Input({
@@ -38,6 +41,7 @@ function Input({
   styledInput,
   styledIconWrapper,
   onClickIcon,
+  disabled = false,
 }: InputProps) {
   return (
     <Field name={name} validate={validate}>
@@ -55,6 +59,7 @@ function Input({
               id={id}
               type={type}
               autoFocus={autoFocus}
+              disabled={disabled}
               className={
                 Boolean(styledInput)
                   ? styledInput
@@ -78,7 +83,8 @@ function Input({
               <div
                 onClick={onClickIcon}
                 className={cn(
-                  "absolute top-4",
+                  "absolute top-0 h-full flex items-center",
+                  disabled && "opacity-60",
                   EndIcon && "right-5",
                   StartIcon && "left-5",
                   styledIconWrapper
@@ -97,4 +103,5 @@ function Input({
   );
 }
 
+export { InputWithLabel };
 export default Input;

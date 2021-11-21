@@ -6,7 +6,11 @@
         "search": "Search",
         "noData": "No Data",
         "goBack": "Go Back",
-        "send": "Send"
+        "send": "Send",
+        "farm": "Farm",
+        "reservation": "Reservation",
+        "phoneNumber": "Phone Number",
+        "address": "Address"
     },
     "pages": {
         "login": {
@@ -42,10 +46,10 @@
             "cancelReservation": "Cancel Reservation"
         },
         "farmManagement": {
-            "title": "Reservation Management",
-            "reservationList": "Reservation List",
+            "title": "Farm Management",
+            "farmList": "Farm List",
             "farmName": "Farm Name",
-            "experienceName": "Experiance Name",
+            "activityName": "Activity Name",
             "userName": "User Name",
             "productName": "Product Name",
             "price": "Price",
@@ -57,13 +61,22 @@
             "reservationDetail": "Reservation Detail",
             "cancelReservation": "Cancel Reservation",
             "complete": "complete",
-            "process": "process"
+            "process": "process",
+            "activityList": "Activity List",
+            "activities": "activities",
+            "settlementCycle": "Settlement Cycle",
+            "accountHolder": "Account Holder",
+            "nameOfBank": "Name Of Bank",
+            "accountNumber": "Account Number",
+            "settlementRate": "Settlement Rate",
+            "farmUser": "Farm User",
+            "addFarmUser": "Add farm user"
         },
         "farmActivity": {
             "title": "Farm Activity",
             "reservationList": "Reservation List",
             "farmName": "Farm Name",
-            "experienceName": "Experiance Name",
+            "activityName": "Activity Name",
             "userName": "User Name",
             "productName": "Product Name",
             "price": "Price",
