@@ -10,7 +10,9 @@
         "farm": "농장",
         "reservation": "예약",
         "phoneNumber": "전화번호",
-        "address": "주소"
+        "address": "주소",
+        "produce": "생성",
+        "cancel": "취소"
     },
     "pages": {
         "login": {

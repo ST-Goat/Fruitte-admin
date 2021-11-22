@@ -10,7 +10,9 @@
         "farm": "Farm",
         "reservation": "Reservation",
         "phoneNumber": "Phone Number",
-        "address": "Address"
+        "address": "Address",
+        "produce": "Produce",
+        "cancel": "Cancel"
     },
     "pages": {
         "login": {

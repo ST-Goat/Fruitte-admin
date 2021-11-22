@@ -5,6 +5,7 @@ import TabHeader from "../components/TabHeader";
 import AddOrEdit from "../components/AddOrEdit";
 import Reservation from "./Reservation";
 import Activities from "./Activities";
+import Text from "pages/common/components/Text";
 
 type TabPanelProps = {
   children?: React.ReactNode;
@@ -68,7 +69,10 @@ function FarmDetail() {
   ];
   return (
     <div>
-      <LeftHeader />
+      <div className="flex justify-between items-center w-full">
+        <LeftHeader />
+        <Text className="underline cursor-pointer">미사용 처리</Text>
+      </div>
       <TabHeader
         tabs={tabList}
         tabIdCurrent={tabIdCurrent}

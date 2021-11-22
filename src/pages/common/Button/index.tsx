@@ -10,7 +10,7 @@ const SIZE_STYLE: Record<Size, string> = {
 export type ButtonProps = {
   size?: Size;
   className?: string;
-  color?: "primary" | "green" | "red" | "other";
+  color?: "primary" | "secondary" | "red" | "other";
   variant?: "primary" | "other";
 } & {
   [key: string]: any;
@@ -18,7 +18,7 @@ export type ButtonProps = {
 
 const bgColor: Record<NonNullable<ButtonProps["color"]>, string> = {
   primary: "bg-primary-default text-white-default",
-  green: "bg-green-500 text-white-default",
+  secondary: "bg-grey-default text-white-default",
   red: "bg-red-100 text-white-default",
   other: "",
 };
@@ -32,7 +32,7 @@ function ButtonCustomizer({
   size = Size.BASE,
   className,
   color = "primary",
-  variant = "other",
+  variant = "primary",
   ...props
 }: ButtonProps) {
   return (
