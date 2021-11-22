@@ -47,7 +47,9 @@ const TabHeader = ({
           ))}
         </Tabs>
       </Box>
-      <Box sx={{ padding: "1.75rem 3rem" }}>{children}</Box>
+      <Box sx={{ padding: "1.75rem 3rem", paddingBottom: "6rem" }}>
+        {children}
+      </Box>
     </Box>
   );
 };

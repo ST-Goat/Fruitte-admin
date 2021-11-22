@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Form, Formik, FormikProps } from "formik";
 import InputWithLabel, {
@@ -7,7 +8,7 @@ import Text from "pages/common/components/Text";
 import EditIcon from "@mui/icons-material/Edit";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { useState } from "react";
+import ButtonCustomizer from "pages/common/Button";
 
 const ListField = [
   {
@@ -101,6 +102,22 @@ const initialValues = {
   farmUser: "",
 };
 
+const SubmitOrCancel = ({ t }: { t: (key: string) => string }) => {
+  return (
+    <>
+      <ButtonCustomizer style={{ minWidth: "8rem" }}>
+        {t("common.produce")}
+      </ButtonCustomizer>
+      <ButtonCustomizer
+        style={{ minWidth: "8rem", marginLeft: "2rem" }}
+        color="secondary"
+      >
+        {t("common.cancel")}
+      </ButtonCustomizer>
+    </>
+  );
+};
+
 function AddOrEdit({ isCreate, data }: { isCreate: boolean; data?: any }) {
   const { t } = useTranslation();
   const [fieldDisabled, setFieldDisabled] = useState<{
@@ -176,11 +193,13 @@ function AddOrEdit({ isCreate, data }: { isCreate: boolean; data?: any }) {
                       onClickIcon={() => handleOnClickIcon(item)}
                       disabled={isCreate ? false : fieldDisabled[item.id]}
                       EndIcon={
-                        <EditIcon
-                          color="action"
-                          fontSize="large"
-                          sx={styleIconAction}
-                        />
+                        !isCreate && (
+                          <EditIcon
+                            color="action"
+                            fontSize="large"
+                            sx={styleIconAction}
+                          />
+                        )
                       }
                     />
                   </div>
@@ -203,6 +222,11 @@ function AddOrEdit({ isCreate, data }: { isCreate: boolean; data?: any }) {
           {t("pages.farmManagement.addFarmUser")}
         </Text>
       </div>
+      {isCreate && (
+        <div className="flex justify-end items-center w-full mt-16">
+          <SubmitOrCancel t={t} />
+        </div>
+      )}
     </div>
   );
 }

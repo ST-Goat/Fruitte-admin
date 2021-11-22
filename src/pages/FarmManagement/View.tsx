@@ -85,7 +85,7 @@ function FarmManagementView({
           </Text>
           <div className="flex flex-grow justify-end">
             {tittleHeader.primary === translationKey.farmList && (
-              <ButtonCustomizer className="rounded-xl">
+              <ButtonCustomizer>
                 <Link to={farmCreationUrl}>
                   {t("pages.farmManagement.addFarmUser")}
                 </Link>

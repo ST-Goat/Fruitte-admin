@@ -55,7 +55,7 @@ export default function ConfirmModal({
           <div className="w-full flex justify-between mt-36">
             <ButtonCustomizer
               className="rounded-3xl font-bold hover:opacity-80"
-              color="green"
+              color="primary"
               style={{ minWidth: "25%" }}
             >
               승인
