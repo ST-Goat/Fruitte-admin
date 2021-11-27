@@ -72,7 +72,8 @@
             "accountNumber": "Account Number",
             "settlementRate": "Settlement Rate",
             "farmUser": "Farm User",
-            "addFarmUser": "Add farm user"
+            "addFarmUser": "Add farm user",
+            "createActivity": "Create Activity"
         },
         "farmActivity": {
             "title": "Farm Activity",

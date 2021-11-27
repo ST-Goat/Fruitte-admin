@@ -24,7 +24,7 @@ const bgColor: Record<NonNullable<ButtonProps["color"]>, string> = {
 };
 
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
-  primary: "rounded rounded-2 hover:opacity-80",
+  primary: "rounded rounded-2 hover:opacity-80 transform active:scale-95",
   other: "",
 };
 

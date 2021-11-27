@@ -2,7 +2,7 @@ import { useState } from "react";
 import LeftHeader from "../components/LeftHeader";
 import Feedback from "../Feedback";
 import TabHeader from "../components/TabHeader";
-import AddOrEdit from "../components/AddOrEdit";
+import FarmForm from "../components/FarmForm";
 import Reservation from "./Reservation";
 import Activities from "./Activities";
 import Text from "pages/common/components/Text";
@@ -48,7 +48,7 @@ function FarmDetail() {
   const tabList = [
     {
       id: 0,
-      children: <AddOrEdit isCreate={false} data={fakeFarmData} />,
+      children: <FarmForm isCreate={false} data={fakeFarmData} />,
       keyLabel: "common.farm",
     },
     {

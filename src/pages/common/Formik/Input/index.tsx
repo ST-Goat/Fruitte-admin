@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import cn from "classnames";
 import { Field, FieldInputProps, FieldMetaProps } from "formik";
 import InputWithLabel from "./InputWithLabel";
-import cn from "classnames";
+
+import { useDebounce } from "utilities";
 
 export type InputProps = {
   id?: string | undefined;
@@ -27,9 +29,8 @@ const styledInputDefault = cn(
   "disabled:outline-none disabled:border-1 disabled:border-grey-default disabled:opacity-60"
 );
 
-function Input({
+const RenderInput = ({
   id,
-  name,
   type,
   placeholder,
   onChange,
@@ -42,7 +43,71 @@ function Input({
   styledIconWrapper,
   onClickIcon,
   disabled = false,
-}: InputProps) {
+  field,
+  meta,
+  name,
+}: InputProps & {
+  field: FieldInputProps<any>;
+  meta: FieldMetaProps<any>;
+}) => {
+  const isError = validate && meta.touched && meta.error;
+  const [fieldValue, setFieldValue] = useState(field.value ?? "");
+  const debouncedValue = useDebounce(fieldValue);
+
+  useEffect(() => {
+    field.onChange({
+      target: {
+        name: name,
+        value: debouncedValue,
+      },
+    });
+  }, [debouncedValue]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFieldValue(event.target.value);
+    onChange && onChange(event);
+  };
+  return (
+    <div className={cn("relative", styledWrapper)}>
+      <input
+        id={id}
+        type={type}
+        autoFocus={autoFocus}
+        disabled={disabled}
+        className={
+          Boolean(styledInput)
+            ? styledInput
+            : styledInputDefault.replaceAll(
+                isError ? "border-primary-default" : "border-error-default",
+                isError ? "border-error-default" : "border-primary-default"
+              )
+        }
+        placeholder={placeholder}
+        value={fieldValue}
+        onChange={handleChange}
+      />
+      {(EndIcon || StartIcon) && (
+        <div
+          onClick={onClickIcon}
+          className={cn(
+            "absolute top-0 h-full flex items-center",
+            disabled && "opacity-60",
+            EndIcon && "right-5",
+            StartIcon && "left-5",
+            styledIconWrapper
+          )}
+        >
+          {EndIcon ?? StartIcon}
+        </div>
+      )}
+      {isError && (
+        <div className="error ml-2 text-red-700 italic">{meta.error}</div>
+      )}
+    </div>
+  );
+};
+
+function Input({ name, validate, ...props }: InputProps) {
   return (
     <Field name={name} validate={validate}>
       {({
@@ -51,57 +116,18 @@ function Input({
       }: {
         field: FieldInputProps<any>;
         meta: FieldMetaProps<any>;
-      }) => {
-        const isError = validate && meta.touched && meta.error;
-        return (
-          <div className={cn("relative", styledWrapper)}>
-            <input
-              id={id}
-              type={type}
-              autoFocus={autoFocus}
-              disabled={disabled}
-              className={
-                Boolean(styledInput)
-                  ? styledInput
-                  : styledInputDefault.replaceAll(
-                      isError
-                        ? "border-primary-default"
-                        : "border-error-default",
-                      isError
-                        ? "border-error-default"
-                        : "border-primary-default"
-                    )
-              }
-              placeholder={placeholder}
-              {...field}
-              onChange={(value) => {
-                field.onChange(value);
-                onChange && onChange(value);
-              }}
-            />
-            {(EndIcon || StartIcon) && (
-              <div
-                onClick={onClickIcon}
-                className={cn(
-                  "absolute top-0 h-full flex items-center",
-                  disabled && "opacity-60",
-                  EndIcon && "right-5",
-                  StartIcon && "left-5",
-                  styledIconWrapper
-                )}
-              >
-                {EndIcon ?? StartIcon}
-              </div>
-            )}
-            {isError && (
-              <div className="error ml-2 text-red-700 italic">{meta.error}</div>
-            )}
-          </div>
-        );
-      }}
+      }) => (
+        <RenderInput
+          {...props}
+          name={name}
+          field={field}
+          meta={meta}
+          validate={validate}
+        />
+      )}
     </Field>
   );
 }
 
-export { InputWithLabel };
+export { InputWithLabel, RenderInput };
 export default Input;
