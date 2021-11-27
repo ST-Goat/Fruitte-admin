@@ -6,6 +6,7 @@ import {
   farmActivityUrl,
   farmCreationUrl,
   farmDetailUrl,
+  farmReservationUrl,
 } from "routes";
 
 import Main from "pages/main/Main";
@@ -21,6 +22,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import LocalActivityIcon from "@mui/icons-material/LocalActivity";
+import AddOrEditReservation from "pages/FarmManagement/AddOrEditReservation/indext";
 
 export type MenuItemProps = {
   key: string;
@@ -84,6 +86,12 @@ export const menuItems: MenuItemProps[] = [
         label: "",
         to: `${farmManagementActivityUrl}/:id`,
         component: AddOrEditActivity,
+      },
+      {
+        key: "farm-management-reservation-edit",
+        label: "",
+        to: `${farmReservationUrl}/:id`,
+        component: AddOrEditReservation,
       },
     ],
   },

@@ -9,5 +9,6 @@ export const farmCreationUrl = `${farmManagementUrl}/create`;
 export const farmDetailUrl = `${farmManagementUrl}/detail`;
 export const farmManagementActivityUrl = `${farmManagementUrl}/farm-activites`;
 export const farmManagementActivityCreateUrl = `${farmManagementActivityUrl}/create`;
+export const farmReservationUrl = `${farmManagementUrl}/reservation`;
 
 export const farmActivityUrl = "/farm-activity";
