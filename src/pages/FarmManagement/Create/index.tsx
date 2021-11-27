@@ -1,13 +1,19 @@
 import { useState } from "react";
 import LeftHeader from "../components/LeftHeader";
 import TabHeader from "../components/TabHeader";
-import AddOrEdit from "../components/AddOrEdit";
+import FarmForm from "../components/FarmForm";
+import Activities from "./Activities";
 
 const tabList = [
   {
     id: 0,
-    children: <AddOrEdit isCreate />,
+    children: <FarmForm isCreate />,
     keyLabel: "common.farm",
+  },
+  {
+    id: 1,
+    children: <Activities />,
+    keyLabel: "pages.farmManagement.activities",
   },
 ];
 type TabPanelProps = {

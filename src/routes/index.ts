@@ -7,5 +7,7 @@ export const userManagementUrl = "/user-management";
 export const farmManagementUrl = "/farm-management";
 export const farmCreationUrl = `${farmManagementUrl}/create`;
 export const farmDetailUrl = `${farmManagementUrl}/detail`;
+export const farmManagementActivityUrl = `${farmManagementUrl}/farm-activites`;
+export const farmManagementActivityCreateUrl = `${farmManagementActivityUrl}/create`;
 
 export const farmActivityUrl = "/farm-activity";

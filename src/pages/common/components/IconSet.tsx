@@ -46,6 +46,8 @@ import { ReactComponent as AddPrimary } from "assets/icons/add-primary.svg";
 import { ReactComponent as RemoveBlack } from "assets/icons/remove-black.svg";
 import { ReactComponent as KoFlag } from "assets/icons/korea-flag.svg";
 import { ReactComponent as EnFlag } from "assets/icons/english-flag.svg";
+import { ReactComponent as UploadImage } from "assets/icons/upload-frame.svg";
+import { ReactComponent as PhotoFrame } from "assets/icons/photo-frame.svg";
 
 export const ICON_SET: Record<string, FC<SVGProps<SVGSVGElement>>> = {
   "eyes-hide": EyesHide,
@@ -95,4 +97,6 @@ export const ICON_SET: Record<string, FC<SVGProps<SVGSVGElement>>> = {
   "remove-black": RemoveBlack,
   "ko-flag": KoFlag,
   "en-flag": EnFlag,
+  "upload-image": UploadImage,
+  "none-image": PhotoFrame,
 };

@@ -135,6 +135,8 @@ module.exports = {
       borderColor: ['disabled'],
       borderWidth: ['disabled'],
       cursor: ['disabled'],
+      transform: ['hover', 'focus', 'active'],
+      scale: ['hover', 'focus', 'active'],
     },
     position: ["responsive"],
     opacity: ["responsive", "hover", "focus", "disabled"],

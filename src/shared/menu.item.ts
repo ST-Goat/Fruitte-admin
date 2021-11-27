@@ -1,6 +1,8 @@
 import {
   userManagementUrl,
   farmManagementUrl,
+  farmManagementActivityUrl,
+  farmManagementActivityCreateUrl,
   farmActivityUrl,
   farmCreationUrl,
   farmDetailUrl,
@@ -13,6 +15,7 @@ import FarmManagement from "pages/FarmManagement";
 import FarmCreation from "pages/FarmManagement/Create";
 import FarmDetail from "pages/FarmManagement/FarmDetail";
 import FarmActivity from "pages/FarmActivity";
+import AddOrEditActivity from "pages/FarmManagement/AddOrEditActivity";
 
 import PeopleIcon from "@mui/icons-material/People";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -75,6 +78,12 @@ export const menuItems: MenuItemProps[] = [
         label: "",
         to: `${farmDetailUrl}/:id`,
         component: FarmDetail,
+      },
+      {
+        key: "farm-management-activity-detail",
+        label: "",
+        to: `${farmManagementActivityUrl}/:id`,
+        component: AddOrEditActivity,
       },
     ],
   },

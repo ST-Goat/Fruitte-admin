@@ -118,7 +118,7 @@ const SubmitOrCancel = ({ t }: { t: (key: string) => string }) => {
   );
 };
 
-function AddOrEdit({ isCreate, data }: { isCreate: boolean; data?: any }) {
+function FarmForm({ isCreate, data }: { isCreate: boolean; data?: any }) {
   const { t } = useTranslation();
   const [fieldDisabled, setFieldDisabled] = useState<{
     [key: string]: boolean;
@@ -231,4 +231,4 @@ function AddOrEdit({ isCreate, data }: { isCreate: boolean; data?: any }) {
   );
 }
 
-export default AddOrEdit;
+export default FarmForm;
