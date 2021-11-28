@@ -6,6 +6,7 @@ import FarmForm from "../components/FarmForm";
 import Reservation from "./Reservation";
 import Activities from "./Activities";
 import Text from "pages/common/components/Text";
+import Schedule from "./Schedule";
 
 type TabPanelProps = {
   children?: React.ReactNode;
@@ -58,13 +59,18 @@ function FarmDetail() {
     },
     {
       id: 2,
-      children: <Reservation />,
-      keyLabel: "common.reservation",
+      children: <Schedule />,
+      keyLabel: "pages.farmManagement.schedule",
     },
     {
       id: 3,
       children: Feedback,
       keyLabel: "pages.farmManagement.feedback",
+    },
+    {
+      id: 4,
+      children: <Reservation />,
+      keyLabel: "common.reservation",
     },
   ];
   return (

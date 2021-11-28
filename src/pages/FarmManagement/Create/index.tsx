@@ -10,11 +10,11 @@ const tabList = [
     children: <FarmForm isCreate />,
     keyLabel: "common.farm",
   },
-  {
-    id: 1,
-    children: <Activities />,
-    keyLabel: "pages.farmManagement.activities",
-  },
+  // {
+  //   id: 1,
+  //   children: <Activities />,
+  //   keyLabel: "pages.farmManagement.activities",
+  // },
 ];
 type TabPanelProps = {
   children?: React.ReactNode;
