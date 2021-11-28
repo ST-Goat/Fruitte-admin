@@ -19,6 +19,7 @@ export type InputProps = {
   styledWrapper?: string;
   styledIconWrapper?: string;
   onClickIcon?: (event: React.MouseEvent) => void;
+  onBlur?: () => void;
   disabled?: boolean;
 };
 
@@ -42,6 +43,7 @@ const RenderInput = ({
   styledInput,
   styledIconWrapper,
   onClickIcon,
+  onBlur,
   disabled = false,
   field,
   meta,
@@ -82,6 +84,7 @@ const RenderInput = ({
                 isError ? "border-error-default" : "border-primary-default"
               )
         }
+        onBlur={onBlur}
         placeholder={placeholder}
         value={fieldValue}
         onChange={handleChange}

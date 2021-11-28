@@ -14,6 +14,7 @@ import UploadImages, { UploadImageProps } from "./UploadImages";
 import EditIcon from "@mui/icons-material/Edit";
 import OptionalProducts, { OptionalProductProps } from "./OptionalProducts";
 import BoxEditor from "./BoxEditor";
+import { useState } from "react";
 
 type FieldItem = {
   id: string;
@@ -123,6 +124,47 @@ const RowStyled = ({
   </>
 );
 
+const Field = ({
+  item,
+  values,
+  setFieldValue,
+}: {
+  item: FieldItem;
+  values: { [field: string]: any };
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+}) => {
+  const [disabled, setDisabled] = useState(true);
+  return (
+    <item.component
+      id={item.id}
+      name={item.name}
+      fieldValue={values[item.name]}
+      setFieldValue={setFieldValue}
+      type="text"
+      placeholder="input any thing here..."
+      onClickIcon={() => setDisabled(!disabled)}
+      onBlur={() => setDisabled(true)}
+      disabled={disabled}
+      EndIcon={
+        item.typeComponent === "input-with-control" ? (
+          <EditIcon
+            color="action"
+            fontSize="large"
+            sx={{
+              "&": {
+                cursor: "pointer",
+              },
+              "&:active": {
+                transform: "scale(0.8)",
+              },
+            }}
+          />
+        ) : undefined
+      }
+    />
+  );
+};
+
 const initialValues = {
   name: "",
   images: null,
@@ -192,29 +234,10 @@ function ActivityFormItem() {
                       </Text>
                     }
                     rightContent={
-                      <item.component
-                        id={item.id}
-                        name={item.name}
-                        fieldValue={values[item.name]}
+                      <Field
+                        item={item}
+                        values={values}
                         setFieldValue={setFieldValue}
-                        type="text"
-                        placeholder="input any thing here..."
-                        EndIcon={
-                          item.typeComponent === "input-with-control" ? (
-                            <EditIcon
-                              color="action"
-                              fontSize="large"
-                              sx={{
-                                "&": {
-                                  cursor: "pointer",
-                                },
-                                "&:active": {
-                                  transform: "scale(0.8)",
-                                },
-                              }}
-                            />
-                          ) : undefined
-                        }
                       />
                     }
                   />
