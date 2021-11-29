@@ -73,7 +73,8 @@
             "settlementRate": "Settlement Rate",
             "farmUser": "Farm User",
             "addFarmUser": "Add farm user",
-            "createActivity": "Create Activity"
+            "createActivity": "Create Activity",
+            "schedule": "Schedule"
         },
         "farmActivity": {
             "title": "Farm Activity",
