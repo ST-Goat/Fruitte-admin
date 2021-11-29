@@ -73,7 +73,8 @@
             "settlementRate": "정산 비율",
             "farmUser": "농장 유저",
             "addFarmUser": "농장 유저 추가",
-            "createActivity": "체험 생성"
+            "createActivity": "체험 생성",
+            "schedule": "일정"
         },
         "farmActivity": {
             "title": "Farm Activity",
