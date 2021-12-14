@@ -7,7 +7,7 @@ import {
   loginSuccess,
   loginFailure,
 } from "../slices/auth";
-import { homepageUrl } from "routes";
+import { homepageUrl, loginUrl } from "routes";
 import { login, LoginPayload } from "services/authentication";
 import CONFIGS from "shared/configs";
 
@@ -27,7 +27,7 @@ function* handleLogout() {
   yield delay(500);
   localStorage.removeItem(CONFIGS.HEADER_PAYLOAD_KEY);
   // redirect to login page
-  yield put(push(homepageUrl));
+  yield put(push(loginUrl));
 }
 
 function* watchLoginFlow() {

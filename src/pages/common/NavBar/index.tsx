@@ -1,8 +1,12 @@
+import { useLocation, Link } from "react-router-dom";
+
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
-import Avatar from "@mui/material/Avatar";
 import LocaleTrans from "../LocaleTrans";
+import AccountMenu from "./AccountMenu";
+
+import { loginUrl } from "routes";
+
 import "./index.scss";
 
 export const LogoHeader = () => (
@@ -22,6 +26,8 @@ function NavBar({
   handleExpendSideBar?: () => void;
   disableExpand?: boolean;
 }) {
+  const location = useLocation();
+
   return (
     <div id="navbar" className="w-full pl-5 pr-8 py-3 flex bg-primary-default">
       <div className="navbar__left flex items-center flex-grow">
@@ -45,13 +51,11 @@ function NavBar({
         <div className="navbar__locale-trans">
           <LocaleTrans />
         </div>
-        <div className="cursor-pointer ml-4">
-          <Avatar
-            sx={{ width: 40, height: 40 }}
-            alt="#user"
-            src="https://i.pravatar.cc/300"
-          />
-        </div>
+        {Boolean(location.pathname !== loginUrl) && (
+          <div className="cursor-pointer ml-4">
+            <AccountMenu />
+          </div>
+        )}
       </div>
     </div>
   );
