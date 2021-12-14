@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
 import "./Login.scss";
 
 import {
@@ -12,13 +13,17 @@ import EyesHide from "assets/icons/eyes-hide.svg";
 import EyesShow from "assets/icons/eyes-show.svg";
 import Input from "pages/common/Formik/Input";
 import NavBar from "pages/common/NavBar";
+import ButtonCustomizer from "pages/common/Button";
 
-function validateEmail(value: string) {
+import { login } from "services/authentication";
+import { loginRequest } from "features/slices/auth";
+
+function validatePhone(value: string) {
   let error;
   if (!value) {
     error = "Required";
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-    error = "Invalid email address";
+  } else if (!/([0-9]{3})-([0-9]{3})-([0-9]{4}$)/g.test(value)) {
+    error = "Mobile format is incorrect (XXX-XXX-XXXX)";
   }
   return error;
 }
@@ -32,23 +37,29 @@ function validatePassword(value: string) {
 }
 
 type FormValues = {
-  email: string;
+  phone: string;
   password: string;
 };
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
   const [passIsShowred, setPassIsShowred] = useState(false);
+  const dispatch = useDispatch();
 
   const hideOrShowPass = () => {
     setPassIsShowred(!passIsShowred);
   };
 
   const onSubmit = (values: FormValues, actions: FormikActions<any>) => {
-    setTimeout(() => {
-      alert(JSON.stringify(values, null, 2));
-      actions.setSubmitting(false);
-    }, 1000);
+    const { phone, password } = values;
+    dispatch(
+      loginRequest({
+        mobile: phone,
+        password: password,
+        isFarmer: false,
+      })
+    );
+    actions.setSubmitting(false);
   };
 
   return (
@@ -58,25 +69,24 @@ const Login: React.FC = () => {
         <h1 className="text-5xl text-center font-bold mb-16">
           {t("pages.login.title")}
         </h1>
-        <Formik initialValues={{ email: "", password: "" }} onSubmit={onSubmit}>
+        <Formik initialValues={{ phone: "", password: "" }} onSubmit={onSubmit}>
           {(props: FormikProps<any>) => (
             <Form>
               <div className="mb-6">
                 <Input
                   type="text"
                   autoFocus
-                  name="email"
-                  validate={validateEmail}
-                  placeholder={`${t("common.email")}/ID`}
+                  name="phone"
+                  validate={validatePhone}
+                  placeholder={t("common.phoneNumber")}
                 />
               </div>
               <div className="mb-12">
-                {" "}
                 <Input
                   type={passIsShowred ? "text" : "password"}
                   name="password"
                   validate={validatePassword}
-                  placeholder={`${t("common.email")}/ID`}
+                  placeholder={t("common.password")}
                   onClickIcon={hideOrShowPass}
                   EndIcon={
                     <img
@@ -88,12 +98,9 @@ const Login: React.FC = () => {
                 />
               </div>
 
-              <button
-                className="w-full p-2 rounded-lg bg-primary-default"
-                type="submit"
-              >
-                {t("pages.login.submit")}
-              </button>
+              <ButtonCustomizer className="w-full" type="submit">
+                {t("pages.login.submit")?.toLocaleUpperCase()}
+              </ButtonCustomizer>
             </Form>
           )}
         </Formik>
