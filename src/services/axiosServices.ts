@@ -5,7 +5,7 @@ class AxiosService {
   service: any;
   constructor() {
     const service = axios.create({
-      withCredentials: true,
+      withCredentials: false,
       responseType: "json",
       baseURL: CONFIGS.API_ENDPOINT,
     });
@@ -44,17 +44,17 @@ class AxiosService {
     }
   };
 
-  async get(endpoint: string, options: any) {
+  async get(endpoint: string, options?: any) {
     // await refreshToken
     return this.service.get(endpoint, options);
   }
 
-  async post(endpoint: string, payload: any, options: any) {
+  async post(endpoint: string, payload?: any, options?: any) {
     // await refreshToken
     return this.service.post(endpoint, payload, options);
   }
 
-  async put(endpoint: string, payload: any, options: any) {
+  async put(endpoint: string, payload?: any, options?: any) {
     // await refreshToken
     return this.service.put(endpoint, payload, options);
   }

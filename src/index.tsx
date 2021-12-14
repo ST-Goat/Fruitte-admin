@@ -7,17 +7,22 @@ import reportWebVitals from "./reportWebVitals";
 import "./styles/tailwind.scss";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import { store } from "./features/store";
 import { I18nextProvider } from "react-i18next";
+import { ConnectedRouter } from "connected-react-router";
+
+import { store } from "./features/store";
 import i18n from "./i18n";
+import history from "utilities/history";
 
 ReactDOM.render(
   <Suspense fallback="loading">
     <BrowserRouter>
       <Provider store={store}>
-        <I18nextProvider i18n={i18n}>
-          <App />
-        </I18nextProvider>
+        <ConnectedRouter history={history}>
+          <I18nextProvider i18n={i18n}>
+            <App />
+          </I18nextProvider>
+        </ConnectedRouter>
       </Provider>
     </BrowserRouter>
   </Suspense>,
