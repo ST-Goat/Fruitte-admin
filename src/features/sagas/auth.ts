@@ -20,6 +20,7 @@ function* handleLogin(payload: LoginPayload) {
     // redirect to admin page
   } catch (error) {
     yield put(loginFailure(error));
+    yield put(logoutRequest(null));
   }
 }
 

@@ -70,43 +70,45 @@ const RenderInput = ({
     onChange && onChange(event);
   };
   return (
-    <div className={cn("relative", styledWrapper)}>
-      <input
-        id={id}
-        type={type}
-        autoFocus={autoFocus}
-        disabled={disabled}
-        className={
-          Boolean(styledInput)
-            ? styledInput
-            : styledInputDefault.replaceAll(
-                isError ? "border-primary-default" : "border-error-default",
-                isError ? "border-error-default" : "border-primary-default"
-              )
-        }
-        onBlur={onBlur}
-        placeholder={placeholder}
-        value={fieldValue}
-        onChange={handleChange}
-      />
-      {(EndIcon || StartIcon) && (
-        <div
-          onClick={onClickIcon}
-          className={cn(
-            "absolute top-0 h-full flex items-center",
-            disabled && "opacity-60",
-            EndIcon && "right-5",
-            StartIcon && "left-5",
-            styledIconWrapper
-          )}
-        >
-          {EndIcon ?? StartIcon}
-        </div>
-      )}
+    <>
+      <div className={cn("relative", styledWrapper)}>
+        <input
+          id={id}
+          type={type}
+          autoFocus={autoFocus}
+          disabled={disabled}
+          className={
+            Boolean(styledInput)
+              ? styledInput
+              : styledInputDefault.replaceAll(
+                  isError ? "border-primary-default" : "border-error-default",
+                  isError ? "border-error-default" : "border-primary-default"
+                )
+          }
+          onBlur={onBlur}
+          placeholder={placeholder}
+          value={fieldValue}
+          onChange={handleChange}
+        />
+        {(EndIcon || StartIcon) && (
+          <div
+            onClick={onClickIcon}
+            className={cn(
+              "absolute top-0 h-full flex items-center",
+              disabled && "opacity-60",
+              EndIcon && "right-5",
+              StartIcon && "left-5",
+              styledIconWrapper
+            )}
+          >
+            {EndIcon ?? StartIcon}
+          </div>
+        )}
+      </div>
       {isError && (
         <div className="error ml-2 text-red-700 italic">{meta.error}</div>
       )}
-    </div>
+    </>
   );
 };
 
