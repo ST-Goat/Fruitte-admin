@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, Action } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import { routerMiddleware } from "connected-react-router";
 
@@ -15,5 +15,5 @@ export const store = configureStore({
 });
 sagaMiddleware.run(rootSaga);
 
-export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;

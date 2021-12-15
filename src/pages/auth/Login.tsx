@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
 import "./Login.scss";
 
 import {
@@ -15,8 +14,8 @@ import Input from "pages/common/Formik/Input";
 import NavBar from "pages/common/NavBar";
 import ButtonCustomizer from "pages/common/Button";
 
-import { login } from "services/authentication";
 import { loginRequest } from "features/slices/auth";
+import { useAppDispatch, useAppSelector } from "utilities/useHook";
 
 function validatePhone(value: string) {
   let error;
@@ -44,7 +43,8 @@ type FormValues = {
 const Login: React.FC = () => {
   const { t } = useTranslation();
   const [passIsShowred, setPassIsShowred] = useState(false);
-  const dispatch = useDispatch();
+  const authState = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   const hideOrShowPass = () => {
     setPassIsShowred(!passIsShowred);
@@ -69,40 +69,49 @@ const Login: React.FC = () => {
         <h1 className="text-5xl text-center font-bold mb-16">
           {t("pages.login.title")}
         </h1>
-        <Formik initialValues={{ phone: "", password: "" }} onSubmit={onSubmit}>
-          {(props: FormikProps<any>) => (
-            <Form>
-              <div className="mb-6">
-                <Input
-                  type="text"
-                  autoFocus
-                  name="phone"
-                  validate={validatePhone}
-                  placeholder={t("common.phoneNumber")}
-                />
-              </div>
-              <div className="mb-12">
-                <Input
-                  type={passIsShowred ? "text" : "password"}
-                  name="password"
-                  validate={validatePassword}
-                  placeholder={t("common.password")}
-                  onClickIcon={hideOrShowPass}
-                  EndIcon={
-                    <img
-                      className="cursor-pointer"
-                      alt="hideOrShowPass"
-                      src={!passIsShowred ? EyesShow : EyesHide}
-                    />
-                  }
-                />
-              </div>
-
-              <ButtonCustomizer className="w-full" type="submit">
-                {t("pages.login.submit")?.toLocaleUpperCase()}
-              </ButtonCustomizer>
-            </Form>
+        <div>
+          {authState.errorMessage && (
+            <div className="mb-4 text-center text-error-default italic">
+              {authState.errorMessage}
+            </div>
           )}
+        </div>
+        <Formik initialValues={{ phone: "", password: "" }} onSubmit={onSubmit}>
+          {(props: FormikProps<any>) => {
+            return (
+              <Form>
+                <div className="mb-6">
+                  <Input
+                    type="text"
+                    autoFocus
+                    name="phone"
+                    validate={validatePhone}
+                    placeholder={t("common.phoneNumber")}
+                  />
+                </div>
+                <div className="mb-12">
+                  <Input
+                    type={passIsShowred ? "text" : "password"}
+                    name="password"
+                    validate={validatePassword}
+                    placeholder={t("common.password")}
+                    onClickIcon={hideOrShowPass}
+                    EndIcon={
+                      <img
+                        className="cursor-pointer"
+                        alt="hideOrShowPass"
+                        src={!passIsShowred ? EyesShow : EyesHide}
+                      />
+                    }
+                  />
+                </div>
+
+                <ButtonCustomizer className="w-full" type="submit">
+                  {t("pages.login.submit")?.toLocaleUpperCase()}
+                </ButtonCustomizer>
+              </Form>
+            );
+          }}
         </Formik>
       </div>
       <div className="login__footer w-full h-16 absolute bottom-0 bg-primary-default"></div>
