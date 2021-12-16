@@ -1,24 +1,41 @@
-import { useState, useRef } from "react";
+import { useState, useRef, memo, useEffect } from "react";
 import JoditEditor from "jodit-react";
-import { Field, FieldInputProps, FieldMetaProps } from "formik";
+import { Field, FieldProps } from "formik";
 
-const BoxEditor = ({ name }: { name: string }) => {
+const JoditEditorCustomizer = memo(({ field, meta }: FieldProps) => {
   const editor = useRef(null);
+  const [value, setValue] = useState(field.value);
+
+  useEffect(() => {
+    field.onChange({
+      target: {
+        name: field.name,
+        value: value,
+      },
+    });
+  }, [value]);
 
   const config = {
     readonly: false,
   };
   return (
+    <JoditEditor
+      ref={editor}
+      config={config}
+      value={value}
+      onBlur={(newContent) => {
+        setValue(newContent);
+      }}
+    />
+  );
+});
+
+const BoxEditor = ({ name }: { name: string }) => {
+  return (
     <Field
       name={name}
-      render={({
-        field,
-        meta,
-      }: {
-        field: FieldInputProps<any>;
-        meta: FieldMetaProps<any>;
-      }) => {
-        return <JoditEditor ref={editor} config={config} {...field} />;
+      render={(fieldProps: FieldProps) => {
+        return <JoditEditorCustomizer {...fieldProps} />;
       }}
     />
   );
