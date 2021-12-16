@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import TableCustomizer from "pages/common/Table";
 import ButtonCustomizer from "pages/common/Button";
@@ -10,7 +11,6 @@ import Box from "@mui/material/Box";
 
 import { gettotalRowCurrent } from "utilities/paginations";
 import { announcementUrl } from "routes";
-import { useState } from "react";
 
 const headers = [
   {
@@ -70,6 +70,7 @@ const modalStyles = {
 };
 
 type ModalContentType = {
+  type: "create" | "edit" | "delete" | null;
   title: string;
   leftBtn: string;
   rightBtn: string;
@@ -145,25 +146,30 @@ const convertData = (
 
 function AnnouncementView() {
   const { t } = useTranslation();
+  const history = useHistory();
   const Modals: { [key: string]: ModalContentType } = {
     create: {
+      type: "create",
       title: t("pages.announcement.createModalTitle"),
       leftBtn: t("common.create"),
       rightBtn: t("common.cancel"),
     },
     edit: {
+      type: "edit",
       title: t("pages.announcement.editModalTitle"),
       leftBtn: t("common.edit"),
       rightBtn: t("common.cancel"),
     },
     delete: {
+      type: "delete",
       title: t("pages.announcement.deleteModalTitle"),
       leftBtn: t("common.delete"),
       rightBtn: t("common.cancel"),
     },
   };
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [modalContent, setModalContent] = useState({
+  const [modalContent, setModalContent] = useState<ModalContentType>({
+    type: null,
     title: "",
     leftBtn: "",
     rightBtn: "",
@@ -183,7 +189,18 @@ function AnnouncementView() {
   };
 
   const handleAccepted = () => {
-    // accepted idSelected
+    switch (modalContent.type) {
+      case "create":
+        history.push(`${announcementUrl}/create`);
+        break;
+      case "edit":
+        history.push(`${announcementUrl}/${idSelected}`);
+        break;
+      case "delete":
+        break;
+      default:
+        break;
+    }
   };
   return (
     <div>
