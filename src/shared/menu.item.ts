@@ -3,7 +3,7 @@ import {
   farmManagementUrl,
   farmManagementActivityUrl,
   farmManagementActivityCreateUrl,
-  farmActivityUrl,
+  // farmActivityUrl,
   farmCreationUrl,
   farmDetailUrl,
   farmReservationUrl,
@@ -15,7 +15,7 @@ import UserDetail from "pages/UserManagement/UserDetail";
 import FarmManagement from "pages/FarmManagement";
 import FarmCreation from "pages/FarmManagement/Create";
 import FarmDetail from "pages/FarmManagement/FarmDetail";
-import FarmActivity from "pages/FarmActivity";
+// import FarmActivity from "pages/FarmActivity";
 import AddOrEditActivity from "pages/FarmManagement/AddOrEditActivity";
 
 import PeopleIcon from "@mui/icons-material/People";
@@ -95,12 +95,12 @@ export const menuItems: MenuItemProps[] = [
       },
     ],
   },
-  {
-    key: "farm-activity",
-    label: "pages.farmActivity.title",
-    to: farmActivityUrl,
-    component: FarmActivity,
-    exact: true,
-    icon: LocalActivityIcon,
-  },
+  // {
+  //   key: "farm-activity",
+  //   label: "pages.farmActivity.title",
+  //   to: farmActivityUrl,
+  //   component: FarmActivity,
+  //   exact: true,
+  //   icon: LocalActivityIcon,
+  // },
 ];

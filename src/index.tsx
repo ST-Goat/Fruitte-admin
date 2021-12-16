@@ -10,7 +10,7 @@ import { Provider } from "react-redux";
 import { I18nextProvider } from "react-i18next";
 import { ConnectedRouter } from "connected-react-router";
 
-import { store } from "./features/store";
+import { store } from "./redux/store";
 import i18n from "./i18n";
 import history from "utilities/history";
 

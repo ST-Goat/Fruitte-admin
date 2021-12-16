@@ -12,7 +12,11 @@
         "phoneNumber": "전화번호",
         "address": "주소",
         "produce": "생성",
-        "cancel": "취소"
+        "cancel": "취소",
+        "user": "User",
+        "content": "Content",
+        "status": "Status",
+        "select": "Select"
     },
     "pages": {
         "login": {
@@ -74,7 +78,8 @@
             "farmUser": "농장 유저",
             "addFarmUser": "농장 유저 추가",
             "createActivity": "체험 생성",
-            "schedule": "일정"
+            "schedule": "일정",
+            "sendDate": "Send Date"
         },
         "farmActivity": {
             "title": "Farm Activity",

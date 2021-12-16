@@ -1,5 +1,3 @@
-import { useLocation } from "react-router-dom";
-import { farmCreationUrl, farmDetailUrl } from "routes";
 import { Formik, Form, FormikProps } from "formik";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
@@ -179,8 +177,6 @@ const initialValues = {
   information: "",
 };
 function ActivityFormItem() {
-  const location = useLocation();
-  const isCreate = (location.pathname = "create");
   const { t } = useTranslation();
   return (
     <Formik
@@ -194,13 +190,7 @@ function ActivityFormItem() {
           <Grid container item xs={12}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <LeftHeader
-                  goBackUrl={
-                    isCreate
-                      ? farmCreationUrl
-                      : `${farmDetailUrl}/${location.pathname}`
-                  }
-                />
+                <LeftHeader />
               </Grid>
               <Grid item xs={12}>
                 <div className="border-b-2 border-grey-default">

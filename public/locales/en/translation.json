@@ -12,7 +12,11 @@
         "phoneNumber": "Phone Number",
         "address": "Address",
         "produce": "Produce",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "user": "User",
+        "content": "Content",
+        "status": "Status",
+        "select": "Select"
     },
     "pages": {
         "login": {
@@ -74,7 +78,8 @@
             "farmUser": "Farm User",
             "addFarmUser": "Add farm user",
             "createActivity": "Create Activity",
-            "schedule": "Schedule"
+            "schedule": "Schedule",
+            "sendDate": "Send Date"
         },
         "farmActivity": {
             "title": "Farm Activity",
