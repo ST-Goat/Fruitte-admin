@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import cn from "classnames";
 import { Field, FieldInputProps, FieldMetaProps } from "formik";
 import InputWithLabel from "./InputWithLabel";
@@ -22,13 +22,6 @@ export type InputProps = {
   onBlur?: () => void;
   disabled?: boolean;
 };
-
-const styledInputDefault = cn(
-  "w-full py-4 px-5",
-  "border border-primary-default rounded-xl shadow-md",
-  "focus:outline-none focus:border-2 focus:border-primary-default",
-  "disabled:outline-none disabled:border-1 disabled:border-grey-default disabled:opacity-60"
-);
 
 const RenderInput = ({
   id,
@@ -56,6 +49,31 @@ const RenderInput = ({
   const [fieldValue, setFieldValue] = useState(field.value ?? "");
   const debouncedValue = useDebounce(fieldValue);
 
+  const styledInputDefault = useMemo(() => {
+    let result = [
+      "w-full py-4 px-5",
+      "border border-primary-default rounded-xl shadow-md",
+      "focus:outline-none focus:border-2 focus:border-primary-default",
+      "disabled:outline-none disabled:border-1 disabled:border-grey-default disabled:opacity-60",
+    ];
+    if (isError) {
+      result = [
+        "w-full py-4 px-5",
+        "border border-error-default rounded-xl shadow-md",
+        "focus:outline-none focus:border-2 focus:border-error-default",
+        "disabled:outline-none disabled:border-1 disabled:border-grey-default disabled:opacity-60",
+      ];
+    }
+    if (Boolean(EndIcon)) {
+      result.push("pr-16");
+    }
+    if (Boolean(StartIcon)) {
+      result.push("pl-16");
+    }
+
+    return cn(result);
+  }, [isError, EndIcon, StartIcon]);
+
   useEffect(() => {
     field.onChange({
       target: {
@@ -77,14 +95,7 @@ const RenderInput = ({
           type={type}
           autoFocus={autoFocus}
           disabled={disabled}
-          className={
-            Boolean(styledInput)
-              ? styledInput
-              : styledInputDefault.replaceAll(
-                  isError ? "border-primary-default" : "border-error-default",
-                  isError ? "border-error-default" : "border-primary-default"
-                )
-          }
+          className={Boolean(styledInput) ? styledInput : styledInputDefault}
           onBlur={onBlur}
           placeholder={placeholder}
           value={fieldValue}

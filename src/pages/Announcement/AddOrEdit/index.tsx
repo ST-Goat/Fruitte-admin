@@ -1,6 +1,7 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
+import { isEqual } from "lodash";
 
 import InputWithLabel, {
   MIN_LEFT_WIDTH,
@@ -19,6 +20,42 @@ import ButtonCustomizer from "pages/common/Button";
 
 import { announcementUrl } from "routes";
 
+type JoditEditorCustomizerProps = {
+  field: FieldInputProps<any>;
+  meta: FieldMetaProps<any>;
+};
+const JoditEditorCustomizer = memo(
+  ({ field, meta }: JoditEditorCustomizerProps) => {
+    const editor = useRef(null);
+    const [value, setValue] = useState(field.value);
+
+    useEffect(() => {
+      field.onChange({
+        target: {
+          name: field.name,
+          value: value,
+        },
+      });
+    }, [value]);
+
+    return (
+      <JoditEditor
+        ref={editor}
+        config={{
+          readonly: false,
+          width: "100%",
+        }}
+        value={value}
+        onBlur={(newContent) => setValue(newContent)}
+      />
+    );
+  },
+  (
+    prevProps: JoditEditorCustomizerProps,
+    nextProps: JoditEditorCustomizerProps
+  ) => isEqual(prevProps, nextProps)
+);
+
 const fakeItem = {
   title: "fake-title",
   content: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum`,
@@ -35,7 +72,6 @@ function AddOrEdit() {
     title: string;
     content: string;
   }>(initialValue);
-  const editor = useRef(null);
 
   useEffect(() => {
     if (location.pathname !== `/${announcementUrl}/create`) {
@@ -56,7 +92,9 @@ function AddOrEdit() {
               title: announcement.title,
               content: announcement.content,
             }}
-            onSubmit={() => {}}
+            onSubmit={(values) => {
+              console.log("submit", values);
+            }}
           >
             {(props: FormikProps<any>) => (
               <Form>
@@ -83,27 +121,15 @@ function AddOrEdit() {
                   <div style={{ minWidth: MIN_LEFT_WIDTH }} className="mr-16">
                     {t("common.content")}
                   </div>
-                  <Field
-                    name="content"
-                    render={({
+                  <Field name="content">
+                    {({
                       field,
                       meta,
                     }: {
                       field: FieldInputProps<any>;
                       meta: FieldMetaProps<any>;
-                    }) => {
-                      return (
-                        <JoditEditor
-                          ref={editor}
-                          config={{
-                            readonly: false,
-                            width: "100%",
-                          }}
-                          {...field}
-                        />
-                      );
-                    }}
-                  />
+                    }) => <JoditEditorCustomizer field={field} meta={meta} />}
+                  </Field>
                 </div>
                 <div className="mt-16 mr-8 flex justify-end items-center">
                   <ButtonCustomizer type="submit" className="mr-4">
