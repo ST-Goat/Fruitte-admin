@@ -2,11 +2,10 @@ import {
   userManagementUrl,
   farmManagementUrl,
   farmManagementActivityUrl,
-  farmManagementActivityCreateUrl,
-  // farmActivityUrl,
   farmCreationUrl,
   farmDetailUrl,
   farmReservationUrl,
+  announcementUrl,
 } from "routes";
 
 import Main from "pages/main/Main";
@@ -15,14 +14,16 @@ import UserDetail from "pages/UserManagement/UserDetail";
 import FarmManagement from "pages/FarmManagement";
 import FarmCreation from "pages/FarmManagement/Create";
 import FarmDetail from "pages/FarmManagement/FarmDetail";
-// import FarmActivity from "pages/FarmActivity";
 import AddOrEditActivity from "pages/FarmManagement/AddOrEditActivity";
+import Announcement from "pages/Announcement";
+import AnnouncementAddOrEdit from "pages/Announcement/AddOrEdit";
 
 import PeopleIcon from "@mui/icons-material/People";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import LocalActivityIcon from "@mui/icons-material/LocalActivity";
-import AddOrEditReservation from "pages/FarmManagement/AddOrEditReservation/indext";
+import AnnouncementIcon from "@mui/icons-material/Announcement";
+import AddOrEditReservation from "pages/FarmManagement/AddOrEditReservation";
 
 export type MenuItemProps = {
   key: string;
@@ -95,12 +96,20 @@ export const menuItems: MenuItemProps[] = [
       },
     ],
   },
-  // {
-  //   key: "farm-activity",
-  //   label: "pages.farmActivity.title",
-  //   to: farmActivityUrl,
-  //   component: FarmActivity,
-  //   exact: true,
-  //   icon: LocalActivityIcon,
-  // },
+  {
+    key: "announcement",
+    label: "pages.announcement.title",
+    to: announcementUrl,
+    component: Announcement,
+    exact: true,
+    icon: AnnouncementIcon,
+    subPath: [
+      {
+        key: "announcement-add-or-edit",
+        label: "",
+        to: `${announcementUrl}/:id`,
+        component: AnnouncementAddOrEdit,
+      },
+    ],
+  },
 ];

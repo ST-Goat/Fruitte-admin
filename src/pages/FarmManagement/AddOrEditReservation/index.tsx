@@ -1,7 +1,7 @@
 import React from "react";
 
 function AddOrEditReservation() {
-  return <div></div>;
+  return <div>AddOrEditReservation</div>;
 }
 
 export default AddOrEditReservation;
