@@ -14,9 +14,13 @@
         "produce": "생성",
         "cancel": "취소",
         "user": "User",
-        "content": "Content",
+        "content": "내용",
         "status": "Status",
-        "select": "Select"
+        "select": "Select",
+        "title": "제목",
+        "delete": "삭제",
+        "edit": "수정",
+        "create": "생성"
     },
     "pages": {
         "login": {
@@ -97,6 +101,14 @@
             "cancelReservation": "예약취소",
             "complete": "완료",
             "process": "처리"
+        },
+        "announcement": {
+            "title": "공지사항",
+            "createDate": "생성일",
+            "createAnnouncement": "공지사항 생성",
+            "createModalTitle": "정말 해당 공지사항을 생성 하시겠습니까?",
+            "editModalTitle": "정말 해당 공지사항을 수정 하시겠습니까?",
+            "deleteModalTitle": "정말 해당 공지사항을 삭제 하시겠습니까?"
         }
     }
 }
