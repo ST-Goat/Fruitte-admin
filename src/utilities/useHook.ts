@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import type { RootState, AppDispatch } from "features/store";
+import type { RootState, AppDispatch } from "redux/store";
 
 export const useDebounce = (value: any, delay: number = 100) => {
   const [debouncedValue, setDebouncedValue] = useState(value);

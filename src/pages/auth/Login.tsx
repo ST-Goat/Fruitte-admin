@@ -14,7 +14,7 @@ import Input from "pages/common/Formik/Input";
 import NavBar from "pages/common/NavBar";
 import ButtonCustomizer from "pages/common/Button";
 
-import { loginRequest } from "features/slices/auth";
+import { loginRequest } from "redux/slices/auth";
 import { useAppDispatch, useAppSelector } from "utilities/useHook";
 
 function validatePhone(value: string) {

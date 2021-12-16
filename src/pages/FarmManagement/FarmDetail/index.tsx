@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import LeftHeader from "../components/LeftHeader";
-import Feedback from "../Feedback";
+import Feedback from "./Feedback";
 import TabHeader from "../components/TabHeader";
 import FarmForm from "../components/FarmForm";
 import Reservation from "./Reservation";
@@ -46,33 +46,36 @@ function TabPanel(props: TabPanelProps) {
 function FarmDetail() {
   const [tabIdCurrent, setTabIdCurrent] = useState(0);
 
-  const tabList = [
-    {
-      id: 0,
-      children: <FarmForm isCreate={false} data={fakeFarmData} />,
-      keyLabel: "common.farm",
-    },
-    {
-      id: 1,
-      children: <Activities />,
-      keyLabel: "pages.farmManagement.activities",
-    },
-    {
-      id: 2,
-      children: <Schedule />,
-      keyLabel: "pages.farmManagement.schedule",
-    },
-    {
-      id: 3,
-      children: Feedback,
-      keyLabel: "pages.farmManagement.feedback",
-    },
-    {
-      id: 4,
-      children: <Reservation />,
-      keyLabel: "common.reservation",
-    },
-  ];
+  const tabList = useMemo(
+    () => [
+      {
+        id: 0,
+        children: <FarmForm isCreate={false} data={fakeFarmData} />,
+        keyLabel: "common.farm",
+      },
+      {
+        id: 1,
+        children: <Activities />,
+        keyLabel: "pages.farmManagement.activities",
+      },
+      {
+        id: 2,
+        children: <Schedule />,
+        keyLabel: "pages.farmManagement.schedule",
+      },
+      {
+        id: 3,
+        children: <Reservation />,
+        keyLabel: "common.reservation",
+      },
+      {
+        id: 4,
+        children: <Feedback />,
+        keyLabel: "pages.farmManagement.feedback",
+      },
+    ],
+    []
+  );
   return (
     <div>
       <div className="flex justify-between items-center w-full">

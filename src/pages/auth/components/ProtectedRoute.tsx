@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { Redirect, Route, RouteProps, useLocation } from "react-router";
-import { RootState } from "features/store";
+import { RootState } from "redux/store";
 import { loginUrl } from "routes";
 import CONFIGS from "shared/configs";
 
