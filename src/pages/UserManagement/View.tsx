@@ -9,7 +9,7 @@ import TableCustomizer from "pages/common/Table";
 import type { TablePaginationProps } from "pages/common/Paginations";
 import type { Filters } from "./Container";
 
-import type { UserListResponse } from "services/userManagement";
+import type { UserState } from "./Container";
 import { gettotalRowCurrent } from "utilities";
 
 type UserManagementViewProps = Omit<
@@ -17,7 +17,7 @@ type UserManagementViewProps = Omit<
   "count"
 > & {
   filters: Filters;
-  users: UserListResponse;
+  users: UserState;
   loading: Boolean;
   submitFilters: () => void;
   onChangeFilters: (name: string, value: any) => void;
@@ -64,7 +64,7 @@ const headers = [
   {
     id: "CreateDate-col",
     keyLabel: "pages.userManagement.createDate",
-    keyData: "create",
+    keyData: "createdAt",
   },
 ];
 
@@ -80,6 +80,7 @@ function UserManagementView({
 }: UserManagementViewProps) {
   const history = useHistory();
   const location = useLocation();
+
   return (
     <div>
       <BreadCrumb />
@@ -103,6 +104,7 @@ function UserManagementView({
               totalRow={gettotalRowCurrent(users.total, page, rowsPerPage)}
               data={users.data.map((item, i) => ({
                 ...item,
+                createdAt: new Date(item.createdAt).toLocaleDateString(),
                 no: (page - 1) * rowsPerPage + i + 1,
               }))}
               handleClickRow={(row) => {
