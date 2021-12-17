@@ -3,12 +3,17 @@ import { useState, useCallback, useEffect } from "react";
 import UserManagementView from "./View";
 
 import { PaginationDefault } from "shared/comom.enum";
-import { UserListResponse, fetchUserList } from "services/userManagement";
+import { User, fetchUserList } from "services/userManagement";
 
 export type Filters = {
   search: string;
   infor: string;
   status: string;
+};
+
+export type UserState = {
+  data: Array<User>;
+  total: number;
 };
 
 function UserManagementContainer() {
@@ -22,7 +27,7 @@ function UserManagementContainer() {
     pageSize: PaginationDefault.PAGE_SIZE,
   });
   const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState<UserListResponse>({
+  const [users, setUsers] = useState<UserState>({
     data: [],
     total: 0,
   });
@@ -31,7 +36,6 @@ function UserManagementContainer() {
   };
   const onChangeFilters = useCallback(
     (name: string, value: string | undefined) => {
-      console.log(name, value);
       setFilters((prev) => ({ ...prev, [name]: value }));
     },
     []
@@ -44,7 +48,10 @@ function UserManagementContainer() {
         pagination: pagination,
         filters: filters,
       });
-      setUsers(response);
+      setUsers({
+        data: response.content,
+        total: response.metadata.total,
+      });
     } catch (error) {
       console.log(error);
     } finally {

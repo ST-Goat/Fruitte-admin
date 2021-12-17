@@ -1,6 +1,12 @@
 import axios from "axios";
 import CONFIGS from "shared/configs";
+import { HttpStatus } from "shared/comom.enum";
 
+import { loginUrl } from "routes";
+
+type Options = {
+  params: any;
+};
 class AxiosService {
   service: any;
   constructor() {
@@ -30,11 +36,13 @@ class AxiosService {
   handleError = (error: any) => {
     try {
       switch (error.response.status) {
-        case 401:
-          //   window.location.replace(loginPageUrl);
+        case HttpStatus.UNAUTHORIZED:
+          localStorage.removeItem(CONFIGS.HEADER_PAYLOAD_KEY);
+          window.location.replace(loginUrl);
           return Promise.reject(error);
-        case 403:
-          // window.location.replace(loginPageUrl);
+        case HttpStatus.FORBIDDEN:
+          localStorage.removeItem(CONFIGS.HEADER_PAYLOAD_KEY);
+          window.location.replace(loginUrl);
           return Promise.reject(error);
         default:
           return Promise.reject(error);
@@ -44,22 +52,22 @@ class AxiosService {
     }
   };
 
-  async get(endpoint: string, options?: any) {
+  async get(endpoint: string, options?: Options) {
     // await refreshToken
     return this.service.get(endpoint, options);
   }
 
-  async post(endpoint: string, payload?: any, options?: any) {
+  async post(endpoint: string, payload?: any, options?: Options) {
     // await refreshToken
     return this.service.post(endpoint, payload, options);
   }
 
-  async put(endpoint: string, payload?: any, options?: any) {
+  async put(endpoint: string, payload?: any, options?: Options) {
     // await refreshToken
     return this.service.put(endpoint, payload, options);
   }
 
-  async delete(endpoint: string, options: any) {
+  async delete(endpoint: string, options?: Options) {
     // await refreshToken
     return this.service.delete(endpoint, options);
   }
