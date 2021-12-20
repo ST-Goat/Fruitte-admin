@@ -10,7 +10,7 @@ const SIZE_STYLE: Record<Size, string> = {
 export type ButtonProps = {
   size?: Size;
   className?: string;
-  color?: "primary" | "secondary" | "red" | "other";
+  color?: "primary" | "secondary" | "red" | "brown" | "other";
   variant?: "primary" | "other";
 } & {
   [key: string]: any;
@@ -20,6 +20,7 @@ const bgColor: Record<NonNullable<ButtonProps["color"]>, string> = {
   primary: "bg-primary-default text-white-default",
   secondary: "bg-grey-default text-white-default",
   red: "bg-red-100 text-white-default",
+  brown: "bg-secondary1-default text-white-default",
   other: "",
 };
 

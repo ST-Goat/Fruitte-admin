@@ -144,6 +144,7 @@ function FarmManagementContainer() {
     } else {
       fetchActivityData(pagination, filters);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.page, pagination.pageSize, viewCurrent]);
 
   const submitFilters = () => {
