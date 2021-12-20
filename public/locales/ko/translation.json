@@ -109,6 +109,27 @@
             "createModalTitle": "정말 해당 공지사항을 생성 하시겠습니까?",
             "editModalTitle": "정말 해당 공지사항을 수정 하시겠습니까?",
             "deleteModalTitle": "정말 해당 공지사항을 삭제 하시겠습니까?"
+        },
+        "settlement": {
+            "title": "정산 관리",
+            "unsettled": "미정산",
+            "settlementProcessing": "정산 처리",
+            "unsettlementProcessing": "미정산 처리",
+            "viewCompletionList": "정산완료 목록 보기",
+            "settlementCompleted": "정산완료",
+            "viewUnsettledList": "미정산 목록 보기",
+            "unsettledProcessing": "미정산 처리",
+            "confirmSettled": "정말 정산 처리 하겠습니까?",
+            "confirmUnsettled": "정말 미정산 처리 하겠습니까?",
+            "farmName": "농장명",
+            "name": "이름",
+            "accountHolder": "예금주",
+            "bank": "은행명",
+            "accountNumber": "계좌번호",
+            "price": "금액",
+            "settlementCycle": "정산주기",
+            "state": "상태",
+            "settlementDay": "정산일"
         }
     }
 }

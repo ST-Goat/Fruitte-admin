@@ -109,6 +109,27 @@
             "createModalTitle": "Are you sure you want to create that announcement?",
             "editModalTitle": "Are you sure you want to edit this notice?",
             "deleteModalTitle": "Are you sure you want to delete this notice?"
+        },
+        "settlement": {
+            "title": "Settlement management",
+            "unsettled": "Unsettled",
+            "settlementProcessing": "Settlement processing",
+            "unsettlementProcessing": "Unsettled processing",
+            "viewCompletionList": "View the list of settlement completion",
+            "settlementCompleted": "Settlement completed",
+            "viewUnsettledList": "View unsettled list",
+            "unsettledProcessing": "Unsettled processing",
+            "confirmSettled": "Do you really want to settle?",
+            "confirmUnsettled": "Are you sure you want to deal with unsettled accounts?",
+            "farmName": "Farm name",
+            "name": "Name",
+            "accountHolder": "Account holder",
+            "bank": "Bank name",
+            "accountNumber": "Account number",
+            "price": "Price",
+            "settlementCycle": "Settlement cycle",
+            "state": "State",
+            "settlementDay": "Settlement day"
         }
     }
 }
