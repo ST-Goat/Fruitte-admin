@@ -20,7 +20,8 @@
         "title": "Title",
         "delete": "Delete",
         "edit": "Edit",
-        "create": "Create"
+        "create": "Create",
+        "view": "View"
     },
     "pages": {
         "login": {
@@ -130,6 +131,12 @@
             "settlementCycle": "Settlement cycle",
             "state": "State",
             "settlementDay": "Settlement day"
+        },
+        "reservation": {
+            "title": "Reservation Management",
+            "bookingDate": "Booking date",
+            "user": "User",
+            "activityName": "Activity name"
         }
     }
 }
