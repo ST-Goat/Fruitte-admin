@@ -130,6 +130,12 @@
             "settlementCycle": "정산주기",
             "state": "상태",
             "settlementDay": "정산일"
+        },
+        "reservation": {
+            "title": "Reservation Management",
+            "bookingDate": "Booking date",
+            "user": "User",
+            "activityName": "Activity name"
         }
     }
 }

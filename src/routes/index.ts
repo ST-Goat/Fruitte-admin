@@ -15,4 +15,7 @@ export const announcementUrl = "/announcement";
 
 export const settlementMangementUrl = "/settlement-mangement";
 
+export const reservationManagementUrl = "/reservation-management";
+export const bookingDetailUrl = `${reservationManagementUrl}/booking-detail`;
+
 export const farmActivityUrl = "/farm-activity";

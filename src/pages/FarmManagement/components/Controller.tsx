@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-import SearchField from "./SearchField";
+import SearchBox from "pages/common/SearchBox";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -44,7 +44,7 @@ function Controller({
           xs={6}
         >
           <Grid item style={{ flexGrow: 1 }}>
-            <SearchField
+            <SearchBox
               name="search"
               onChange={(e: React.ChangeEvent<any>) =>
                 onChange(e.target.name, e.target.value)

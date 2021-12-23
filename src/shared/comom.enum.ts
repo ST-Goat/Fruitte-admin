@@ -2,6 +2,7 @@ export enum Size {
   BASE = "base",
   SMALL = "small",
   BIG = "big",
+  CUSTOM = "custom",
 }
 
 export enum Color {
