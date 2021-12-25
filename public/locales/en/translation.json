@@ -137,6 +137,12 @@
             "bookingDate": "Booking date",
             "user": "User",
             "activityName": "Activity name"
+        },
+        "inquiry": {
+            "title": "Inquiry Management",
+            "sendDate": "Send date",
+            "action": "Action",
+            "sender": "Sender"
         }
     }
 }
