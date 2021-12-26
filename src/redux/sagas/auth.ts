@@ -7,9 +7,12 @@ import {
   loginSuccess,
   loginFailure,
 } from "../slices/auth";
+import { enqueueSnackbar } from "redux/slices/snackbar";
+
 import { homepageUrl, loginUrl } from "routes";
 import { login, LoginPayload } from "services/authentication";
 import CONFIGS from "shared/configs";
+import { SNACKBAR_VARIANTS } from "shared/comom.enum";
 
 function* handleLogin(payload: LoginPayload) {
   try {
@@ -20,6 +23,12 @@ function* handleLogin(payload: LoginPayload) {
     // redirect to admin page
   } catch (error) {
     yield put(loginFailure(error));
+    yield put(
+      enqueueSnackbar({
+        message: "Login failed!",
+        variant: SNACKBAR_VARIANTS.ERROR,
+      })
+    );
     yield put(logoutRequest(null));
   }
 }

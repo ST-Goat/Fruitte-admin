@@ -15,7 +15,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import { Link, useLocation } from "react-router-dom";
-import { LogoHeader } from "../NavBar";
+import { LogoHeader } from "../../../layouts/NavBar";
 
 import { menuItems } from "shared/menu.item";
 

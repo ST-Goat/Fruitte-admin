@@ -80,6 +80,13 @@ export enum PaginationDefault {
   PAGE_SIZE = 10,
 }
 
+export enum SNACKBAR_VARIANTS {
+  SUCCESS = "success",
+  ERROR = "error",
+  WARNING = "warning",
+  INFO = "info",
+}
+
 export type DeleteApiResponse = {
   deletedCount: number;
   metadata: {
