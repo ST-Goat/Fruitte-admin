@@ -2,7 +2,7 @@ import { useLocation, Link } from "react-router-dom";
 
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import LocaleTrans from "../LocaleTrans";
+import LocaleTrans from "pages/common/LocaleTrans";
 import AccountMenu from "./AccountMenu";
 
 import { loginUrl } from "routes";

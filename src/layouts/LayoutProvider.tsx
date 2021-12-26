@@ -1,7 +1,7 @@
 import * as React from "react";
 import { noop } from "@reach/utils";
 
-import NavBar from "pages/common/NavBar";
+import NavBar from "layouts/NavBar";
 import SidebarNav from "pages/common/SidebarNav";
 
 export type LayoutType = "plain" | "withNavigation";
