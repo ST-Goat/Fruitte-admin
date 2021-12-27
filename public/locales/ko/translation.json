@@ -53,7 +53,10 @@
             "farmInformation": "농장 정보",
             "price": "금액",
             "reservationDate": "예약일",
-            "cancelReservation": "예약 취소"
+            "cancelReservation": "예약 취소",
+            "approveStatus": "일반회원",
+            "pendingStatus": "농장유저 요청",
+            "declinedStatus": "탈퇴회원"
         },
         "farmManagement": {
             "title": "농장관리",

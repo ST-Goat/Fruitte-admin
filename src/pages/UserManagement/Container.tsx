@@ -5,11 +5,7 @@ import UserManagementView from "./View";
 import { PaginationDefault } from "shared/comom.enum";
 import { User, fetchUserList } from "services/userManagement";
 
-export type Filters = {
-  search: string;
-  infor: string;
-  status: string;
-};
+import type { Filters } from "services/userManagement";
 
 export type UserState = {
   data: Array<User>;
@@ -18,9 +14,7 @@ export type UserState = {
 
 function UserManagementContainer() {
   const [filters, setFilters] = useState<Filters>({
-    search: "",
-    infor: "",
-    status: "",
+    keyword: "",
   });
   const [pagination, setPagination] = useState({
     page: PaginationDefault.PAGE,

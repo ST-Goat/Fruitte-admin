@@ -54,7 +54,10 @@
             "farmInformation": "Farm Information",
             "price": "Price",
             "reservationDate": "Reservation Date",
-            "cancelReservation": "Cancel Reservation"
+            "cancelReservation": "Cancel Reservation",
+            "approveStatus": "approve",
+            "pendingStatus": "pending",
+            "declinedStatus": "decilined"
         },
         "farmManagement": {
             "title": "Farm Management",
