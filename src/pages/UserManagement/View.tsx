@@ -1,5 +1,6 @@
 import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import BreadCrumb from "pages/common/BreadCrumb";
 import TablePaginations from "pages/common/Paginations";
@@ -7,10 +8,11 @@ import Controller from "./components/Controller";
 import TableCustomizer from "pages/common/Table";
 
 import type { TablePaginationProps } from "pages/common/Paginations";
-import type { Filters } from "./Container";
+import type { Filters } from "services/userManagement";
 
 import type { UserState } from "./Container";
 import { gettotalRowCurrent } from "utilities";
+import { REQUEST_PARTNER_STATUS } from "services/userManagement";
 
 type UserManagementViewProps = Omit<
   Omit<TablePaginationProps, "children">,
@@ -68,6 +70,28 @@ const headers = [
   },
 ];
 
+const ItemStatus = ({ status }: { status: REQUEST_PARTNER_STATUS }) => {
+  const { t } = useTranslation();
+  switch (status) {
+    case REQUEST_PARTNER_STATUS.PENDING:
+      return (
+        <span className="text-red-700">
+          {t("pages.userManagement.pendingStatus")}
+        </span>
+      );
+    case REQUEST_PARTNER_STATUS.APPROVE:
+      return (
+        <span className="text-green-700">
+          {t("pages.userManagement.approveStatus")}
+        </span>
+      );
+    case REQUEST_PARTNER_STATUS.DECLINE:
+      return <span>{t("pages.userManagement.declinedStatus")}</span>;
+    default:
+      return <></>;
+  }
+};
+
 function UserManagementView({
   filters,
   submitFilters,
@@ -105,6 +129,7 @@ function UserManagementView({
               data={users.data.map((item, i) => ({
                 ...item,
                 createdAt: new Date(item.createdAt).toLocaleDateString(),
+                status: () => <ItemStatus status={item.status} />,
                 no: (page - 1) * rowsPerPage + i + 1,
               }))}
               handleClickRow={(row) => {
