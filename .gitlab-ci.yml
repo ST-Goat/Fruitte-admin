@@ -4,46 +4,42 @@ image: docker:latest
 
 services:
   - docker:dind
-  stages:
-    - build
-    - deploy
-
-  variables:
-    # Common
-    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-    AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
-    S3_BUCKET_NAME: $S3_BUCKET_NAME
-    S3_BUCKET_NAME_DEVELOP: $S3_BUCKET_NAME_DEVELOP
-
-  cache:
-    # key: $CI_COMMIT_REF_SLUG
+stages:
+  - build
+  - deploy
+variables:
+  # Common
+  AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+  AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+  AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+  S3_BUCKET_NAME: $S3_BUCKET_NAME
+  S3_BUCKET_NAME_DEVELOP: $S3_BUCKET_NAME_DEVELOP
+cache:
+  # key: $CI_COMMIT_REF_SLUG
+  paths:
+    - node_modules/
+Build:
+  stage: build
+  image: node:11
+  script:
+    - npm install
+    - npm build
+  artifacts:
     paths:
-      - node_modules/
-  
-  Build:
-    stage: build
-    image: node:11
-    script:
-      - npm install
-      - npm build
-    artifacts:
-      paths:
       - build/
-      expire_in: 1 day
+    expire_in: 1 day
 
-    Deploy:
-      stage: deploy
-      when: manual
-      before_script:
-        - apk add --no-cache curl jq python py-pip
-        - pip install awscli
-        - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-        - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-        - aws configure set region $AWS_DEFAULT_REGION
-      script:
-        - aws s3 cp build/ s3://$S3_BUCKET_NAME_DEVELOP/ --recursive --include "*"
-        # - aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
-        only:
+Deploy:
+  stage: deploy
+  when: manual
+  before_script:
+    - apk add --no-cache curl jq python py-pip
+    - pip install awscli
+    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+    - aws configure set region $AWS_DEFAULT_REGION
+  script:
+    - aws s3 cp build/ s3://$S3_BUCKET_NAME_DEVELOP/ --recursive --include "*"
+    # - aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
+  only:
     - develop
-
