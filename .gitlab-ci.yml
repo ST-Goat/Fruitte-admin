@@ -15,6 +15,7 @@ cache:
   paths:
     - node_modules/
 Build:
+  image: node:14
   stage: build
   script:
     - yarn install
