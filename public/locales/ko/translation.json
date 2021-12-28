@@ -53,7 +53,10 @@
             "farmInformation": "농장 정보",
             "price": "금액",
             "reservationDate": "예약일",
-            "cancelReservation": "예약 취소"
+            "cancelReservation": "예약 취소",
+            "approveStatus": "일반회원",
+            "pendingStatus": "농장유저 요청",
+            "declinedStatus": "탈퇴회원"
         },
         "farmManagement": {
             "title": "농장관리",
@@ -130,6 +133,18 @@
             "settlementCycle": "정산주기",
             "state": "상태",
             "settlementDay": "정산일"
+        },
+        "reservation": {
+            "title": "Reservation Management",
+            "bookingDate": "Booking date",
+            "user": "User",
+            "activityName": "Activity name"
+        },
+        "inquiry": {
+            "title": "Inquiry Management",
+            "sendDate": "Send date",
+            "action": "Action",
+            "sender": "Sender"
         }
     }
 }

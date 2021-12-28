@@ -1,6 +1,6 @@
 import axios from "axios";
 import CONFIGS from "shared/configs";
-import { HttpStatus } from "shared/comom.enum";
+import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
 
 import { loginUrl } from "routes";
 
@@ -38,10 +38,24 @@ class AxiosService {
       switch (error.response.status) {
         case HttpStatus.UNAUTHORIZED:
           localStorage.removeItem(CONFIGS.HEADER_PAYLOAD_KEY);
+          sessionStorage.setItem(
+            CONFIGS.TOAST,
+            JSON.stringify({
+              message: error.message,
+              variant: SNACKBAR_VARIANTS.ERROR,
+            })
+          );
           window.location.replace(loginUrl);
           return Promise.reject(error);
         case HttpStatus.FORBIDDEN:
           localStorage.removeItem(CONFIGS.HEADER_PAYLOAD_KEY);
+          sessionStorage.setItem(
+            CONFIGS.TOAST,
+            JSON.stringify({
+              message: error.message,
+              variant: SNACKBAR_VARIANTS.ERROR,
+            })
+          );
           window.location.replace(loginUrl);
           return Promise.reject(error);
         default:

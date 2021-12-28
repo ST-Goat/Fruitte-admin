@@ -11,11 +11,11 @@ import {
 import EyesHide from "assets/icons/eyes-hide.svg";
 import EyesShow from "assets/icons/eyes-show.svg";
 import Input from "pages/common/Formik/Input";
-import NavBar from "pages/common/NavBar";
+import NavBar from "layouts/NavBar";
 import ButtonCustomizer from "pages/common/Button";
 
 import { loginRequest } from "redux/slices/auth";
-import { useAppDispatch, useAppSelector } from "utilities/useHook";
+import { useAppDispatch } from "utilities/useHook";
 
 function validatePhone(value: string) {
   let error;
@@ -43,7 +43,6 @@ type FormValues = {
 const Login: React.FC = () => {
   const { t } = useTranslation();
   const [passIsShowred, setPassIsShowred] = useState(false);
-  const authState = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const hideOrShowPass = () => {
@@ -69,13 +68,6 @@ const Login: React.FC = () => {
         <h1 className="text-5xl text-center font-bold mb-16">
           {t("pages.login.title")}
         </h1>
-        <div>
-          {authState.errorMessage && (
-            <div className="mb-4 text-center text-error-default italic">
-              {authState.errorMessage}
-            </div>
-          )}
-        </div>
         <Formik initialValues={{ phone: "", password: "" }} onSubmit={onSubmit}>
           {(props: FormikProps<any>) => {
             return (

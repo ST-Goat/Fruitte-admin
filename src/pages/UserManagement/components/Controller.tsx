@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 
-import SearchField from "./SearchField";
+import SearchBox from "pages/common/SearchBox";
 import Grid from "@mui/material/Grid";
 
-import { Filters } from "../Container";
+import type { Filters } from "services/userManagement";
 import ButtonCustomizer from "pages/common/Button";
 
 function Controller({
@@ -29,9 +29,9 @@ function Controller({
           xs={6}
         >
           <Grid item style={{ flexGrow: 1 }}>
-            <SearchField
-              name="search"
-              onChange={(e: React.ChangeEvent<any>) =>
+            <SearchBox
+              name="keyword"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onChange(e.target.name, e.target.value)
               }
               placeholder={t("pages.userManagement.searchPlaceHolder")}

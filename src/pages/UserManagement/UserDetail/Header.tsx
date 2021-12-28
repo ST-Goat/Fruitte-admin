@@ -3,7 +3,7 @@ import cn from "classnames";
 import { Link, useParams } from "react-router-dom";
 
 import BreadCrumb, { BreadItem } from "pages/common/BreadCrumb";
-import SearchField from "../components/SearchField";
+import SearchBox from "pages/common/SearchBox";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import Text from "pages/common/components/Text";
@@ -69,7 +69,7 @@ function UserDetailHeader() {
               </Link>
             </div>
             <div className="w-full flex justify-end mb-4">
-              <SearchField
+              <SearchBox
                 name="search"
                 onChange={(e: React.ChangeEvent<any>) => {}}
                 placeholder={t("")}

@@ -7,6 +7,10 @@ import {
   farmReservationUrl,
   announcementUrl,
   settlementMangementUrl,
+  reservationManagementUrl,
+  bookingDetailUrl,
+  inquiryManagementUrl,
+  inquiryDetailUrl,
 } from "routes";
 
 import Main from "pages/main/Main";
@@ -20,6 +24,10 @@ import Announcement from "pages/Announcement";
 import AnnouncementAddOrEdit from "pages/Announcement/AddOrEdit";
 import SettlementManagement from "pages/SettlementManagement";
 import AddOrEditReservation from "pages/FarmManagement/AddOrEditReservation";
+import ReservationManagement from "pages/ReservationManagement";
+import BookingDetail from "pages/ReservationManagement/BookingDetail";
+import InquiryManagement from "pages/InquiryManagement";
+import InquiryDetail from "pages/InquiryManagement/Detail";
 
 import PeopleIcon from "@mui/icons-material/People";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -27,6 +35,8 @@ import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import LocalActivityIcon from "@mui/icons-material/LocalActivity";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import PaymentIcon from "@mui/icons-material/Payment";
+import BookOnlineIcon from "@mui/icons-material/BookOnline";
+import CoPresentIcon from "@mui/icons-material/CoPresent";
 
 export type MenuItemProps = {
   key: string;
@@ -121,6 +131,38 @@ export const menuItems: MenuItemProps[] = [
         label: "",
         to: `${announcementUrl}/:id`,
         component: AnnouncementAddOrEdit,
+      },
+    ],
+  },
+  {
+    key: "reservation-management",
+    label: "pages.reservation.title",
+    to: reservationManagementUrl,
+    component: ReservationManagement,
+    exact: true,
+    icon: BookOnlineIcon,
+    subPath: [
+      {
+        key: "reservation-management-booking-detail",
+        label: "",
+        to: `${bookingDetailUrl}/:id`,
+        component: BookingDetail,
+      },
+    ],
+  },
+  {
+    key: "inquiry-management",
+    label: "pages.inquiry.title",
+    to: inquiryManagementUrl,
+    component: InquiryManagement,
+    exact: true,
+    icon: CoPresentIcon,
+    subPath: [
+      {
+        key: "inquiry-detail",
+        label: "",
+        to: `${inquiryDetailUrl}/:id`,
+        component: InquiryDetail,
       },
     ],
   },

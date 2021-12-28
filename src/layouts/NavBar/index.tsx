@@ -2,7 +2,7 @@ import { useLocation, Link } from "react-router-dom";
 
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import LocaleTrans from "../LocaleTrans";
+import LocaleTrans from "pages/common/LocaleTrans";
 import AccountMenu from "./AccountMenu";
 
 import { loginUrl } from "routes";
@@ -29,7 +29,7 @@ function NavBar({
   const location = useLocation();
 
   return (
-    <div id="navbar" className="w-full pl-5 pr-8 py-3 flex bg-primary-default">
+    <div id="navbar" className="w-full pl-5 pr-8 py-2 flex bg-primary-default">
       <div className="navbar__left flex items-center flex-grow">
         {!disableExpand && (
           <IconButton

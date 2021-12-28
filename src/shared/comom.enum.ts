@@ -2,6 +2,7 @@ export enum Size {
   BASE = "base",
   SMALL = "small",
   BIG = "big",
+  CUSTOM = "custom",
 }
 
 export enum Color {
@@ -77,6 +78,13 @@ export enum UserStatus {
 export enum PaginationDefault {
   PAGE = 1,
   PAGE_SIZE = 10,
+}
+
+export enum SNACKBAR_VARIANTS {
+  SUCCESS = "success",
+  ERROR = "error",
+  WARNING = "warning",
+  INFO = "info",
 }
 
 export type DeleteApiResponse = {

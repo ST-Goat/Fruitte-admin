@@ -5,6 +5,7 @@ const SIZE_STYLE: Record<Size, string> = {
   [Size.BIG]: "px-4 h-12 min-w-min",
   [Size.BASE]: "px-4 h-10 min-w-min",
   [Size.SMALL]: "px-4 h-6 min-w-min",
+  [Size.CUSTOM]: "",
 };
 
 export type ButtonProps = {
