@@ -24,6 +24,8 @@ Build:
     paths:
       - build/
     expire_in: 1 day
+  only:
+    - develop
 
 Deploy:
   image: python:latest
@@ -34,3 +36,5 @@ Deploy:
     - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
     - aws configure set region $AWS_DEFAULT_REGION
     - aws s3 sync ./build s3://$S3_BUCKET_NAME_DEVELOP --acl public-read
+  only:
+    - develop
