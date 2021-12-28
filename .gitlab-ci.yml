@@ -19,7 +19,6 @@ cache:
     - node_modules/
 Build:
   stage: build
-  image: node:11
   script:
     - npm install
     - npm build
