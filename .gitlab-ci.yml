@@ -1,6 +1,6 @@
 # @format
 
-image: sleavely/node-awscli:14.x
+image: sleavely/node-awscli:10.x
 
 services:
   - docker:dind
