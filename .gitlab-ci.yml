@@ -1,9 +1,5 @@
 # @format
 
-image: sleavely/node-awscli:10.x
-
-services:
-  - docker:dind
 variables:
   AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
   AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
@@ -11,6 +7,7 @@ variables:
   S3_BUCKET_NAME_DEVELOP: $S3_BUCKET_NAME_DEVELOP
 
 stages:
+  - build
   - deploy
 
 cache:
@@ -18,15 +15,22 @@ cache:
   paths:
     - node_modules/
 Build:
-  stage: deploy
+  image: node:11
+  stage: build
   script:
     - npm install
     - npm run build
-    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-    - aws configure set region $AWS_DEFAULT_REGION
-    - aws s3 sync ./build s3://$S3_BUCKET_NAME_DEVELOP --acl public-read
   artifacts:
     paths:
       - build/
     expire_in: 1 day
+
+Deploy:
+  image: python:latest
+  stage: deploy
+  script:
+    - pip install awscli
+    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+    - aws configure set region $AWS_DEFAULT_REGION
+    - aws s3 sync ./build s3://$S3_BUCKET_NAME_DEVELOP --acl public-read
