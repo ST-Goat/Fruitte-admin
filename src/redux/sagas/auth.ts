@@ -11,13 +11,18 @@ import { enqueueSnackbar } from "redux/slices/snackbar";
 
 import { homepageUrl, loginUrl } from "routes";
 import { login, LoginPayload } from "services/authentication";
+
 import CONFIGS from "shared/configs";
 import { SNACKBAR_VARIANTS } from "shared/comom.enum";
+import { addTokenToStorage, removeTokenInStorage } from "utilities/helper";
 
 function* handleLogin(payload: LoginPayload) {
   try {
     const { data } = yield call(login, payload);
-    localStorage.setItem(CONFIGS.HEADER_PAYLOAD_KEY, data.access_token);
+    addTokenToStorage({
+      accessToken: data.access_token,
+      refreshToken: data.refresh_token,
+    });
     yield put(loginSuccess(data));
     yield put(push(homepageUrl));
     // redirect to admin page
@@ -35,7 +40,7 @@ function* handleLogin(payload: LoginPayload) {
 
 function* handleLogout() {
   yield delay(500);
-  localStorage.removeItem(CONFIGS.HEADER_PAYLOAD_KEY);
+  removeTokenInStorage();
   // redirect to login page
   yield put(push(loginUrl));
 }
