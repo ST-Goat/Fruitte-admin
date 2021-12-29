@@ -17,12 +17,16 @@ import ButtonCustomizer from "pages/common/Button";
 import { loginRequest } from "redux/slices/auth";
 import { useAppDispatch } from "utilities/useHook";
 
-function validatePhone(value: string) {
+function validateEmail(value: string) {
   let error;
   if (!value) {
     error = "Required";
-  } else if (!/([0-9]{3})-([0-9]{3})-([0-9]{4}$)/g.test(value)) {
-    error = "Mobile format is incorrect (XXX-XXX-XXXX)";
+  } else if (
+    !/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/g.test(
+      value
+    )
+  ) {
+    error = "Email format is incorrect";
   }
   return error;
 }
@@ -36,7 +40,7 @@ function validatePassword(value: string) {
 }
 
 type FormValues = {
-  phone: string;
+  email: string;
   password: string;
 };
 
@@ -50,10 +54,10 @@ const Login: React.FC = () => {
   };
 
   const onSubmit = (values: FormValues, actions: FormikActions<any>) => {
-    const { phone, password } = values;
+    const { email, password } = values;
     dispatch(
       loginRequest({
-        mobile: phone,
+        email: email,
         password: password,
         isFarmer: false,
       })
@@ -68,7 +72,7 @@ const Login: React.FC = () => {
         <h1 className="text-5xl text-center font-bold mb-16">
           {t("pages.login.title")}
         </h1>
-        <Formik initialValues={{ phone: "", password: "" }} onSubmit={onSubmit}>
+        <Formik initialValues={{ email: "", password: "" }} onSubmit={onSubmit}>
           {(props: FormikProps<any>) => {
             return (
               <Form>
@@ -76,9 +80,9 @@ const Login: React.FC = () => {
                   <Input
                     type="text"
                     autoFocus
-                    name="phone"
-                    validate={validatePhone}
-                    placeholder={t("common.phoneNumber")}
+                    name="email"
+                    validate={validateEmail}
+                    placeholder={t("common.email")}
                   />
                 </div>
                 <div className="mb-12">

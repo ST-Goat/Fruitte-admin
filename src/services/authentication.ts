@@ -2,19 +2,19 @@ import axiosServices from "./axiosServices";
 import type { FormikErrors } from "formik";
 
 export type LoginPayload = {
-  mobile: string;
+  email: string;
   password: string;
   isFarmer: boolean;
   setErrors?: (errors: FormikErrors<any>) => void;
 };
 
 export const login = async ({
-  mobile,
+  email,
   password,
   isFarmer = false,
 }: LoginPayload) => {
   return axiosServices.post("common/login", {
-    mobile,
+    email,
     password,
     isFarmer,
   });
