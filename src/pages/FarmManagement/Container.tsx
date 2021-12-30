@@ -72,20 +72,20 @@ function FarmManagementContainer() {
     }
   }
 
-  const fetchViewData = (view: ViewCurrent) => {
-    if (viewCurrent === VIEW_FARM_LIST) {
-      fetchFarmData(pagination, filters);
+  const fetchViewData = (view: ViewCurrent, filterCurrent: Filters) => {
+    if (view === VIEW_FARM_LIST) {
+      fetchFarmData(pagination, filterCurrent);
     } else {
-      fetchActivityData(pagination, filters);
+      fetchActivityData(pagination, filterCurrent);
     }
   };
   useEffect(() => {
-    fetchViewData(viewCurrent);
+    fetchViewData(viewCurrent, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.page, pagination.pageSize, viewCurrent]);
 
-  const submitFilters = () => {
-    fetchViewData(viewCurrent);
+  const submitFilters = (newFilter: Filters) => {
+    fetchViewData(viewCurrent, newFilter);
   };
   return (
     <div>

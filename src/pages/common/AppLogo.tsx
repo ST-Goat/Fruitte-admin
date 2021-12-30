@@ -13,7 +13,7 @@ const AppLogo: React.FC<AppLogoType> = ({
 }) => {
   return (
     <a href="/" className={cn("flex items-center justify-center", className)}>
-      <img className={logoClassName} src="/Logo.png" alt="Fruittee Logo" />
+      <img className={logoClassName} src="/Logo.svg" alt="Fruittee Logo" />
     </a>
   );
 };

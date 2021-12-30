@@ -4,7 +4,7 @@ import SearchBox from "pages/common/SearchBox";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Filters } from "services/farmActivity";
+import { Filters, FilterStatus } from "services/farmActivity";
 import ButtonCustomizer from "pages/common/Button";
 
 import { FarmItem, fetchAllFarm } from "services/farmManagement";
@@ -18,7 +18,7 @@ function Controller({
 }: {
   filters: Filters;
   onChange: (name: string, value: string | undefined) => void;
-  onSubmit: () => void;
+  onSubmit: (newFilter: Filters) => void;
   rightController?: boolean;
 }) {
   const { t } = useTranslation();
@@ -39,13 +39,17 @@ function Controller({
     async function fetchFarmData() {
       try {
         const responseData = await fetchAllFarm();
-        setFarmOptions(
-          responseData.map((item: FarmItem) => ({
-            id: item.id,
-            label: item.name,
-            value: item.name,
-          }))
-        );
+        const listOption = responseData.map((item: FarmItem) => ({
+          id: item.id,
+          label: item.name,
+          value: item.name,
+        }));
+        listOption.unshift({
+          id: "all",
+          label: "All",
+          value: "",
+        });
+        setFarmOptions(listOption);
       } catch (error) {
         console.log(error);
       }
@@ -78,7 +82,7 @@ function Controller({
             <ButtonCustomizer
               variant="primary"
               className="text-white font-bold"
-              onClick={onSubmit}
+              onClick={() => onSubmit(filters)}
             >
               {t("common.search")}
             </ButtonCustomizer>
@@ -99,8 +103,26 @@ function Controller({
                 fullWidth
                 size="small"
                 options={farmOptions}
+                defaultValue={farmOptions[0]}
+                value={farmOptions.find(
+                  (item) => item.value === filters.farmName
+                )}
                 getOptionLabel={(option) => option.label}
-                onChange={(e, value) => onChange("farmName", value?.value)}
+                onChange={(e, value, reason) => {
+                  if (reason === "clear") {
+                    onChange("farmName", farmOptions[0].value);
+                    onSubmit({
+                      ...filters,
+                      farmName: farmOptions[0].value,
+                    });
+                  } else {
+                    onChange("farmName", value?.value);
+                    onSubmit({
+                      ...filters,
+                      farmName: value?.value,
+                    });
+                  }
+                }}
                 renderInput={(params: any) => (
                   <TextField
                     {...params}
@@ -123,11 +145,29 @@ function Controller({
                 fullWidth
                 size="small"
                 options={listStatus}
+                defaultValue={listStatus[0]}
+                value={listStatus.find(
+                  (item) => item.value === filters.filterStatus
+                )}
                 isOptionEqualToValue={(option, value) => {
                   return option.value === value.value;
                 }}
                 getOptionLabel={(option) => option.label}
-                onChange={(e, value) => onChange("filterStatus", value?.value)}
+                onChange={(e, value, reason) => {
+                  if (reason === "clear") {
+                    onChange("filterStatus", listStatus[0].value);
+                    onSubmit({
+                      ...filters,
+                      filterStatus: listStatus[0].value as FilterStatus,
+                    });
+                  } else {
+                    onChange("filterStatus", value?.value);
+                    onSubmit({
+                      ...filters,
+                      filterStatus: value?.value as FilterStatus,
+                    });
+                  }
+                }}
                 renderInput={(params: any) => (
                   <TextField
                     {...params}

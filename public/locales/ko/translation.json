@@ -91,7 +91,11 @@
             "createActivity": "체험 생성",
             "schedule": "일정",
             "sendDate": "Send Date",
-            "createDate": "생성일"
+            "createDate": "생성일",
+            "perPerson": "1인 요금",
+            "twoPerson": "2인 요금",
+            "threePerson": "3인 요금",
+            "fourPerson": "4인 요금"
         },
         "farmActivity": {
             "title": "Farm Activity",
