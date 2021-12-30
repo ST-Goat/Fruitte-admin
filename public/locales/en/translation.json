@@ -91,7 +91,11 @@
             "createActivity": "Create Activity",
             "schedule": "Schedule",
             "sendDate": "Send Date",
-            "createDate": "Create Date"
+            "createDate": "Create Date",
+            "perPerson": "1 person",
+            "twoPerson": "2 person",
+            "threePerson": "3 person",
+            "fourPerson": "4 person"
         },
         "farmActivity": {
             "title": "Farm Activity",

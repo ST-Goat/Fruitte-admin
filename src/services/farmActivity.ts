@@ -20,10 +20,12 @@ export type FarmActivityResponses = {
   total: number;
 };
 
+export type FilterStatus = "ACTIVE" | "DEACTIVE" | "";
+
 export type Filters = {
   keywork: string;
   farmName?: string;
-  filterStatus?: "ACTIVE" | "DEACTIVE" | "";
+  filterStatus?: FilterStatus;
 };
 
 export const fetchFarmActivities = async (

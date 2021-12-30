@@ -69,8 +69,11 @@ const activityHeaders: HeaderItem[] = [
   },
   {
     id: "Price-col",
-    keyLabel: "common.price",
-    keyData: "phone",
+    keyLabel: "pages.farmManagement.price",
+    keyData: "price",
+    styledHead: {
+      textAlign: "left",
+    },
   },
   {
     id: "Status-col",
@@ -79,7 +82,7 @@ const activityHeaders: HeaderItem[] = [
   },
   {
     id: "Create-date-col",
-    keyLabel: "pages.farmManagement.createAt",
+    keyLabel: "pages.farmManagement.createDate",
     keyData: "createAt",
   },
 ];
@@ -93,7 +96,7 @@ type FarmManagementProps = Omit<
   farms: FarmListResponse;
   activities: FarmActivityResponses;
   loading: Boolean;
-  submitFilters: () => void;
+  submitFilters: (newFilter: Filters) => void;
   onChangeFilters: (name: string, value: any) => void;
   onChangeTableView: () => void;
 };
@@ -113,7 +116,7 @@ type FarmActivityView = {
   no: number;
   farmName: string;
   activityName: string;
-  price: string;
+  price: React.FC;
   status: string;
   createAt: string;
 };
@@ -138,14 +141,34 @@ const convertFarmDataView = (
 const convertFarmActivityDataView = (
   data: Array<Activity>,
   page: number,
-  rowsPerPage: number
+  rowsPerPage: number,
+  translate: (text: string) => string
 ): Array<FarmActivityView> => {
   return data.map((item, i) => ({
     id: item.id,
     no: (page - 1) * rowsPerPage + i + 1,
     farmName: item.farmName,
     activityName: item.name,
-    price: `${item.oneMemberPrice}, ${item.twoMembersPrice}, ${item.threeMembersPrice}, ${item.fourMembersPrice}`,
+    price: () => (
+      <ul>
+        <li className="text-left">
+          <b>{`${translate("pages.farmManagement.perPerson")}: `}</b>
+          {item.oneMemberPrice}
+        </li>
+        <li className="text-left">
+          <b>{`${translate("pages.farmManagement.twoPerson")}: `}</b>
+          {item.twoMembersPrice}
+        </li>
+        <li className="text-left">
+          <b>{`${translate("pages.farmManagement.threePerson")}: `}</b>
+          {item.threeMembersPrice}
+        </li>
+        <li className="text-left">
+          <b>{`${translate("pages.farmManagement.fourPerson")}: `}</b>
+          {item.fourMembersPrice}
+        </li>
+      </ul>
+    ),
     status: "#fake",
     createAt: "#fake",
   }));
@@ -196,10 +219,15 @@ function FarmManagementView({
           total: farms.total,
         }
       : {
-          data: convertFarmActivityDataView(activities.data, page, rowsPerPage),
+          data: convertFarmActivityDataView(
+            activities.data,
+            page,
+            rowsPerPage,
+            t
+          ),
           total: activities.total,
         };
-  }, [view, farms, activities, page, rowsPerPage]);
+  }, [view, farms, activities, page, rowsPerPage, t]);
   return (
     <div>
       <div>
@@ -208,14 +236,14 @@ function FarmManagementView({
         </Text>
         <div className="flex">
           <Text
-            onClick={handleChangeTitle}
-            className="font-bold text-2xl inline-block align-bottom cursor-pointer"
+            // onClick={handleChangeTitle}
+            className="font-bold text-2xl inline-block align-bottom"
           >
             {t(tittleHeader.primary)}
           </Text>
           <Text
             onClick={handleChangeTitle}
-            className="ml-4 font-bold text-lg underline leading-8 inline-block align-bottom cursor-pointer"
+            className="ml-4 font-bold text-lg hover:underline leading-8 inline-block align-bottom cursor-pointer"
           >
             {t(tittleHeader.secondary)}
           </Text>

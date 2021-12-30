@@ -12,7 +12,7 @@ import "./index.scss";
 export const LogoHeader = () => (
   <div className="w-24 cursor-pointer">
     <Link to="/">
-      <img src="/Logo.png" alt="main_logo" />
+      <img src="/Logo.svg" alt="main_logo" />
     </Link>
   </div>
 );
