@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -9,33 +9,155 @@ import TableCustomizer, { HeaderItem } from "pages/common/Table";
 import Text from "pages/common/components/Text";
 import ButtonCustomizer from "pages/common/Button";
 
+import { VIEW_FARM_LIST } from "./Container";
 import type { TablePaginationProps } from "pages/common/Paginations";
-import type { Filters } from "./Container";
-
-import { FarmListResponse } from "services/farmManagement";
+import type { ViewCurrent } from "./Container";
+import type { Activity, Filters } from "services/farmActivity";
+import { FarmItem, FarmListResponse } from "services/farmManagement";
 import { FarmActivityResponses } from "services/farmActivity";
 import { gettotalRowCurrent } from "utilities";
 import { farmCreationUrl, farmDetailUrl } from "routes";
+
+const farmHeaders: HeaderItem[] = [
+  {
+    id: "No-col",
+    label: "No",
+    keyData: "no",
+  },
+  {
+    id: "Farm-col",
+    keyLabel: "pages.farmManagement.farmName",
+    keyData: "farmName",
+  },
+  {
+    id: "Owner-name-col",
+    keyLabel: "pages.farmManagement.userName",
+    keyData: "ownerName",
+  },
+  {
+    id: "Owner-phone-col",
+    keyLabel: "common.phoneNumber",
+    keyData: "ownerPhone",
+  },
+  {
+    id: "State-col",
+    keyLabel: "pages.farmManagement.state",
+    keyData: "status",
+  },
+  {
+    id: "Create-date-col",
+    keyLabel: "pages.farmManagement.createDate",
+    keyData: "createAt",
+  },
+];
+
+const activityHeaders: HeaderItem[] = [
+  {
+    id: "No-col",
+    label: "No",
+    keyData: "no",
+  },
+  {
+    id: "Farm-col",
+    keyLabel: "pages.farmManagement.farmName",
+    keyData: "farmName",
+  },
+  {
+    id: "Activity-name-col",
+    keyLabel: "pages.farmManagement.activityName",
+    keyData: "activityName",
+  },
+  {
+    id: "Price-col",
+    keyLabel: "common.price",
+    keyData: "phone",
+  },
+  {
+    id: "Status-col",
+    keyLabel: "common.status",
+    keyData: "status",
+  },
+  {
+    id: "Create-date-col",
+    keyLabel: "pages.farmManagement.createAt",
+    keyData: "createAt",
+  },
+];
 
 type FarmManagementProps = Omit<
   Omit<TablePaginationProps, "children">,
   "count"
 > & {
   filters: Filters;
-  dataTable: FarmListResponse | FarmActivityResponses;
+  view: ViewCurrent;
+  farms: FarmListResponse;
+  activities: FarmActivityResponses;
   loading: Boolean;
   submitFilters: () => void;
   onChangeFilters: (name: string, value: any) => void;
   onChangeTableView: () => void;
-  headers: HeaderItem[];
+};
+
+type FarmView = {
+  id: number | string;
+  no: number;
+  farmName: string;
+  ownerName: string;
+  ownerPhone: string;
+  status: string;
+  createAt: string;
+};
+
+type FarmActivityView = {
+  id: number | string;
+  no: number;
+  farmName: string;
+  activityName: string;
+  price: string;
+  status: string;
+  createAt: string;
+};
+
+const convertFarmDataView = (
+  data: Array<FarmItem>,
+  page: number,
+  rowsPerPage: number
+): Array<FarmView> => {
+  if (!data || data.length === 0) return [];
+  return data.map((item, i) => ({
+    id: item.id,
+    no: (page - 1) * rowsPerPage + i + 1,
+    farmName: item.name,
+    ownerName: Boolean(item.owner) ? item.owner.name : "-",
+    ownerPhone: Boolean(item.owner) ? item.owner.phone : "-",
+    status: "#fake",
+    createAt: "#fake",
+  }));
+};
+
+const convertFarmActivityDataView = (
+  data: Array<Activity>,
+  page: number,
+  rowsPerPage: number
+): Array<FarmActivityView> => {
+  return data.map((item, i) => ({
+    id: item.id,
+    no: (page - 1) * rowsPerPage + i + 1,
+    farmName: item.farmName,
+    activityName: item.name,
+    price: `${item.oneMemberPrice}, ${item.twoMembersPrice}, ${item.threeMembersPrice}, ${item.fourMembersPrice}`,
+    status: "#fake",
+    createAt: "#fake",
+  }));
 };
 
 function FarmManagementView({
   filters,
+  view,
+  farms,
+  activities,
   submitFilters,
   onChangeFilters,
-  headers,
-  dataTable,
   loading,
   rowsPerPage,
   page,
@@ -64,6 +186,20 @@ function FarmManagementView({
     });
     onChangeTableView();
   };
+
+  const headers = view === VIEW_FARM_LIST ? farmHeaders : activityHeaders;
+
+  const dataTable = useMemo(() => {
+    return view === VIEW_FARM_LIST
+      ? {
+          data: convertFarmDataView(farms.data, page, rowsPerPage),
+          total: farms.total,
+        }
+      : {
+          data: convertFarmActivityDataView(activities.data, page, rowsPerPage),
+          total: activities.total,
+        };
+  }, [view, farms, activities, page, rowsPerPage]);
   return (
     <div>
       <div>
@@ -113,10 +249,7 @@ function FarmManagementView({
               hover
               loading={loading}
               totalRow={gettotalRowCurrent(dataTable.total, page, rowsPerPage)}
-              data={dataTable.data.map((item, i) => ({
-                ...item,
-                no: (page - 1) * rowsPerPage + i + 1,
-              }))}
+              data={dataTable.data}
               handleClickRow={(row) => {
                 history.push(`${farmDetailUrl}/${row.id}`);
               }}

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import SearchBox from "pages/common/SearchBox";
 import Grid from "@mui/material/Grid";
 
-import { Filters } from "../Container";
+import { Filters } from "services/farmActivity";
 import ButtonCustomizer from "pages/common/Button";
 
 function Controller({

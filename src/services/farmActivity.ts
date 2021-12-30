@@ -1,17 +1,18 @@
 import { PaginationDefault } from "shared/comom.enum";
+import axiosServices from "services/axiosServices";
 
 export type Activity = {
-  id: string;
+  id: number;
+  name: string;
   farmName: string;
-  activityName: string;
-  userName: string;
-  productName: string;
-  price: string;
-  paymentStatus: string;
-  refundAmount: string;
-  reservationDate: string;
-  feedback: string;
-  phone?: string;
+  description: string;
+  info: string;
+  note: string;
+  duration: number;
+  oneMemberPrice: number;
+  twoMembersPrice: number;
+  threeMembersPrice: number;
+  fourMembersPrice: number;
 };
 
 export type FarmActivityResponses = {
@@ -19,47 +20,11 @@ export type FarmActivityResponses = {
   total: number;
 };
 
-const fakeFarmList: Array<Activity> = [
-  {
-    id: "농장명-1",
-    farmName: "체험명",
-    activityName: "체험명",
-    userName: "4인팀+옵션",
-    productName: "10,000원",
-    price: "완료",
-    paymentStatus: "-",
-    refundAmount: "1,000원",
-    reservationDate: "10/23/2021",
-    feedback: "미처리",
-    phone: "010-1234-1234",
-  },
-  {
-    id: "농장명-2",
-    farmName: "농장명-2",
-    activityName: "체험명",
-    userName: "4인팀+옵션",
-    productName: "10,000원",
-    price: "완료",
-    paymentStatus: "-",
-    refundAmount: "1,000원",
-    reservationDate: "10/23/2021",
-    feedback: "미처리",
-    phone: "010-1234-1234",
-  },
-  {
-    id: "농장명-3",
-    farmName: "농장명-3",
-    activityName: "체험명",
-    userName: "4인팀+옵션",
-    productName: "10,000원",
-    price: "완료",
-    paymentStatus: "-",
-    refundAmount: "1,000원",
-    reservationDate: "10/23/2021",
-    feedback: "미처리",
-    phone: "010-1234-1234",
-  },
-];
+export type Filters = {
+  keywork: string;
+  farmName?: string;
+  filterStatus?: "ACTIVE" | "DEACTIVE" | "";
+};
 
 export const fetchFarmActivities = async (
   params: {
@@ -67,22 +32,27 @@ export const fetchFarmActivities = async (
       page: number;
       pageSize: number;
     };
-    filters: any;
+    filters: Filters;
   } = {
     pagination: {
       page: PaginationDefault.PAGE,
       pageSize: PaginationDefault.PAGE_SIZE,
     },
-    filters: {},
+    filters: {
+      keywork: "",
+    },
   }
 ): Promise<FarmActivityResponses> => {
   const { page, pageSize } = params.pagination;
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve({
-        data: fakeFarmList.slice((page - 1) * pageSize, page * pageSize),
-        total: fakeFarmList.length,
-      });
-    }, 1000);
-  });
+  return axiosServices
+    .get("admin/activities", { params: { ...params.filters } })
+    .then((response) => {
+      return {
+        data: response.data.content.slice(
+          (page - 1) * pageSize,
+          page * pageSize
+        ),
+        total: !response.data.content ? 0 : response.data.content.length,
+      };
+    });
 };
