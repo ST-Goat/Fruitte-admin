@@ -50,7 +50,7 @@ const feedbackHeaders = [
 ];
 
 export type Filters = {
-  search: string;
+  keywork: string;
 };
 
 const fakeData = [
@@ -92,7 +92,7 @@ const fakeData = [
 
 function Feedback() {
   const [filters, setFilters] = useState<Filters>({
-    search: "",
+    keywork: "",
   });
   const { t } = useTranslation();
   return (

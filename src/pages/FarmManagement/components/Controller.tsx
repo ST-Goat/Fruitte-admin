@@ -4,20 +4,11 @@ import SearchBox from "pages/common/SearchBox";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Filters } from "../Container";
+import { Filters } from "services/farmActivity";
 import ButtonCustomizer from "pages/common/Button";
 
-const listInfor = [
-  { id: 1, label: "Name", value: "name" },
-  { id: 2, label: "Phone", value: "phone" },
-  { id: 3, label: "Email", value: "email" },
-];
-
-const listStatus = [
-  { id: 1, label: "Active", value: "active" },
-  { id: 2, label: "DeActive", value: "deactive" },
-  { id: 3, label: "Request", value: "request" },
-];
+import { FarmItem, fetchAllFarm } from "services/farmManagement";
+import { useEffect, useState } from "react";
 
 function Controller({
   filters,
@@ -31,6 +22,36 @@ function Controller({
   rightController?: boolean;
 }) {
   const { t } = useTranslation();
+  const listStatus = [
+    { id: 1, label: t("common.all"), value: "" },
+    { id: 2, label: t("common.normal"), value: "ACTIVE" },
+    { id: 3, label: t("common.unused"), value: "DEACTIVE" },
+  ];
+  const [farmOptions, setFarmOptions] = useState<
+    Array<{
+      id: string;
+      label: string;
+      value: string;
+    }>
+  >([]);
+
+  useEffect(() => {
+    async function fetchFarmData() {
+      try {
+        const responseData = await fetchAllFarm();
+        setFarmOptions(
+          responseData.map((item: FarmItem) => ({
+            id: item.id,
+            label: item.name,
+            value: item.name,
+          }))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchFarmData();
+  }, []);
   return (
     <div className="mt-6">
       <Grid container spacing={2}>
@@ -45,7 +66,8 @@ function Controller({
         >
           <Grid item style={{ flexGrow: 1 }}>
             <SearchBox
-              name="search"
+              name="keywork"
+              value={filters.keywork}
               onChange={(e: React.ChangeEvent<any>) =>
                 onChange(e.target.name, e.target.value)
               }
@@ -76,11 +98,23 @@ function Controller({
               <Autocomplete
                 fullWidth
                 size="small"
-                options={listInfor}
+                options={farmOptions}
                 getOptionLabel={(option) => option.label}
-                onChange={(e, value) => onChange("infor", value?.value)}
+                onChange={(e, value) => onChange("farmName", value?.value)}
                 renderInput={(params: any) => (
-                  <TextField {...params} name="infor" label="Field" />
+                  <TextField
+                    {...params}
+                    sx={{
+                      "& fieldset": {
+                        borderColor: "#4C9C2E",
+                      },
+                      "& .Mui-focused fieldset": {
+                        borderColor: "#4C9C2E !important",
+                      },
+                    }}
+                    name="farmName"
+                    placeholder={t("common.farm")}
+                  />
                 )}
               />
             </Grid>
@@ -89,10 +123,25 @@ function Controller({
                 fullWidth
                 size="small"
                 options={listStatus}
+                isOptionEqualToValue={(option, value) => {
+                  return option.value === value.value;
+                }}
                 getOptionLabel={(option) => option.label}
-                onChange={(e, value) => onChange("status", value?.value)}
+                onChange={(e, value) => onChange("filterStatus", value?.value)}
                 renderInput={(params: any) => (
-                  <TextField {...params} name="status" label="Status" />
+                  <TextField
+                    {...params}
+                    sx={{
+                      "& fieldset": {
+                        borderColor: "#4C9C2E",
+                      },
+                      "& .Mui-focused fieldset": {
+                        borderColor: "#4C9C2E !important",
+                      },
+                    }}
+                    name="filterStatus"
+                    placeholder={t("common.status")}
+                  />
                 )}
               />
             </Grid>

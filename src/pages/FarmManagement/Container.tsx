@@ -6,88 +6,22 @@ import { PaginationDefault } from "shared/comom.enum";
 import { FarmListResponse, fetchFarmList } from "services/farmManagement";
 import {
   FarmActivityResponses,
+  Filters,
   fetchFarmActivities,
 } from "services/farmActivity";
-export type Filters = {
-  search: string;
-};
 
-const farmHeaders = [
-  {
-    id: "No-col",
-    label: "No",
-    keyData: "no",
-  },
-  {
-    id: "Farm-col",
-    keyLabel: "pages.farmManagement.farmName",
-    keyData: "farmName",
-  },
-  {
-    id: "Activity-name-col",
-    keyLabel: "pages.farmManagement.activityName",
-    keyData: "activityName",
-  },
-  {
-    id: "Price-col",
-    keyLabel: "pages.farmManagement.price",
-    keyData: "price",
-  },
-  {
-    id: "State-stautus-col",
-    keyLabel: "pages.farmManagement.state",
-    keyData: "state",
-  },
-  {
-    id: "Reservation-date-col",
-    keyLabel: "pages.farmManagement.reservationDate",
-    keyData: "reservationDate",
-  },
-];
-
-const activityHeaders = [
-  {
-    id: "No-col",
-    label: "No",
-    keyData: "no",
-  },
-  {
-    id: "Farm-col",
-    keyLabel: "pages.farmManagement.farmName",
-    keyData: "farmName",
-  },
-  {
-    id: "Activity-name-col",
-    keyLabel: "pages.farmManagement.activityName",
-    keyData: "activityName",
-  },
-  {
-    id: "Phone-col",
-    keyLabel: "common.phoneNumber",
-    keyData: "phone",
-  },
-  {
-    id: "State-stautus-col",
-    keyLabel: "pages.farmManagement.state",
-    keyData: "state",
-  },
-  {
-    id: "Reservation-date-col",
-    keyLabel: "pages.farmManagement.reservationDate",
-    keyData: "reservationDate",
-  },
-];
-
-const VIEW_FARM_LIST = "view-farm-list";
-const VIEW_FARM_ACTIVITIES = "view-farm-activities";
+export const VIEW_FARM_LIST = "view-farm-list";
+export const VIEW_FARM_ACTIVITIES = "view-farm-activities";
 const initialPagination = {
   page: PaginationDefault.PAGE,
   pageSize: PaginationDefault.PAGE_SIZE,
 };
-type ViewCurrent = typeof VIEW_FARM_LIST | typeof VIEW_FARM_ACTIVITIES;
+export type ViewCurrent = typeof VIEW_FARM_LIST | typeof VIEW_FARM_ACTIVITIES;
 function FarmManagementContainer() {
   const [filters, setFilters] = useState<Filters>({
-    search: "",
+    keywork: "",
+    farmName: "",
+    filterStatus: "",
   });
   const [pagination, setPagination] = useState(initialPagination);
   const [loading, setLoading] = useState(false);
@@ -103,7 +37,6 @@ function FarmManagementContainer() {
 
   const onChangeFilters = useCallback(
     (name: string, value: string | undefined) => {
-      console.log(name, value);
       setFilters((prev) => ({ ...prev, [name]: value }));
     },
     []
@@ -138,17 +71,21 @@ function FarmManagementContainer() {
       setLoading(false);
     }
   }
-  useEffect(() => {
+
+  const fetchViewData = (view: ViewCurrent) => {
     if (viewCurrent === VIEW_FARM_LIST) {
       fetchFarmData(pagination, filters);
     } else {
       fetchActivityData(pagination, filters);
     }
+  };
+  useEffect(() => {
+    fetchViewData(viewCurrent);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.page, pagination.pageSize, viewCurrent]);
 
   const submitFilters = () => {
-    fetchFarmData(pagination, filters);
+    fetchViewData(viewCurrent);
   };
   return (
     <div>
@@ -156,8 +93,9 @@ function FarmManagementContainer() {
         filters={filters}
         submitFilters={submitFilters}
         onChangeFilters={onChangeFilters}
-        dataTable={viewCurrent === VIEW_FARM_LIST ? farms : activities}
-        headers={viewCurrent === VIEW_FARM_LIST ? farmHeaders : activityHeaders}
+        view={viewCurrent}
+        farms={farms}
+        activities={activities}
         loading={loading}
         rowsPerPage={pagination.pageSize}
         page={pagination.page}

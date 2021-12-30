@@ -21,7 +21,10 @@
         "delete": "Delete",
         "edit": "Edit",
         "create": "Create",
-        "view": "View"
+        "view": "View",
+        "all": "All",
+        "normal": "Normal",
+        "unused": "Unused"
     },
     "pages": {
         "login": {
@@ -87,7 +90,8 @@
             "addFarmUser": "Add farm user",
             "createActivity": "Create Activity",
             "schedule": "Schedule",
-            "sendDate": "Send Date"
+            "sendDate": "Send Date",
+            "createDate": "Create Date"
         },
         "farmActivity": {
             "title": "Farm Activity",

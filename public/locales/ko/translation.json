@@ -20,7 +20,11 @@
         "title": "제목",
         "delete": "삭제",
         "edit": "수정",
-        "create": "생성"
+        "create": "생성",
+        "view": "View",
+        "all": "전체",
+        "normal": "일반",
+        "unused": "미사용"
     },
     "pages": {
         "login": {
@@ -86,7 +90,8 @@
             "addFarmUser": "농장 유저 추가",
             "createActivity": "체험 생성",
             "schedule": "일정",
-            "sendDate": "Send Date"
+            "sendDate": "Send Date",
+            "createDate": "생성일"
         },
         "farmActivity": {
             "title": "Farm Activity",

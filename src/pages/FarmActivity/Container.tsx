@@ -6,15 +6,12 @@ import { PaginationDefault } from "shared/comom.enum";
 import {
   FarmActivityResponses,
   fetchFarmActivities,
+  Filters,
 } from "services/farmActivity";
-
-export type Filters = {
-  search: string;
-};
 
 function FarmActivityContainer() {
   const [filters, setFilters] = useState<Filters>({
-    search: "",
+    keywork: "",
   });
   const [pagination, setPagination] = useState({
     page: PaginationDefault.PAGE,
@@ -37,18 +34,18 @@ function FarmActivityContainer() {
   );
 
   async function fetchUserListData(pagination: any, filters: Filters) {
-    setLoading(true);
-    try {
-      const response = await fetchFarmActivities({
-        pagination: pagination,
-        filters: filters,
-      });
-      setFarms(response);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    // setLoading(true);
+    // try {
+    //   const response = await fetchFarmActivities({
+    //     pagination: pagination,
+    //     filters: filters,
+    //   });
+    //   setFarms(response);
+    // } catch (error) {
+    //   console.log(error);
+    // } finally {
+    //   setLoading(false);
+    // }
   }
   useEffect(() => {
     fetchUserListData(pagination, filters);

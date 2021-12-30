@@ -7,9 +7,8 @@ import Controller from "./components/Controller";
 import TableCustomizer from "pages/common/Table";
 import Text from "pages/common/components/Text";
 import type { TablePaginationProps } from "pages/common/Paginations";
-import type { Filters } from "./Container";
 
-import { FarmActivityResponses } from "services/farmActivity";
+import { FarmActivityResponses, Filters } from "services/farmActivity";
 import { gettotalRowCurrent } from "utilities";
 
 type FarmManagementProps = Omit<
