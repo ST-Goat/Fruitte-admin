@@ -2,7 +2,7 @@ import { Formik, Form, FormikProps } from "formik";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
 
-import LeftHeader from "../components/LeftHeader";
+import LeftHeader from "../LeftHeader";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Grid from "@mui/material/Grid";
 import Text from "pages/common/components/Text";

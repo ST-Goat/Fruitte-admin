@@ -5,6 +5,8 @@ import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
 import { loginUrl } from "routes";
 import { addTokenToStorage, removeTokenInStorage } from "utilities/helper";
 import fetchAccessToken from "services/refreshToken";
+import { store } from "redux/store";
+import { enqueueSnackbar } from "redux/slices/snackbar";
 
 type Options = {
   params: any;
@@ -52,7 +54,7 @@ class AxiosService {
   handleError = (error: any) => {
     const {
       config,
-      response: { status },
+      response: { status, data },
     } = error;
     const originalRequest = config;
     switch (status) {
@@ -64,17 +66,17 @@ class AxiosService {
               isAlreadyFetchingAccessToken = false;
               onAccessTokenFetched(access_token, refresh_token);
             })
-            .catch((error) => {
+            .catch((err) => {
               removeTokenInStorage();
               window.location.replace(loginUrl);
               sessionStorage.setItem(
                 CONFIGS.TOAST,
                 JSON.stringify({
-                  message: error.message,
+                  message: err.message,
                   variant: SNACKBAR_VARIANTS.ERROR,
                 })
               );
-              return Promise.reject(error);
+              return Promise.reject(err);
             });
         }
 
@@ -101,6 +103,13 @@ class AxiosService {
         );
         return Promise.reject(error);
       default:
+        const { error: errResponse } = data;
+        store.dispatch(
+          enqueueSnackbar({
+            message: errResponse?.message ?? `Error with ${status}`,
+            variant: SNACKBAR_VARIANTS.ERROR,
+          })
+        );
         return Promise.reject(error);
     }
   };

@@ -17,6 +17,7 @@ import { FarmItem, FarmListResponse } from "services/farmManagement";
 import { FarmActivityResponses } from "services/farmActivity";
 import { gettotalRowCurrent } from "utilities";
 import { farmCreationUrl, farmDetailUrl } from "routes";
+import classNames from "classnames";
 
 const farmHeaders: HeaderItem[] = [
   {
@@ -72,7 +73,7 @@ const activityHeaders: HeaderItem[] = [
     keyLabel: "pages.farmManagement.price",
     keyData: "price",
     styledHead: {
-      textAlign: "left",
+      align: "left",
     },
   },
   {
@@ -243,7 +244,11 @@ function FarmManagementView({
           </Text>
           <Text
             onClick={handleChangeTitle}
-            className="ml-4 font-bold text-lg hover:underline leading-8 inline-block align-bottom cursor-pointer"
+            className={classNames(
+              "ml-4 inline-block align-bottom",
+              "font-base text-lg leading-8 cursor-pointer",
+              "hover:underline"
+            )}
           >
             {t(tittleHeader.secondary)}
           </Text>
@@ -274,12 +279,14 @@ function FarmManagementView({
           <div className="rounded-md border-2 border-grey-300">
             <TableCustomizer
               headers={headers}
-              hover
+              hover={view === VIEW_FARM_LIST}
               loading={loading}
               totalRow={gettotalRowCurrent(dataTable.total, page, rowsPerPage)}
               data={dataTable.data}
               handleClickRow={(row) => {
-                history.push(`${farmDetailUrl}/${row.id}`);
+                if (view === VIEW_FARM_LIST) {
+                  history.push(`${farmDetailUrl}/${row.id}`);
+                }
               }}
             />
           </div>

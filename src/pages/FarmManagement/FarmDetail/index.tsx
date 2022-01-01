@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
+
 import LeftHeader from "../components/LeftHeader";
 import Feedback from "./Feedback";
 import TabHeader from "../components/TabHeader";
@@ -7,6 +9,8 @@ import Reservation from "./Reservation";
 import Activities from "./Activities";
 import Text from "pages/common/components/Text";
 import Schedule from "./Schedule";
+
+import { RouteParams } from "shared/comom.enum";
 
 type TabPanelProps = {
   children?: React.ReactNode;
@@ -44,6 +48,7 @@ function TabPanel(props: TabPanelProps) {
 }
 
 function FarmDetail() {
+  const { id: farmId } = useParams<RouteParams>();
   const [tabIdCurrent, setTabIdCurrent] = useState(0);
 
   const tabList = useMemo(
@@ -60,7 +65,7 @@ function FarmDetail() {
       },
       {
         id: 2,
-        children: <Schedule />,
+        children: <Schedule farmId={farmId} />,
         keyLabel: "pages.farmManagement.schedule",
       },
       {
