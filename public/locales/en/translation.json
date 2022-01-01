@@ -24,7 +24,8 @@
         "view": "View",
         "all": "All",
         "normal": "Normal",
-        "unused": "Unused"
+        "unused": "Unused",
+        "save": "Save"
     },
     "pages": {
         "login": {

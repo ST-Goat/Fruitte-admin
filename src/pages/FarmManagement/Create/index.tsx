@@ -2,7 +2,6 @@ import { useState } from "react";
 import LeftHeader from "../components/LeftHeader";
 import TabHeader from "../components/TabHeader";
 import FarmForm from "../components/FarmForm";
-import Activities from "./Activities";
 
 const tabList = [
   {
@@ -10,11 +9,6 @@ const tabList = [
     children: <FarmForm isCreate />,
     keyLabel: "common.farm",
   },
-  // {
-  //   id: 1,
-  //   children: <Activities />,
-  //   keyLabel: "pages.farmManagement.activities",
-  // },
 ];
 type TabPanelProps = {
   children?: React.ReactNode;

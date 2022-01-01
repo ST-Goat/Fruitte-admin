@@ -14,7 +14,7 @@ const ListField = [
   {
     id: "farmName__field",
     keyLabel: "pages.farmManagement.farmName",
-    name: "farmName",
+    name: "name",
     type: "text",
   },
   {
@@ -88,8 +88,13 @@ const styleIconAction = () => ({
   },
 });
 
+// "name": "string",
+//   "address": "string",
+//   "description": "string",
+//   "districtId": 1
+
 const initialValues = {
-  farmName: "",
+  name: "",
   email: "",
   phone: "",
   address: "",
@@ -99,13 +104,13 @@ const initialValues = {
   nameOfBank: "",
   accountNumber: "",
   settlementRate: "",
-  farmUser: "",
+  farmUser: [],
 };
 
 const SubmitOrCancel = ({ t }: { t: (key: string) => string }) => {
   return (
     <>
-      <ButtonCustomizer style={{ minWidth: "8rem" }}>
+      <ButtonCustomizer type="submit" style={{ minWidth: "8rem" }}>
         {t("common.produce")}
       </ButtonCustomizer>
       <ButtonCustomizer
@@ -147,7 +152,12 @@ function FarmForm({ isCreate, data }: { isCreate: boolean; data?: any }) {
         {t("pages.farmManagement.farmName")}
       </Text>
       <div className="w-full mt-16">
-        <Formik initialValues={data ?? initialValues} onSubmit={() => {}}>
+        <Formik
+          initialValues={data ?? initialValues}
+          onSubmit={(values) => {
+            console.log(values, "val");
+          }}
+        >
           {(props: FormikProps<any>) => (
             <Form>
               {ListField.map((item) => {
@@ -205,28 +215,31 @@ function FarmForm({ isCreate, data }: { isCreate: boolean; data?: any }) {
                   </div>
                 );
               })}
+              <div className="w-full flex justify-start items-center">
+                <div
+                  className="mr-16"
+                  style={{ minWidth: MIN_LEFT_WIDTH }}
+                ></div>
+                <div>
+                  <AddCircleOutlineIcon
+                    color="action"
+                    fontSize="large"
+                    sx={styleIconAction}
+                  />
+                </div>
+                <Text className="px-4 text-xl">
+                  {t("pages.farmManagement.addFarmUser")}
+                </Text>
+              </div>
+              {isCreate && (
+                <div className="flex justify-end items-center w-full mt-16">
+                  <SubmitOrCancel t={t} />
+                </div>
+              )}
             </Form>
           )}
         </Formik>
       </div>
-      <div className="w-full flex justify-start items-center">
-        <div className="mr-16" style={{ minWidth: MIN_LEFT_WIDTH }}></div>
-        <div>
-          <AddCircleOutlineIcon
-            color="action"
-            fontSize="large"
-            sx={styleIconAction}
-          />
-        </div>
-        <Text className="px-4 text-xl">
-          {t("pages.farmManagement.addFarmUser")}
-        </Text>
-      </div>
-      {isCreate && (
-        <div className="flex justify-end items-center w-full mt-16">
-          <SubmitOrCancel t={t} />
-        </div>
-      )}
     </div>
   );
 }

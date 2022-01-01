@@ -119,3 +119,7 @@ export type PaginationResponse<T> = {
   data: T[];
   metadata: PaginationMetadata;
 };
+
+export type RouteParams = {
+  id: string;
+};

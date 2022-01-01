@@ -24,7 +24,8 @@
         "view": "View",
         "all": "전체",
         "normal": "일반",
-        "unused": "미사용"
+        "unused": "미사용",
+        "save": "저장"
     },
     "pages": {
         "login": {

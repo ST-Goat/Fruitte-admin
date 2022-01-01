@@ -10,6 +10,7 @@ export type TimePickerProps = {
   name: string;
   onChange?: (event: React.ChangeEvent<any>) => void;
   fullWidth?: boolean;
+  value?: any | Date | number | string;
 } & {
   [key: string]: any;
 };
@@ -18,6 +19,7 @@ function TimePicker({
   name,
   onChange,
   fullWidth = true,
+  value,
   ...props
 }: TimePickerProps) {
   return (
@@ -27,7 +29,7 @@ function TimePicker({
           <LocalizationProvider dateAdapter={DateAdapter}>
             <Stack spacing={3}>
               <DesktopTimePicker
-                value={new Date()}
+                value={value}
                 onChange={(newValue: Date | null) => {
                   field.onChange({
                     target: {
@@ -36,15 +38,18 @@ function TimePicker({
                     },
                   });
                 }}
+                {...props}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    {...props}
                     sx={{
                       border: "1px solid #76848d",
                       borderRadius: "5px",
                       "&": {
                         borderColor: "#4C9C2E",
+                      },
+                      "& .Mui-focused fieldset": {
+                        borderColor: "#4C9C2E !important",
                       },
                     }}
                   />

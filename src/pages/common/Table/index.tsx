@@ -22,7 +22,6 @@ const StyledTableCell = styled(TableCell)(({ theme, ...props }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    cursor: "pointer",
   },
   ...props,
 }));

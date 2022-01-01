@@ -1,22 +1,28 @@
+import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import cn from "classnames";
 import { Formik, Form, FormikProps } from "formik";
+import format from "date-fns/format";
+
 import Grid from "@mui/material/Grid";
 import Text from "pages/common/components/Text";
 import Select from "pages/common/Formik/Select";
-import DatePicker from "pages/common/Formik/DatePicker";
-import TimePicker from "pages/common/Formik/TimePicker";
+import DatePickerCustomizer from "pages/common/Formik/DatePicker";
+import TimePickerCustomizer from "pages/common/Formik/TimePicker";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-import cn from "classnames";
-import { guid } from "utilities";
-import { useState } from "react";
 import ButtonCustomizer from "pages/common/Button";
 
-const options = [
-  { label: "체험명", value: "체험명" },
-  { label: "체험명1", value: "체험명1" },
-  { label: "체험명2", value: "체험명2" },
-];
+import { Activity, fetchAllActivityByFarmId } from "services/farmActivity";
+import {
+  fetchFarmSchedules,
+  ScheduleInfor,
+  ScheduleItem,
+} from "services/farmSchedules";
+
+import { guid } from "utilities";
+import { TextField } from "@mui/material";
 
 const MAGIRN_LEFT = "ml-16";
 const MAGIRN_RIGHT = "mr-16";
@@ -43,7 +49,24 @@ const RowStyled = ({
   </>
 );
 
-const TimeRangePicker = ({ handleRemove }: { handleRemove: () => void }) => {
+type TimeRangeItem = {
+  id: string;
+  start: Date;
+  onePerson: number;
+  twoPerson: number;
+  threePerson: number;
+  fourPerson: number;
+};
+
+const TimeRangePicker = ({
+  item,
+  handleRemove,
+  duration,
+}: {
+  item: TimeRangeItem;
+  duration: number;
+  handleRemove: () => void;
+}) => {
   return (
     <div className="mb-8">
       <div className="flex items-center">
@@ -60,9 +83,14 @@ const TimeRangePicker = ({ handleRemove }: { handleRemove: () => void }) => {
             }}
           />
         </div>
-        <TimePicker name="startTime" />
+        <TimePickerCustomizer name="start" />
         <div className="w-16" />
-        <TimePicker name="endTime" />
+        <TimePickerCustomizer
+          name="end"
+          readOnly
+          value={new Date(item.start.getTime() + duration * 1000)}
+          renderInput={(params: any) => <TextField {...params} />}
+        />
       </div>
       <div className="grid grid-cols-2 gap-4 ml-12 mt-8">
         <div className="flex items-center">
@@ -102,26 +130,26 @@ const TimeRangePicker = ({ handleRemove }: { handleRemove: () => void }) => {
   );
 };
 
-const SchedulePrevious = () => {
+const SchedulePrevious = ({ data }: { data: ScheduleItem[] }) => {
+  const lastActivityInfor = data[data.length - 1];
+  if (!lastActivityInfor) return <></>;
   return (
     <>
-      {[1, 2, 3].map((item) => (
+      {lastActivityInfor.scheduleInfos.map((item: ScheduleInfor) => (
         <RowStyled
-          key={item}
+          key={item.id}
           leftContent={
             <Text className="h-full font-bold text-lg py-8 border-b border-grey-300">
-              19:00 <br />
-              2021/10/10
+              {format(new Date(item.startAt), "HH:mm")} <br />
+              {format(new Date(item.startAt), "yyyy/MM/dd")}
             </Text>
           }
           rightContent={
             <div className="h-full py-8 border-b border-grey-300">
-              <Text className="font-bold text-lg">체험명</Text>
-              <Text>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quod
-                commodi velit eum voluptatem non saepe totam. Excepturi,
-                molestiae! Molestias alia
+              <Text className="font-bold text-lg">
+                {lastActivityInfor.name}
               </Text>
+              <Text>{lastActivityInfor.description}</Text>
             </div>
           }
         />
@@ -130,23 +158,22 @@ const SchedulePrevious = () => {
   );
 };
 
-type TimeRangeItem = {
-  id: string;
-  start: Date;
-  end: Date;
-  onePerson: number;
-  twoPerson: number;
-  threePerson: number;
-  fourPerson: number;
-};
-function Schedule() {
+const TWO_HOURS = 7200;
+function Schedule({ farmId }: { farmId: string }) {
+  const { t } = useTranslation();
   const [timeRangeList, setTimeRangeList] = useState<Array<TimeRangeItem>>([]);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [selectedActivity, setSelectedActivity] = useState<
+    Activity | undefined
+  >(undefined);
+  const [schedulePrevious, setSchedulePrevious] = useState<ScheduleItem[]>([]);
+
+  const rangeTimeSchedule = selectedActivity?.duration ?? TWO_HOURS;
 
   const handleAddNewTimeRange = () => {
     const newTimeRangeItem = {
       id: guid(),
       start: new Date(),
-      end: new Date(),
       onePerson: 0,
       twoPerson: 0,
       threePerson: 0,
@@ -154,6 +181,35 @@ function Schedule() {
     };
     setTimeRangeList((prev) => [...prev, newTimeRangeItem]);
   };
+
+  useEffect(() => {
+    async function fetchAllActivityOptions() {
+      try {
+        const response: Activity[] = await fetchAllActivityByFarmId({
+          farmId: farmId,
+        });
+        setActivities(response);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchAllActivityOptions();
+  }, [farmId]);
+
+  useEffect(() => {
+    //fetchFarmSchedules
+    async function fetchSchedulePrevious() {
+      try {
+        // need control with activity id here
+        const response = await fetchFarmSchedules();
+        setSchedulePrevious(response.slice(-3));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchSchedulePrevious();
+  }, [selectedActivity]);
+
   return (
     <div>
       <Formik
@@ -174,13 +230,28 @@ function Schedule() {
             >
               <RowStyled
                 leftContent={<Text className="font-bold text-xl">체험</Text>}
-                rightContent={<Select name="activity" options={options} />}
+                rightContent={
+                  <Select
+                    name="activity"
+                    options={activities.map((item) => ({
+                      id: item.id,
+                      label: item.name,
+                      value: item.id,
+                    }))}
+                    onChange={(e) => {
+                      const idSelected = e.target.value;
+                      setSelectedActivity(
+                        activities.find((item) => item.id === idSelected)
+                      );
+                    }}
+                  />
+                }
               />
               <RowStyled
                 leftContent={<Text className="font-bold text-xl">날짜</Text>}
                 rightContent={
                   <div className="w-80">
-                    <DatePicker name="date" />
+                    <DatePickerCustomizer name="date" />
                   </div>
                 }
               />
@@ -191,6 +262,8 @@ function Schedule() {
                     {timeRangeList.map((item) => (
                       <TimeRangePicker
                         key={item.id}
+                        item={item}
+                        duration={rangeTimeSchedule}
                         handleRemove={() => {
                           setTimeRangeList((prev) =>
                             prev.filter(
@@ -220,7 +293,7 @@ function Schedule() {
             </Grid>
             <div className="flex items-center justify-end pr-64">
               <ButtonCustomizer type="submit" className="px-8 rounded-3xl mt-8">
-                저장
+                {t("common.save")}
               </ButtonCustomizer>
             </div>
           </Form>
@@ -236,7 +309,7 @@ function Schedule() {
         <Grid item xs={12}>
           <div className="h-16 bg-grey-default" />
         </Grid>
-        <SchedulePrevious />
+        <SchedulePrevious data={schedulePrevious} />
       </Grid>
     </div>
   );

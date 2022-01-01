@@ -28,12 +28,6 @@ function* handleLogin(payload: LoginPayload) {
     // redirect to admin page
   } catch (error) {
     yield put(loginFailure(error));
-    yield put(
-      enqueueSnackbar({
-        message: "Login failed!",
-        variant: SNACKBAR_VARIANTS.ERROR,
-      })
-    );
     yield put(logoutRequest(null));
   }
 }
