@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import classNames from "classnames";
 
 import TablePaginations from "pages/common/Paginations";
 import Controller from "./components/Controller";
@@ -17,7 +18,6 @@ import { FarmItem, FarmListResponse } from "services/farmManagement";
 import { FarmActivityResponses } from "services/farmActivity";
 import { gettotalRowCurrent } from "utilities";
 import { farmCreationUrl, farmDetailUrl } from "routes";
-import classNames from "classnames";
 
 const farmHeaders: HeaderItem[] = [
   {
@@ -134,8 +134,8 @@ const convertFarmDataView = (
     farmName: item.name,
     ownerName: Boolean(item.owner) ? item.owner.name : "-",
     ownerPhone: Boolean(item.owner) ? item.owner.phone : "-",
-    status: "#fake",
-    createAt: "#fake",
+    status: `${item.status}`,
+    createAt: new Date(item.createdAt).toLocaleDateString(),
   }));
 };
 

@@ -3,10 +3,12 @@ import LeftHeader from "../components/LeftHeader";
 import TabHeader from "../components/TabHeader";
 import FarmForm from "../components/FarmForm";
 
+import { initialFarmDetails } from "../FarmDetail";
+
 const tabList = [
   {
     id: 0,
-    children: <FarmForm isCreate />,
+    children: <FarmForm isCreate={true} initData={initialFarmDetails} />,
     keyLabel: "common.farm",
   },
 ];

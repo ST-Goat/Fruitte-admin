@@ -12,6 +12,8 @@ export type FarmItem = {
     email: string;
     phone: string;
   };
+  createdAt: Date;
+  status: boolean;
 };
 
 export type FarmListResponse = {
@@ -52,4 +54,83 @@ export const fetchFarmList = async (
         total: !response.data.content ? 0 : response.data.content.length,
       };
     });
+};
+
+export type FarmerItem = {
+  id: number | string;
+  name: string;
+  email: string;
+  phone: string;
+  isActive: true;
+};
+export type FarmDetail = {
+  id: number | string;
+  name: string;
+  address: string;
+  description: string;
+  email: string;
+  phone: string;
+  settlementCycle: number;
+  accountHolder: string;
+  bankName: string;
+  accountNumber: string;
+  incomeRate: number;
+  farmers: FarmerItem[];
+};
+
+export const fetchFarmDetail = async ({
+  farmId,
+}: {
+  farmId: string | number;
+}): Promise<FarmDetail> => {
+  return axiosServices
+    .get(`admin/farms/${farmId}`)
+    .then((response) => response.data);
+};
+
+export type NewFarmData = {
+  name: string;
+  address: string;
+  description: string;
+  email: string;
+  phone: string;
+  settlementCycle: number;
+  accountHolder: string;
+  bankName: string;
+  accountNumber: string;
+  incomeRate: number;
+  userIds: Array<number>;
+};
+export const createNewFarm = async ({ data }: { data: NewFarmData }) => {
+  return axiosServices.post("admin/farms", {
+    ...data,
+    districtId: 1,
+  });
+};
+
+export type FarmDataEdit = {
+  name: string;
+  address: string;
+  description: string;
+  email: string;
+  phone: string;
+  settlementCycle: number;
+  accountHolder: string;
+  bankName: string;
+  accountNumber: string;
+  incomeRate: number;
+  newUserIds: number[];
+  deleteUserIds: number[];
+};
+export const updateFarmWithData = async ({
+  data,
+  farmId,
+}: {
+  data: FarmDataEdit;
+  farmId: string | number;
+}) => {
+  return axiosServices.put(`admin/farms/${farmId}`, {
+    ...data,
+    districtId: 1,
+  });
 };

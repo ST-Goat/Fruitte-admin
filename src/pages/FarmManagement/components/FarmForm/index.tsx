@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Form, Formik, FormikProps } from "formik";
+import { Link } from "react-router-dom";
+import { difference } from "lodash";
+
 import InputWithLabel, {
   MIN_LEFT_WIDTH,
 } from "pages/common/Formik/Input/InputWithLabel";
@@ -9,6 +12,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ButtonCustomizer from "pages/common/Button";
+
+import { farmManagementUrl } from "routes";
+
+import { createNewFarm, updateFarmWithData } from "services/farmManagement";
+import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
+import { useAppDispatch } from "utilities";
+import { enqueueSnackbar } from "redux/slices/snackbar";
 
 const ListField = [
   {
@@ -42,12 +52,6 @@ const ListField = [
     type: "text",
   },
   {
-    id: "paymentStatus__field",
-    keyLabel: "pages.farmManagement.paymentStatus",
-    name: "paymentStatus",
-    type: "text",
-  },
-  {
     id: "accountHolder__field",
     keyLabel: "pages.farmManagement.accountHolder",
     name: "accountHolder",
@@ -56,7 +60,7 @@ const ListField = [
   {
     id: "nameOfBank__field",
     keyLabel: "pages.farmManagement.nameOfBank",
-    name: "nameOfBank",
+    name: "bankName",
     type: "text",
   },
   {
@@ -68,13 +72,13 @@ const ListField = [
   {
     id: "settlementRate__field",
     keyLabel: "pages.farmManagement.settlementRate",
-    name: "settlementRate",
+    name: "incomeRate",
     type: "text",
   },
   {
     id: "farmUser__field",
     keyLabel: "pages.farmManagement.farmUser",
-    name: "farmUser",
+    name: "farmers",
     type: "text",
   },
 ];
@@ -88,43 +92,46 @@ const styleIconAction = () => ({
   },
 });
 
-// "name": "string",
-//   "address": "string",
-//   "description": "string",
-//   "districtId": 1
-
-const initialValues = {
-  name: "",
-  email: "",
-  phone: "",
-  address: "",
-  settlementCycle: "",
-  paymentStatus: "",
-  accountHolder: "",
-  nameOfBank: "",
-  accountNumber: "",
-  settlementRate: "",
-  farmUser: [],
-};
-
-const SubmitOrCancel = ({ t }: { t: (key: string) => string }) => {
+const SubmitOrCancel = ({
+  t,
+  disabled,
+}: {
+  t: (key: string) => string;
+  disabled: boolean;
+}) => {
   return (
     <>
-      <ButtonCustomizer type="submit" style={{ minWidth: "8rem" }}>
+      <ButtonCustomizer
+        disabled={disabled}
+        type="submit"
+        style={{ minWidth: "8rem" }}
+      >
         {t("common.produce")}
       </ButtonCustomizer>
-      <ButtonCustomizer
-        style={{ minWidth: "8rem", marginLeft: "2rem" }}
-        color="secondary"
-      >
-        {t("common.cancel")}
-      </ButtonCustomizer>
+      <Link to={farmManagementUrl}>
+        <ButtonCustomizer
+          style={{ minWidth: "8rem", marginLeft: "2rem" }}
+          color="secondary"
+          disabled={disabled}
+        >
+          {t("common.cancel")}
+        </ButtonCustomizer>
+      </Link>
     </>
   );
 };
 
-function FarmForm({ isCreate, data }: { isCreate: boolean; data?: any }) {
+function FarmForm({
+  isCreate,
+  initData,
+  farmId,
+}: {
+  isCreate: boolean;
+  initData: any;
+  farmId?: any;
+}) {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const [fieldDisabled, setFieldDisabled] = useState<{
     [key: string]: boolean;
   }>(
@@ -136,6 +143,7 @@ function FarmForm({ isCreate, data }: { isCreate: boolean; data?: any }) {
       {}
     )
   );
+  const [isLoadingProcess, setIsLoadingProcess] = useState(false);
 
   const handleOnClickIcon = (item: { id: string }) => {
     if (!isCreate) {
@@ -146,18 +154,58 @@ function FarmForm({ isCreate, data }: { isCreate: boolean; data?: any }) {
     }
   };
 
+  const handleSubmit = async (values: any) => {
+    setIsLoadingProcess(true);
+    const commonData = {
+      accountHolder: values.accountHolder,
+      accountNumber: values.accountNumber,
+      address: values.address,
+      bankName: values.bankName,
+      description: "",
+      email: values.email,
+      incomeRate: Number(values.incomeRate),
+      name: values.name,
+      phone: values.phone,
+      settlementCycle: Number(values.settlementCycle),
+    };
+    if (isCreate) {
+      // post with create
+      const response = await createNewFarm({
+        data: {
+          ...commonData,
+          userIds: values.farmers,
+        },
+      });
+    } else {
+      const newUserIds = difference(values.farmers, initData.farmers);
+      const deleteUserIds = difference(initData.farmers, values.farmers);
+      const response = await updateFarmWithData({
+        farmId: farmId,
+        data: {
+          ...commonData,
+          newUserIds: newUserIds as number[],
+          deleteUserIds: deleteUserIds as number[],
+        },
+      });
+      if (response.status === HttpStatus.OK) {
+        dispatch(
+          enqueueSnackbar({
+            message: "Success!",
+            variant: SNACKBAR_VARIANTS.SUCCESS,
+          })
+        );
+      }
+    }
+    setIsLoadingProcess(false);
+  };
+
   return (
     <div className="px-16">
       <Text className="m-auto text-center font-bold text-4xl">
         {t("pages.farmManagement.farmName")}
       </Text>
       <div className="w-full mt-16">
-        <Formik
-          initialValues={data ?? initialValues}
-          onSubmit={(values) => {
-            console.log(values, "val");
-          }}
-        >
+        <Formik initialValues={initData} onSubmit={handleSubmit}>
           {(props: FormikProps<any>) => (
             <Form>
               {ListField.map((item) => {
@@ -231,11 +279,9 @@ function FarmForm({ isCreate, data }: { isCreate: boolean; data?: any }) {
                   {t("pages.farmManagement.addFarmUser")}
                 </Text>
               </div>
-              {isCreate && (
-                <div className="flex justify-end items-center w-full mt-16">
-                  <SubmitOrCancel t={t} />
-                </div>
-              )}
+              <div className="flex justify-end items-center w-full mt-16">
+                <SubmitOrCancel disabled={isLoadingProcess} t={t} />
+              </div>
             </Form>
           )}
         </Formik>

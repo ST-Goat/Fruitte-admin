@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import LeftHeader from "../components/LeftHeader";
@@ -11,6 +11,7 @@ import Text from "pages/common/components/Text";
 import Schedule from "./Schedule";
 
 import { RouteParams } from "shared/comom.enum";
+import { fetchFarmDetail } from "services/farmManagement";
 
 type TabPanelProps = {
   children?: React.ReactNode;
@@ -18,19 +19,6 @@ type TabPanelProps = {
   id: number;
 };
 
-const fakeFarmData = {
-  farmName: "농장명",
-  email: "abc@gmail.com",
-  phone: "010-1234-1234",
-  address: "경기도 광주시, 1234",
-  settlementCycle: "2주/ 4주",
-  paymentStatus: "홍길동",
-  accountHolder: "신한은행",
-  nameOfBank: "123-134-1234-134",
-  accountNumber: "40%",
-  settlementRate: "이메일",
-  farmUser: "농장 유저 추가",
-};
 function TabPanel(props: TabPanelProps) {
   const { children, id, current, ...other } = props;
 
@@ -47,15 +35,60 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
+export const initialFarmDetails = {
+  name: "",
+  email: "",
+  phone: "",
+  address: "",
+  settlementCycle: 0,
+  accountHolder: "",
+  bankName: "",
+  accountNumber: "",
+  incomeRate: 0,
+  farmers: [],
+};
+
 function FarmDetail() {
   const { id: farmId } = useParams<RouteParams>();
   const [tabIdCurrent, setTabIdCurrent] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [detail, setDetail] = useState(initialFarmDetails);
+
+  useEffect(() => {
+    async function getFarmData(farmId: string) {
+      setIsLoading(true);
+      try {
+        const response = await fetchFarmDetail({ farmId: farmId });
+        setDetail({
+          name: response.name,
+          email: response.email,
+          phone: response.phone,
+          address: response.address,
+          settlementCycle: response.settlementCycle,
+          accountHolder: response.accountHolder,
+          bankName: response.bankName,
+          accountNumber: response.accountNumber,
+          incomeRate: response.incomeRate,
+          farmers: [],
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    getFarmData(farmId);
+  }, [farmId]);
 
   const tabList = useMemo(
     () => [
       {
         id: 0,
-        children: <FarmForm isCreate={false} data={fakeFarmData} />,
+        children: isLoading ? (
+          <>...loading</>
+        ) : (
+          <FarmForm farmId={farmId} isCreate={false} initData={detail} />
+        ),
         keyLabel: "common.farm",
       },
       {
@@ -79,8 +112,9 @@ function FarmDetail() {
         keyLabel: "pages.farmManagement.feedback",
       },
     ],
-    []
+    [isLoading, detail, farmId]
   );
+
   return (
     <div>
       <div className="flex justify-between items-center w-full">

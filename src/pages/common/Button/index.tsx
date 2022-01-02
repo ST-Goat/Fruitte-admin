@@ -11,22 +11,24 @@ const SIZE_STYLE: Record<Size, string> = {
 export type ButtonProps = {
   size?: Size;
   className?: string;
-  color?: "primary" | "secondary" | "red" | "brown" | "other";
-  variant?: "primary" | "other";
+  color?: "primary" | "secondary" | "red" | "disabled" | "other";
+  variant?: "primary" | "disabled" | "other";
+  disabled?: boolean;
 } & {
   [key: string]: any;
 };
 
 const bgColor: Record<NonNullable<ButtonProps["color"]>, string> = {
   primary: "bg-primary-default text-white-default",
-  secondary: "bg-grey-default text-white-default",
+  secondary: " bg-secondary1-default text-white-default",
   red: "bg-red-100 text-white-default",
-  brown: "bg-secondary1-default text-white-default",
+  disabled: "bg-grey-default text-white-default",
   other: "",
 };
 
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
   primary: "rounded rounded-2 hover:opacity-80 transform active:scale-95",
+  disabled: "cursor-auto rounded rounded-2 opacity-80",
   other: "",
 };
 
@@ -37,13 +39,14 @@ function ButtonCustomizer({
   variant = "primary",
   ...props
 }: ButtonProps) {
+  const isDisabled = props.disabled;
   return (
     <button
       {...props}
       className={cn(
         className,
-        bgColor[color],
-        variantClasses[variant],
+        isDisabled ? bgColor["disabled"] : bgColor[color],
+        isDisabled ? variantClasses["disabled"] : variantClasses[variant],
         SIZE_STYLE[size]
       )}
     />
