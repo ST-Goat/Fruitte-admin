@@ -1,43 +1,55 @@
 import { useState, useRef, memo, useEffect } from "react";
 import JoditEditor from "jodit-react";
-import { Field, FieldProps } from "formik";
+import { Field, FieldInputProps, FieldMetaProps, FieldProps } from "formik";
+import { isEqual } from "lodash";
 
-const JoditEditorCustomizer = memo(({ field, meta }: FieldProps) => {
-  const editor = useRef(null);
-  const [value, setValue] = useState(field.value);
+const JoditEditorCustomizer = memo(
+  ({
+    field,
+    meta,
+  }: {
+    field: FieldInputProps<any>;
+    meta: FieldMetaProps<any>;
+  }) => {
+    const editor = useRef(null);
+    const [value, setValue] = useState(field.value);
 
-  useEffect(() => {
-    field.onChange({
-      target: {
-        name: field.name,
-        value: value,
-      },
-    });
-  }, [value]);
+    useEffect(() => {
+      field.onChange({
+        target: {
+          name: field.name,
+          value: value,
+        },
+      });
+    }, [value]);
 
-  const config = {
-    readonly: false,
-  };
-  return (
-    <JoditEditor
-      ref={editor}
-      config={config}
-      value={value}
-      onBlur={(newContent) => {
-        setValue(newContent);
-      }}
-    />
-  );
-});
+    const config = {
+      readonly: false,
+    };
+    return (
+      <JoditEditor
+        ref={editor}
+        config={config}
+        value={value}
+        onBlur={(newContent) => {
+          setValue(newContent);
+        }}
+      />
+    );
+  },
+  (prevProps: any, nextProps: any) => {
+    return isEqual(prevProps, nextProps);
+  }
+);
 
 const BoxEditor = ({ name }: { name: string }) => {
   return (
-    <Field
-      name={name}
-      render={(fieldProps: FieldProps) => {
-        return <JoditEditorCustomizer {...fieldProps} />;
+    <Field name={name}>
+      {(fieldProps: FieldProps) => {
+        const { field, meta } = fieldProps;
+        return <JoditEditorCustomizer field={field} meta={meta} />;
       }}
-    />
+    </Field>
   );
 };
 export default BoxEditor;

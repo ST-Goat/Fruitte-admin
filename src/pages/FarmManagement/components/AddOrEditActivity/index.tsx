@@ -24,77 +24,77 @@ type FieldItem = {
 
 const fields: Array<FieldItem> = [
   {
-    id: "체험 명",
+    id: "field-name",
     keyLabel: "체험 명",
     name: "name",
     component: Input,
     typeComponent: "input-with-control",
   },
   {
-    id: "이미지",
+    id: "field-images",
     keyLabel: "이미지",
     name: "images",
     component: UploadImages,
     typeComponent: "image-upload",
   },
   {
-    id: "1인 요금",
+    id: "field-one-person",
     keyLabel: "1인 요금",
     name: "rate1",
     component: Input,
     typeComponent: "input-with-control",
   },
   {
-    id: "2인 요금",
+    id: "field-two-person",
     keyLabel: "2인 요금",
     name: "rate2",
     component: Input,
     typeComponent: "input-with-control",
   },
   {
-    id: "3인 요금",
+    id: "field-three-person",
     keyLabel: "3인 요금",
     name: "rate3",
     component: Input,
     typeComponent: "input-with-control",
   },
   {
-    id: "4인 요금",
+    id: "field-four-person",
     keyLabel: "4인 요금",
     name: "rate4",
     component: Input,
     typeComponent: "input-with-control",
   },
   {
-    id: "옵션 상품",
+    id: "field-optional-products",
     keyLabel: "옵션 상품",
     name: "optionalProducts",
     component: OptionalProducts,
     typeComponent: "optional-products",
   },
   {
-    id: "체험 시간",
+    id: "field-duration",
     keyLabel: "체험 시간",
     name: "timeActivity",
     component: Input,
     typeComponent: "input-with-control",
   },
   {
-    id: "준비물",
+    id: "field-materials",
     keyLabel: "준비물",
     name: "materials",
     component: Input,
     typeComponent: "input-with-control",
   },
   {
-    id: "요약 설명",
+    id: "field-description",
     keyLabel: "요약 설명",
     name: "description",
     component: BoxEditor,
     typeComponent: "input-with-control",
   },
   {
-    id: "상세 정보",
+    id: "field-information",
     keyLabel: "상세 정보",
     name: "information",
     component: BoxEditor,
@@ -124,11 +124,11 @@ const RowStyled = ({
 
 const Field = ({
   item,
-  values,
+  value,
   setFieldValue,
 }: {
   item: FieldItem;
-  values: { [field: string]: any };
+  value: any;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 }) => {
   const [disabled, setDisabled] = useState(true);
@@ -136,7 +136,7 @@ const Field = ({
     <item.component
       id={item.id}
       name={item.name}
-      fieldValue={values[item.name]}
+      fieldValue={value}
       setFieldValue={setFieldValue}
       type="text"
       placeholder="input any thing here..."
@@ -226,7 +226,7 @@ function ActivityFormItem() {
                     rightContent={
                       <Field
                         item={item}
-                        values={values}
+                        value={values[item.name]}
                         setFieldValue={setFieldValue}
                       />
                     }
@@ -241,12 +241,6 @@ function ActivityFormItem() {
                   </ButtonCustomizer>
                 </div>
               </Grid>
-              {/* array product optional can add or delete */}
-              {/* time input */}
-              {/* materials Box */}
-              {/* sub infor editor */}
-              {/* infor editor */}
-              {/* submit or cancel */}
             </Grid>
           </Grid>
         </Form>

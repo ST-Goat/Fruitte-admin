@@ -68,7 +68,7 @@ function Controller({
           </div>
           <ButtonCustomizer
             onClick={handleProgress}
-            color="brown"
+            color="secondary"
             className="rounded rounded-xl"
           >
             {isViewUnsettled

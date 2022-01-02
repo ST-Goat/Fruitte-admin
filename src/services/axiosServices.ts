@@ -47,7 +47,6 @@ class AxiosService {
   }
 
   handleSuccess(response: { data: any; status: number }) {
-    // do something with the response
     return response;
   }
 
