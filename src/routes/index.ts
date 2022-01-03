@@ -21,4 +21,8 @@ export const bookingDetailUrl = `${reservationManagementUrl}/booking-detail`;
 export const inquiryManagementUrl = "/inquiry-management";
 export const inquiryDetailUrl = `${inquiryManagementUrl}/detail`;
 
+export const faqManagementUrl = "/faq-management";
+export const faqCreateUrl = `${faqManagementUrl}/create`;
+export const faqDetailUrl = `${faqManagementUrl}/detail`;
+
 export const farmActivityUrl = "/farm-activity";

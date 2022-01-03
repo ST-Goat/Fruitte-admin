@@ -11,6 +11,9 @@ import {
   bookingDetailUrl,
   inquiryManagementUrl,
   inquiryDetailUrl,
+  faqManagementUrl,
+  faqCreateUrl,
+  faqDetailUrl,
 } from "routes";
 
 import Main from "pages/main/Main";
@@ -28,6 +31,7 @@ import ReservationManagement from "pages/ReservationManagement";
 import BookingDetail from "pages/ReservationManagement/BookingDetail";
 import InquiryManagement from "pages/InquiryManagement";
 import InquiryDetail from "pages/InquiryManagement/Detail";
+import FaqManagement from "pages/FaqManagement";
 
 import PeopleIcon from "@mui/icons-material/People";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -37,6 +41,8 @@ import AnnouncementIcon from "@mui/icons-material/Announcement";
 import PaymentIcon from "@mui/icons-material/Payment";
 import BookOnlineIcon from "@mui/icons-material/BookOnline";
 import CoPresentIcon from "@mui/icons-material/CoPresent";
+import QuizIcon from "@mui/icons-material/Quiz";
+import FaqAddOrEdit from "pages/FaqManagement/AddOrEdit";
 
 export type MenuItemProps = {
   key: string;
@@ -163,6 +169,28 @@ export const menuItems: MenuItemProps[] = [
         label: "",
         to: `${inquiryDetailUrl}/:id`,
         component: InquiryDetail,
+      },
+    ],
+  },
+  {
+    key: "faq-management",
+    label: "pages.faq.title",
+    to: faqManagementUrl,
+    component: FaqManagement,
+    exact: true,
+    icon: QuizIcon,
+    subPath: [
+      {
+        key: "faq-create",
+        label: "",
+        to: faqCreateUrl,
+        component: FaqAddOrEdit,
+      },
+      {
+        key: "faq-detail",
+        label: "",
+        to: `${faqDetailUrl}/:id`,
+        component: FaqAddOrEdit,
       },
     ],
   },

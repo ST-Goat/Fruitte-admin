@@ -155,6 +155,16 @@
             "sendDate": "Send date",
             "action": "Action",
             "sender": "Sender"
+        },
+        "faq": {
+            "title": "FAQ",
+            "createFaq": "Create FAQ",
+            "question": "Question",
+            "answer": "Answer",
+            "createAt": "Create Date",
+            "delete": "Delete",
+            "edit": "Edit",
+            "deleteModalTitle": "Are you sure you want to delete this question?"
         }
     }
 }

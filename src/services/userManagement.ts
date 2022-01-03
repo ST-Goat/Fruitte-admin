@@ -1,6 +1,7 @@
 import { PaginationDefault } from "shared/comom.enum";
 import axiosService from "./axiosServices";
 
+import { Pagination } from "shared/comom.enum";
 const endpointUrl = "admin/request-partners";
 
 export enum REQUEST_PARTNER_STATUS {
@@ -27,11 +28,6 @@ export type UserListResponse = {
   };
   status: number;
   message: string;
-};
-
-export type Pagination = {
-  page: number;
-  pageSize: number;
 };
 
 export type Filters = {

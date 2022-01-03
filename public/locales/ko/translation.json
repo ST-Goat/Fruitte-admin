@@ -155,6 +155,16 @@
             "sendDate": "Send date",
             "action": "Action",
             "sender": "Sender"
+        },
+        "faq": {
+            "title": "FAQ",
+            "createFaq": "FAQ 생성",
+            "question": "질문",
+            "answer": "답변",
+            "createAt": "생성일",
+            "delete": "삭제",
+            "edit": "수정",
+            "deleteModalTitle": "정말 해당 FAQ를 삭제 하시겠습니까?"
         }
     }
 }
