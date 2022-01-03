@@ -87,37 +87,9 @@ export enum SNACKBAR_VARIANTS {
   INFO = "info",
 }
 
-export type DeleteApiResponse = {
-  deletedCount: number;
-  metadata: {
-    timestamp: number;
-  };
-};
-
-export type PaginationParams = {
-  page: string;
-  size?: number;
-};
-
-export type PaginationMetadata = {
-  nextPage: number;
-  prevPage: string;
+export type Pagination = {
   page: number;
-  size: number;
-};
-
-export type FetchMetadata = {
-  timestamp: number;
-};
-
-export type FetchResponse<T> = {
-  data: T;
-  metadata: FetchMetadata;
-};
-
-export type PaginationResponse<T> = {
-  data: T[];
-  metadata: PaginationMetadata;
+  pageSize: number;
 };
 
 export type RouteParams = {

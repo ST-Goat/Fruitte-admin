@@ -70,7 +70,7 @@ export default function TableCustomizer({
   handleClickRow,
   hover = false,
   loading = false,
-  totalRow = PaginationDefault.PAGE,
+  totalRow = PaginationDefault.PAGE_SIZE,
   RowLoadingCustom,
 }: TableCustomizerProps) {
   const { t } = useTranslation();
