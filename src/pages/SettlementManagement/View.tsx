@@ -30,7 +30,7 @@ const headers = [
   },
   {
     id: "Account-col",
-    keyLabel: "pages.settlement.AccountNumber",
+    keyLabel: "pages.settlement.accountNumber",
     keyData: "accountNumber",
   },
   {
@@ -63,7 +63,7 @@ const fakeData = [
     name: "홍길동",
     accountHolder: "홍길동",
     bankName: "농협",
-    accountNumber: "010-1234-1234",
+    accountNumber: "123-45-6789",
     price: "10,000원",
     settlementCycle: "2주",
     state: "정산 가능",

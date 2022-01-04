@@ -36,7 +36,7 @@ function LocaleTrans({ onChange }: { onChange?: (value: string) => void }) {
       <MenuItem value="ko">
         <div className="flex">
           <Icon size={Size.SMALL} name="ko-flag" />{" "}
-          <Text className="ml-2">한국</Text>
+          <Text className="ml-2">한국어</Text>
         </div>
       </MenuItem>
     </Select>

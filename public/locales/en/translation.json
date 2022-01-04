@@ -39,8 +39,8 @@
             "unprocessed": "Unprocessed",
             "settlementDay": "Settlement day",
             "totalAmount": "Total amount",
-            "question": "문의",
-            "proposal": "제안"
+            "question": "Inquiry",
+            "proposal": "Proposal"
         },
         "userManagement": {
             "title": "Common User Management",
@@ -124,7 +124,7 @@
             "deleteModalTitle": "Are you sure you want to delete this notice?"
         },
         "settlement": {
-            "title": "Settlement management",
+            "title": "Settlement Management",
             "unsettled": "Unsettled",
             "settlementProcessing": "Settlement processing",
             "unsettlementProcessing": "Unsettled processing",

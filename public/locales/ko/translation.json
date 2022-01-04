@@ -2,7 +2,7 @@
     "common": {
         "email": "아이디",
         "password": "비밀번호",
-        "mainMenu": "MAIN MENU",
+        "mainMenu": "메인 메뉴",
         "search": "검색",
         "noData": "데이터 없음",
         "goBack": "뒤로",
@@ -13,15 +13,15 @@
         "address": "주소",
         "produce": "생성",
         "cancel": "취소",
-        "user": "User",
+        "user": "유저",
         "content": "내용",
-        "status": "Status",
-        "select": "Select",
+        "status": "상태",
+        "select": "선택",
         "title": "제목",
         "delete": "삭제",
         "edit": "수정",
         "create": "생성",
-        "view": "View",
+        "view": "보기",
         "all": "전체",
         "normal": "일반",
         "unused": "미사용",
@@ -33,7 +33,7 @@
             "submit": "로그인"
         },
         "dashboard": {
-            "title": "대쉬보드",
+            "title": "대시보드",
             "recentReservations": "최근 예약",
             "nextSettlement": "다음 정산",
             "unprocessed": "미처리",
@@ -44,7 +44,7 @@
         },
         "userManagement": {
             "title": "회원 관리",
-            "searchPlaceHolder": "Search by name, email, phone number...",
+            "searchPlaceHolder": "이름, 이메일, 전화번호로 검색...",
             "name": "이름",
             "email": "이메일",
             "phone": "전화번호",
@@ -64,7 +64,7 @@
             "declinedStatus": "탈퇴회원"
         },
         "farmManagement": {
-            "title": "농장관리",
+            "title": "농장 관리",
             "farmList": "농장 목록",
             "farmName": "농장명",
             "activityName": "체험명",
@@ -91,7 +91,7 @@
             "addFarmUser": "농장 유저 추가",
             "createActivity": "체험 생성",
             "schedule": "일정",
-            "sendDate": "Send Date",
+            "sendDate": "전송 날짜",
             "createDate": "생성일",
             "perPerson": "1인 요금",
             "twoPerson": "2인 요금",
@@ -99,7 +99,7 @@
             "fourPerson": "4인 요금"
         },
         "farmActivity": {
-            "title": "Farm Activity",
+            "title": "농장 체험",
             "reservationList": "예약 목록",
             "farmName": "농장명",
             "activityName": "체험명",
@@ -111,7 +111,7 @@
             "reservationDate": "예약일",
             "feedback": "피드백",
             "reservationDetail": "예약 상세",
-            "cancelReservation": "예약취소",
+            "cancelReservation": "예약 취소",
             "complete": "완료",
             "process": "처리"
         },
@@ -145,16 +145,16 @@
             "settlementDay": "정산일"
         },
         "reservation": {
-            "title": "Reservation Management",
-            "bookingDate": "Booking date",
-            "user": "User",
-            "activityName": "Activity name"
+            "title": "예약 관리",
+            "bookingDate": "예약 날짜",
+            "user": "유저",
+            "activityName": "체험"
         },
         "inquiry": {
-            "title": "Inquiry Management",
-            "sendDate": "Send date",
-            "action": "Action",
-            "sender": "Sender"
+            "title": "문의 관리",
+            "sendDate": "문의 받은 날짜",
+            "action": "액션",
+            "sender": "발송자"
         },
         "faq": {
             "title": "FAQ",
