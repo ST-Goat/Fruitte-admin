@@ -11,7 +11,7 @@ import Text from "pages/common/components/Text";
 import Schedule from "./Schedule";
 
 import { RouteParams } from "shared/comom.enum";
-import { fetchFarmDetail } from "services/farmManagement";
+import { fetchFarmDetail, FarmerItem } from "services/farmManagement";
 
 type TabPanelProps = {
   children?: React.ReactNode;
@@ -40,12 +40,12 @@ export const initialFarmDetails = {
   email: "",
   phone: "",
   address: "",
-  settlementCycle: 0,
+  settlementCycle: 15,
   accountHolder: "",
   bankName: "",
   accountNumber: "",
   incomeRate: 0,
-  farmers: [],
+  farmers: [] as FarmerItem[],
 };
 
 function FarmDetail() {
@@ -69,7 +69,7 @@ function FarmDetail() {
           bankName: response.bankName,
           accountNumber: response.accountNumber,
           incomeRate: response.incomeRate,
-          farmers: [],
+          farmers: response.farmers,
         });
       } catch (error) {
         console.log(error);

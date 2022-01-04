@@ -32,6 +32,8 @@ function AutoCompleteCustomizer({
         disablePortal
         options={options}
         fullWidth={fullWidth}
+        getOptionLabel={(option) => option.label}
+        value={field?.value ?? props.value}
         onChange={(event: React.SyntheticEvent, value: any) => {
           onChange && onChange(event);
           if (Boolean(value))
@@ -39,9 +41,7 @@ function AutoCompleteCustomizer({
               field.onChange({
                 target: {
                   name: name,
-                  value: Array.isArray(value)
-                    ? value.map((x) => x.value)
-                    : value.value,
+                  value: value,
                 },
               });
         }}

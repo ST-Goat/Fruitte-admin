@@ -88,7 +88,7 @@
             "accountNumber": "계좌번호",
             "settlementRate": "정산 비율",
             "farmUser": "농장 유저",
-            "addFarmUser": "농장 유저 추가",
+            "createFarm": "농장 생성",
             "createActivity": "체험 생성",
             "schedule": "일정",
             "sendDate": "전송 날짜",
