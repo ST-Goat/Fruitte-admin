@@ -16,20 +16,7 @@ import ButtonCustomizer from "pages/common/Button";
 
 import { loginRequest } from "redux/slices/auth";
 import { useAppDispatch } from "utilities/useHook";
-
-function validateEmail(value: string) {
-  let error;
-  if (!value) {
-    error = "Required";
-  } else if (
-    !/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/g.test(
-      value
-    )
-  ) {
-    error = "Email format is incorrect";
-  }
-  return error;
-}
+import { validateEmail } from "utilities/helper";
 
 function validatePassword(value: string) {
   let error;
