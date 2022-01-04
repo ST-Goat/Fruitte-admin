@@ -71,7 +71,7 @@
             "userName": "User Name",
             "productName": "Product Name",
             "price": "Price",
-            "state": "State",
+            "state": "Status",
             "paymentStatus": "Payment Status",
             "refundAmount": "Refund Amount",
             "reservationDate": "Reservation Date",
@@ -96,7 +96,9 @@
             "perPerson": "1 person",
             "twoPerson": "2 person",
             "threePerson": "3 person",
-            "fourPerson": "4 person"
+            "fourPerson": "4 person",
+            "twoWeeks": "2 weeks",
+            "fourWeeks": "4 weeks"
         },
         "farmActivity": {
             "title": "Farm Activity",

@@ -96,7 +96,9 @@
             "perPerson": "1인 요금",
             "twoPerson": "2인 요금",
             "threePerson": "3인 요금",
-            "fourPerson": "4인 요금"
+            "fourPerson": "4인 요금",
+            "twoWeeks": "2주",
+            "fourWeeks": "4주"
         },
         "farmActivity": {
             "title": "농장 체험",

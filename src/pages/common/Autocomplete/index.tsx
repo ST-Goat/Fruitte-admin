@@ -39,27 +39,30 @@ function AutoCompleteCustomizer({
               field.onChange({
                 target: {
                   name: name,
-                  value: value.value,
+                  value: Array.isArray(value)
+                    ? value.map((x) => x.value)
+                    : value.value,
                 },
               });
         }}
+        {...props}
         renderInput={(params) => (
           <TextField
             sx={{
               border: "1px solid #76848d",
-              borderRadius: "5px",
+              borderRadius: "0.75rem",
+              "& fieldset": { borderRadius: "0.7rem" },
               "&": {
                 borderColor: "#4C9C2E",
               },
               "& .Mui-focused": {
                 ".MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#4C9C2E !important",
+                  border: "1px solid #4C9C2E !important",
                 },
               },
             }}
             {...params}
             {...field}
-            {...props}
             onChange={(e) => {
               onChange && onChange(e);
               field && field.onChange(e);
