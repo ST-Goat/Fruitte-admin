@@ -17,12 +17,29 @@ import { useAppDispatch } from "utilities";
 import { enqueueSnackbar } from "redux/slices/snackbar";
 import SelectAdvance from "./SelectAdvance";
 
+import { validatePhone, validateEmail } from "utilities/helper";
+
+const validateRequired = (text: string) => {
+  let error;
+  if (!text) {
+    error = "This field is required!";
+  }
+  return error;
+};
+
+const validateSettlementRate = (num: number) => {
+  let error;
+  if (num < 0 || num > 100) error = "Percent must be between 0 and 100!";
+  return error;
+};
+
 const ListField = [
   {
     id: "farmName__field",
     keyLabel: "pages.farmManagement.farmName",
     name: "name",
     type: "text",
+    validate: validateRequired,
     component: InputWithLabel,
   },
   {
@@ -30,6 +47,7 @@ const ListField = [
     keyLabel: "common.email",
     name: "email",
     type: "text",
+    validate: validateEmail,
     component: InputWithLabel,
   },
   {
@@ -37,6 +55,7 @@ const ListField = [
     keyLabel: "common.phoneNumber",
     name: "phone",
     type: "text",
+    validate: validatePhone,
     component: InputWithLabel,
   },
   {
@@ -78,7 +97,8 @@ const ListField = [
     id: "settlementRate__field",
     keyLabel: "pages.farmManagement.settlementRate",
     name: "incomeRate",
-    type: "text",
+    type: "number",
+    validate: validateSettlementRate,
     component: InputWithLabel,
   },
   {
@@ -182,40 +202,53 @@ function FarmForm({
       bankName: values.bankName,
       description: "",
       email: values.email,
-      incomeRate: Number(values.incomeRate),
+      incomeRate: values.incomeRate,
       name: values.name,
       phone: values.phone,
       settlementCycle: Number(values.settlementCycle),
     };
-    if (isCreate) {
-      // post with create
-      const response = await createNewFarm({
-        data: {
-          ...commonData,
-          userIds: values.farmers,
-        },
-      });
-    } else {
-      const newUserIds = difference(values.farmers, initData.farmers);
-      const deleteUserIds = difference(initData.farmers, values.farmers);
-      const response = await updateFarmWithData({
-        farmId: farmId,
-        data: {
-          ...commonData,
-          newUserIds: newUserIds as number[],
-          deleteUserIds: deleteUserIds as number[],
-        },
-      });
-      if (response.status === HttpStatus.OK) {
-        dispatch(
-          enqueueSnackbar({
-            message: "Success!",
-            variant: SNACKBAR_VARIANTS.SUCCESS,
-          })
-        );
+    try {
+      if (isCreate) {
+        // post with create
+        const response = await createNewFarm({
+          data: {
+            ...commonData,
+            userIds: values.farmers,
+          },
+        });
+        if (response.status === HttpStatus.OK) {
+          dispatch(
+            enqueueSnackbar({
+              message: "Success!",
+              variant: SNACKBAR_VARIANTS.SUCCESS,
+            })
+          );
+        }
+      } else {
+        const newUserIds = difference(values.farmers, initData.farmers);
+        const deleteUserIds = difference(initData.farmers, values.farmers);
+        const response = await updateFarmWithData({
+          farmId: farmId,
+          data: {
+            ...commonData,
+            newUserIds: newUserIds as number[],
+            deleteUserIds: deleteUserIds as number[],
+          },
+        });
+        if (response.status === HttpStatus.OK) {
+          dispatch(
+            enqueueSnackbar({
+              message: "Success!",
+              variant: SNACKBAR_VARIANTS.SUCCESS,
+            })
+          );
+        }
       }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoadingProcess(false);
     }
-    setIsLoadingProcess(false);
   };
 
   const getOptionForSelectField = (fieldId: string) => {
@@ -245,7 +278,12 @@ function FarmForm({
                       id={item.id}
                       name={item.name}
                       type={item.type}
-                      label={t(item.keyLabel)}
+                      label={
+                        item.id === "settlementRate__field"
+                          ? `${t(item.keyLabel)}(%)`
+                          : t(item.keyLabel)
+                      }
+                      validate={!item.validate ? "" : item.validate}
                       multiple={item.id === "farmUser__field"}
                       disableCloseOnSelect={item.id === "farmUser__field"}
                       options={getOptionForSelectField(item.id)}

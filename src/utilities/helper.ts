@@ -37,3 +37,25 @@ export const removeTokenInStorage = () => {
   localStorage.removeItem(CONFIGS.HEADER_PAYLOAD_KEY);
   localStorage.removeItem(CONFIGS.REFRESH_TOKEN_KEY);
 };
+
+export const validatePhone = (phone: string) => {
+  let error;
+  if (!phone) error = "Phone is required!";
+  if (!/[0-9]{3}-[0-9]{3}-[0-9]{4}/g.test(phone))
+    error = "Phone format is incorrect!";
+  return error;
+};
+
+export const validateEmail = (value: string) => {
+  let error;
+  if (!value) {
+    error = "Email is required!";
+  } else if (
+    !/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/g.test(
+      value
+    )
+  ) {
+    error = "Email format is incorrect!";
+  }
+  return error;
+};
