@@ -3,6 +3,7 @@ import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
+import format from "date-fns/format";
 
 import TablePaginations from "pages/common/Paginations";
 import Controller from "./components/Controller";
@@ -108,7 +109,7 @@ type FarmView = {
   farmName: string;
   ownerName: string;
   ownerPhone: string;
-  status: string;
+  status: React.FC;
   createAt: string;
 };
 
@@ -125,7 +126,8 @@ type FarmActivityView = {
 const convertFarmDataView = (
   data: Array<FarmItem>,
   page: number,
-  rowsPerPage: number
+  rowsPerPage: number,
+  translate: (text: string) => string
 ): Array<FarmView> => {
   if (!data || data.length === 0) return [];
   return data.map((item, i) => ({
@@ -134,8 +136,18 @@ const convertFarmDataView = (
     farmName: item.name,
     ownerName: Boolean(item.owner) ? item.owner.name : "-",
     ownerPhone: Boolean(item.owner) ? item.owner.phone : "-",
-    status: `${item.status}`,
-    createAt: new Date(item.createdAt).toLocaleDateString(),
+    status: () => (
+      <span
+        className={
+          Boolean(item.status) ? "text-primary-default" : "text-black-default"
+        }
+      >
+        {Boolean(item.status)
+          ? translate("common.normal")
+          : translate("common.unused")}
+      </span>
+    ),
+    createAt: format(new Date(item.createdAt), "yyyy/MM/dd"),
   }));
 };
 
@@ -216,7 +228,7 @@ function FarmManagementView({
   const dataTable = useMemo(() => {
     return view === VIEW_FARM_LIST
       ? {
-          data: convertFarmDataView(farms.data, page, rowsPerPage),
+          data: convertFarmDataView(farms.data, page, rowsPerPage, t),
           total: farms.total,
         }
       : {

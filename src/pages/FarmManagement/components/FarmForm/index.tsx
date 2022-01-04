@@ -4,13 +4,9 @@ import { Form, Formik, FormikProps } from "formik";
 import { Link } from "react-router-dom";
 import { difference } from "lodash";
 
-import InputWithLabel, {
-  MIN_LEFT_WIDTH,
-} from "pages/common/Formik/Input/InputWithLabel";
+import InputWithLabel from "pages/common/Formik/Input/InputWithLabel";
 import Text from "pages/common/components/Text";
 import EditIcon from "@mui/icons-material/Edit";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ButtonCustomizer from "pages/common/Button";
 
 import { farmManagementUrl } from "routes";
@@ -19,6 +15,7 @@ import { createNewFarm, updateFarmWithData } from "services/farmManagement";
 import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
 import { useAppDispatch } from "utilities";
 import { enqueueSnackbar } from "redux/slices/snackbar";
+import SelectAdvance from "./SelectAdvance";
 
 const ListField = [
   {
@@ -26,60 +23,70 @@ const ListField = [
     keyLabel: "pages.farmManagement.farmName",
     name: "name",
     type: "text",
+    component: InputWithLabel,
   },
   {
     id: "email__field",
     keyLabel: "common.email",
     name: "email",
     type: "text",
+    component: InputWithLabel,
   },
   {
     id: "phoneNumber__field",
     keyLabel: "common.phoneNumber",
     name: "phone",
     type: "text",
+    component: InputWithLabel,
   },
   {
     id: "address__field",
     keyLabel: "common.address",
     name: "address",
     type: "text",
+    component: InputWithLabel,
   },
   {
     id: "settlementCycle__field",
     keyLabel: "pages.farmManagement.settlementCycle",
     name: "settlementCycle",
-    type: "text",
+    type: "select",
+    component: SelectAdvance,
   },
   {
     id: "accountHolder__field",
     keyLabel: "pages.farmManagement.accountHolder",
     name: "accountHolder",
     type: "text",
+    component: InputWithLabel,
   },
   {
     id: "nameOfBank__field",
     keyLabel: "pages.farmManagement.nameOfBank",
     name: "bankName",
     type: "text",
+    component: InputWithLabel,
   },
   {
     id: "accountNumber__field",
     keyLabel: "pages.farmManagement.accountNumber",
     name: "accountNumber",
     type: "text",
+    component: InputWithLabel,
   },
   {
     id: "settlementRate__field",
     keyLabel: "pages.farmManagement.settlementRate",
     name: "incomeRate",
     type: "text",
+    component: InputWithLabel,
   },
   {
     id: "farmUser__field",
     keyLabel: "pages.farmManagement.farmUser",
     name: "farmers",
-    type: "text",
+    type: "select",
+    component: SelectAdvance,
   },
 ];
 
@@ -121,6 +128,11 @@ const SubmitOrCancel = ({
   );
 };
 
+const fakeOwners = [
+  { label: "owner 1", value: 0 },
+  { label: "owner 2", value: 1 },
+  { label: "owner 3", value: 2 },
+];
 function FarmForm({
   isCreate,
   initData,
@@ -144,6 +156,13 @@ function FarmForm({
     )
   );
   const [isLoadingProcess, setIsLoadingProcess] = useState(false);
+
+  const settlementCycleOptions = [
+    { label: t("pages.farmManagement.twoWeeks"), value: 15 },
+    { label: t("pages.farmManagement.fourWeeks"), value: 1 },
+  ];
+
+  const ownerOptions = fakeOwners;
 
   const handleOnClickIcon = (item: { id: string }) => {
     if (!isCreate) {
@@ -199,6 +218,17 @@ function FarmForm({
     setIsLoadingProcess(false);
   };
 
+  const getOptionForSelectField = (fieldId: string) => {
+    switch (fieldId) {
+      case "settlementCycle__field":
+        return settlementCycleOptions;
+      case "farmUser__field":
+        return ownerOptions;
+      default:
+        return [];
+    }
+  };
+
   return (
     <div className="px-16">
       <Text className="m-auto text-center font-bold text-4xl">
@@ -209,47 +239,22 @@ function FarmForm({
           {(props: FormikProps<any>) => (
             <Form>
               {ListField.map((item) => {
-                if (item.id === "farmUser__field") {
-                  return (
-                    <div className="flex items-center mb-8 w-2/3" key={item.id}>
-                      <div className="flex-grow">
-                        <InputWithLabel
-                          id={item.id}
-                          name={item.name}
-                          type={item.type}
-                          label={t(item.keyLabel)}
-                          disabled={isCreate ? false : fieldDisabled[item.id]}
-                          onClickIcon={() => handleOnClickIcon(item)}
-                          EndIcon={
-                            !isCreate && (
-                              <EditIcon
-                                color="action"
-                                fontSize="large"
-                                sx={styleIconAction}
-                              />
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="px-4">
-                        <RemoveCircleIcon
-                          color="action"
-                          fontSize="large"
-                          sx={styleIconAction}
-                        />
-                      </div>
-                    </div>
-                  );
-                }
                 return (
                   <div className="mb-8" key={item.id}>
-                    <InputWithLabel
+                    <item.component
                       id={item.id}
                       name={item.name}
                       type={item.type}
                       label={t(item.keyLabel)}
+                      multiple={item.id === "farmUser__field"}
+                      disableCloseOnSelect={item.id === "farmUser__field"}
+                      options={getOptionForSelectField(item.id)}
                       onClickIcon={() => handleOnClickIcon(item)}
-                      disabled={isCreate ? false : fieldDisabled[item.id]}
+                      disabled={
+                        isCreate || item.type === "select"
+                          ? false
+                          : fieldDisabled[item.id]
+                      }
                       EndIcon={
                         !isCreate && (
                           <EditIcon
@@ -263,22 +268,6 @@ function FarmForm({
                   </div>
                 );
               })}
-              <div className="w-full flex justify-start items-center">
-                <div
-                  className="mr-16"
-                  style={{ minWidth: MIN_LEFT_WIDTH }}
-                ></div>
-                <div>
-                  <AddCircleOutlineIcon
-                    color="action"
-                    fontSize="large"
-                    sx={styleIconAction}
-                  />
-                </div>
-                <Text className="px-4 text-xl">
-                  {t("pages.farmManagement.addFarmUser")}
-                </Text>
-              </div>
               <div className="flex justify-end items-center w-full mt-16">
                 <SubmitOrCancel disabled={isLoadingProcess} t={t} />
               </div>

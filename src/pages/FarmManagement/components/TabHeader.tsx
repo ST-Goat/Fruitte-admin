@@ -30,6 +30,11 @@ const TabHeader = ({
           onChange={(event: React.SyntheticEvent, newValue: number) => {
             onChange(newValue);
           }}
+          sx={{
+            ".MuiTabs-indicator": {
+              backgroundColor: "#4C9C2E",
+            },
+          }}
           aria-label="farm-detail-tab"
         >
           {tabs.map((item) => (
@@ -40,6 +45,9 @@ const TabHeader = ({
                   padding: "1rem 3rem",
                   fontWeight: "bold",
                   fontSize: "1.25rem",
+                },
+                "&.Mui-selected": {
+                  color: "#4C9C2E",
                 },
               }}
               label={t(item.keyLabel)}
