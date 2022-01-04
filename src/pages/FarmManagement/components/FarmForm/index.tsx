@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Form, Formik, FormikProps } from "formik";
 import { Link } from "react-router-dom";
-import { difference } from "lodash";
+import { difference, filter } from "lodash";
 
 import InputWithLabel from "pages/common/Formik/Input/InputWithLabel";
 import Text from "pages/common/components/Text";
-import EditIcon from "@mui/icons-material/Edit";
 import ButtonCustomizer from "pages/common/Button";
 
 import { farmManagementUrl } from "routes";
 
-import { createNewFarm, updateFarmWithData } from "services/farmManagement";
+import {
+  createNewFarm,
+  FarmerItem,
+  updateFarmWithData,
+} from "services/farmManagement";
 import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
 import { useAppDispatch } from "utilities";
 import { enqueueSnackbar } from "redux/slices/snackbar";
@@ -110,15 +113,6 @@ const ListField = [
   },
 ];
 
-const styleIconAction = () => ({
-  "&": {
-    cursor: "pointer",
-  },
-  "&:active": {
-    transform: "scale(0.8)",
-  },
-});
-
 const SubmitOrCancel = ({
   t,
   disabled,
@@ -148,10 +142,11 @@ const SubmitOrCancel = ({
   );
 };
 
-const fakeOwners = [
-  { label: "owner 1", value: 0 },
-  { label: "owner 2", value: 1 },
-  { label: "owner 3", value: 2 },
+// id must same value
+const fakeFamers = [
+  { id: 0, label: "fake famer 1", value: 0 },
+  { id: 1, label: "fake famer 2", value: 1 },
+  { id: 2, label: "fake famer 3", value: 2 },
 ];
 function FarmForm({
   isCreate,
@@ -164,17 +159,6 @@ function FarmForm({
 }) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [fieldDisabled, setFieldDisabled] = useState<{
-    [key: string]: boolean;
-  }>(
-    ListField.reduce(
-      (acc, item) => ({
-        ...acc,
-        [item.id]: isCreate ? false : true,
-      }),
-      {}
-    )
-  );
   const [isLoadingProcess, setIsLoadingProcess] = useState(false);
 
   const settlementCycleOptions = [
@@ -182,16 +166,7 @@ function FarmForm({
     { label: t("pages.farmManagement.fourWeeks"), value: 1 },
   ];
 
-  const ownerOptions = fakeOwners;
-
-  const handleOnClickIcon = (item: { id: string }) => {
-    if (!isCreate) {
-      setFieldDisabled((prev) => ({
-        ...prev,
-        [item.id]: !prev[item.id],
-      }));
-    }
-  };
+  const ownerOptions = fakeFamers;
 
   const handleSubmit = async (values: any) => {
     setIsLoadingProcess(true);
@@ -205,15 +180,17 @@ function FarmForm({
       incomeRate: values.incomeRate,
       name: values.name,
       phone: values.phone,
-      settlementCycle: Number(values.settlementCycle),
+      settlementCycle: Number(values.settlementCycle?.value),
     };
+    const listIdFamerInits = initData.farmers.map((u: FarmerItem) => u.id);
+    const listIdFamerValues = values.farmers.map((u: any) => u.value);
     try {
       if (isCreate) {
         // post with create
         const response = await createNewFarm({
           data: {
             ...commonData,
-            userIds: values.farmers,
+            userIds: listIdFamerValues,
           },
         });
         if (response.status === HttpStatus.OK) {
@@ -225,8 +202,8 @@ function FarmForm({
           );
         }
       } else {
-        const newUserIds = difference(values.farmers, initData.farmers);
-        const deleteUserIds = difference(initData.farmers, values.farmers);
+        const newUserIds = difference(listIdFamerValues, listIdFamerInits);
+        const deleteUserIds = difference(listIdFamerInits, listIdFamerValues);
         const response = await updateFarmWithData({
           farmId: farmId,
           data: {
@@ -262,13 +239,25 @@ function FarmForm({
     }
   };
 
+  const getInitialValues = useMemo(() => {
+    const listIdInitFamers = initData.farmers.map(
+      (item: FarmerItem) => item.id
+    );
+    return {
+      ...initData,
+      settlementCycle: settlementCycleOptions.find(
+        (item) => item.value === initData.settlementCycle
+      ),
+      farmers: filter(fakeFamers, (o) => listIdInitFamers.includes(o.id)),
+    };
+  }, [initData, fakeFamers]);
   return (
     <div className="px-16">
       <Text className="m-auto text-center font-bold text-4xl">
         {t("pages.farmManagement.farmName")}
       </Text>
       <div className="w-full mt-16">
-        <Formik initialValues={initData} onSubmit={handleSubmit}>
+        <Formik initialValues={getInitialValues} onSubmit={handleSubmit}>
           {(props: FormikProps<any>) => (
             <Form>
               {ListField.map((item) => {
@@ -287,21 +276,6 @@ function FarmForm({
                       multiple={item.id === "farmUser__field"}
                       disableCloseOnSelect={item.id === "farmUser__field"}
                       options={getOptionForSelectField(item.id)}
-                      onClickIcon={() => handleOnClickIcon(item)}
-                      disabled={
-                        isCreate || item.type === "select"
-                          ? false
-                          : fieldDisabled[item.id]
-                      }
-                      EndIcon={
-                        !isCreate && (
-                          <EditIcon
-                            color="action"
-                            fontSize="large"
-                            sx={styleIconAction}
-                          />
-                        )
-                      }
                     />
                   </div>
                 );

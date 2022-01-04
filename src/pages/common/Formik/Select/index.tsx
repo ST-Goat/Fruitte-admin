@@ -1,5 +1,8 @@
 import { Field, FieldInputProps } from "formik";
-import AutoCompleteCustomizer, { SelectProps } from "pages/common/Autocomplete";
+import AutoCompleteCustomizer, {
+  Option,
+  SelectProps,
+} from "pages/common/Autocomplete";
 
 function Select({
   name,

@@ -268,7 +268,7 @@ function FarmManagementView({
             {tittleHeader.primary === translationKey.farmList && (
               <Link to={farmCreationUrl}>
                 <ButtonCustomizer>
-                  {t("pages.farmManagement.addFarmUser")}
+                  {t("pages.farmManagement.createFarm")}
                 </ButtonCustomizer>{" "}
               </Link>
             )}

@@ -8,8 +8,6 @@ const SelectAdvance = ({
   name,
   options,
   placeholder,
-  onClickIcon,
-  EndIcon,
   ...props
 }: {
   label: string;
@@ -17,8 +15,6 @@ const SelectAdvance = ({
   name: string;
   options: Option[];
   placeholder?: string;
-  onClickIcon: any;
-  EndIcon: any;
 }) => {
   return (
     <div className="flex flex-start items-center">
@@ -36,6 +32,9 @@ const SelectAdvance = ({
           name={name}
           options={options}
           placeholder={placeholder}
+          isOptionEqualToValue={(option: Option, value: Option) =>
+            option.value === value.value
+          }
         />
       </div>
     </div>
