@@ -177,10 +177,10 @@ function FarmForm({
       bankName: values.bankName,
       description: "",
       email: values.email,
-      incomeRate: values.incomeRate,
+      incomeRate: JSON.parse(values.incomeRate),
       name: values.name,
       phone: values.phone,
-      settlementCycle: Number(values.settlementCycle?.value),
+      settlementCycle: JSON.parse(values.settlementCycle?.value),
     };
     const listIdFamerInits = initData.farmers.map((u: FarmerItem) => u.id);
     const listIdFamerValues = values.farmers.map((u: any) => u.value);

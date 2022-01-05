@@ -71,7 +71,7 @@ class AxiosService {
               sessionStorage.setItem(
                 CONFIGS.TOAST,
                 JSON.stringify({
-                  message: err.message,
+                  message: "Authentication is expired!",
                   variant: SNACKBAR_VARIANTS.ERROR,
                 })
               );

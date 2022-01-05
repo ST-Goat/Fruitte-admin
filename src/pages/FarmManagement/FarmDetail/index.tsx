@@ -12,6 +12,8 @@ import Schedule from "./Schedule";
 
 import { RouteParams } from "shared/comom.enum";
 import { fetchFarmDetail, FarmerItem } from "services/farmManagement";
+import { changeTabWithId } from "redux/slices/farm";
+import { useAppDispatch, useAppSelector } from "utilities";
 
 type TabPanelProps = {
   children?: React.ReactNode;
@@ -50,7 +52,10 @@ export const initialFarmDetails = {
 
 function FarmDetail() {
   const { id: farmId } = useParams<RouteParams>();
-  const [tabIdCurrent, setTabIdCurrent] = useState(0);
+  const dispatch = useAppDispatch();
+  const tabIdCurrent = useAppSelector(
+    (state) => state.farm.tabControllers.selected
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [detail, setDetail] = useState(initialFarmDetails);
 
@@ -93,7 +98,7 @@ function FarmDetail() {
       },
       {
         id: 1,
-        children: <Activities />,
+        children: <Activities farmId={farmId} />,
         keyLabel: "pages.farmManagement.activities",
       },
       {
@@ -125,7 +130,7 @@ function FarmDetail() {
         tabs={tabList}
         tabIdCurrent={tabIdCurrent}
         onChange={(newId) => {
-          setTabIdCurrent(newId);
+          dispatch(changeTabWithId(newId));
         }}
       >
         {tabList.map((item) => {

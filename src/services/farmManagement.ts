@@ -33,24 +33,32 @@ export const fetchFarmList = async (
       page: number;
       pageSize: number;
     };
-    filters: any;
+    filters: {
+      keywork: string;
+    };
   } = {
     pagination: {
       page: PaginationDefault.PAGE,
       pageSize: PaginationDefault.PAGE_SIZE,
     },
-    filters: {},
+    filters: {
+      keywork: "",
+    },
   }
 ): Promise<FarmListResponse> => {
   const { page, pageSize } = params.pagination;
   return axiosServices
     .get("admin/farms", { params: params.filters })
     .then((response) => {
+      const { keywork } = params.filters;
       return {
-        data: response.data.content.slice(
-          (page - 1) * pageSize,
-          page * pageSize
-        ),
+        data: response.data.content
+          .filter((item: FarmItem) =>
+            Boolean(keywork)
+              ? item.name.toLowerCase().includes(keywork.toLowerCase())
+              : true
+          )
+          .slice((page - 1) * pageSize, page * pageSize),
         total: !response.data.content ? 0 : response.data.content.length,
       };
     });
