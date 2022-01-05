@@ -35,7 +35,7 @@ function UserDetailHeader() {
               />
               <div className="ml-3">
                 <Text className="font-bold text-xl">홍길동</Text>
-                <Text className="font-bold text-xl">abc@gmail.com</Text>
+                <Text className="font-bold text-xl">honggik@email.com</Text>
                 <Text
                   className={cn(
                     "w-max px-4 py-1",

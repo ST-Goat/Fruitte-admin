@@ -46,13 +46,13 @@ const fakeData = [
     id: 123123,
     no: 1,
     sendDate: "1/12/2021",
-    sender: "Lung Thi Linh",
-    email: "lunglinh@gmail.com",
+    sender: "홍길동",
+    email: "honggik@email.com",
     content:
-      "I want to know how to book an activity at the same time as your scheduled event. What's a best practice?",
+      "안녕하세요 체험 예약 문의 드립니다",
     action: () => (
       <span className="underline active:transform active:scale-95 cursor-pointer inline-block">
-        View Details
+        더 보기
       </span>
     ),
   },
