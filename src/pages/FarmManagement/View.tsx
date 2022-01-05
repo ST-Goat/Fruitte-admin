@@ -16,7 +16,10 @@ import type { TablePaginationProps } from "pages/common/Paginations";
 import type { ViewCurrent } from "./Container";
 import type { Activity, Filters } from "services/farmActivity";
 import { FarmItem, FarmListResponse } from "services/farmManagement";
-import { FarmActivityResponses } from "services/farmActivity";
+import {
+  FarmActivityResponses,
+  FarmActivityStatus,
+} from "services/farmActivity";
 import { gettotalRowCurrent } from "utilities";
 import { farmCreationUrl, farmDetailUrl } from "routes";
 
@@ -53,7 +56,7 @@ const farmHeaders: HeaderItem[] = [
   },
 ];
 
-const activityHeaders: HeaderItem[] = [
+export const activityHeaders: HeaderItem[] = [
   {
     id: "No-col",
     label: "No",
@@ -119,7 +122,7 @@ type FarmActivityView = {
   farmName: string;
   activityName: string;
   price: React.FC;
-  status: string;
+  status: React.FC;
   createAt: string;
 };
 
@@ -151,7 +154,7 @@ const convertFarmDataView = (
   }));
 };
 
-const convertFarmActivityDataView = (
+export const convertFarmActivityDataView = (
   data: Array<Activity>,
   page: number,
   rowsPerPage: number,
@@ -182,8 +185,20 @@ const convertFarmActivityDataView = (
         </li>
       </ul>
     ),
-    status: "#fake",
-    createAt: "#fake",
+    status: () => (
+      <span
+        className={
+          item.status === FarmActivityStatus.ACTIVE
+            ? "text-primary-default"
+            : "text-black-default"
+        }
+      >
+        {item.status === FarmActivityStatus.ACTIVE
+          ? translate("common.normal")
+          : translate("common.unused")}
+      </span>
+    ),
+    createAt: format(new Date(item.createDate), "yyyy/MM/dd"),
   }));
 };
 

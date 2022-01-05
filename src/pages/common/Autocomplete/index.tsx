@@ -62,11 +62,6 @@ function AutoCompleteCustomizer({
               },
             }}
             {...params}
-            {...field}
-            onChange={(e) => {
-              onChange && onChange(e);
-              field && field.onChange(e);
-            }}
           />
         )}
       />

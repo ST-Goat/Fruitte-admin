@@ -4,6 +4,11 @@ import startOfMonth from "date-fns/startOfMonth";
 import endOfMonth from "date-fns/endOfMonth";
 import format from "date-fns/format";
 
+export enum FarmActivityStatus {
+  ACTIVE = 0,
+  DEACTIVE = 1,
+}
+
 export type Activity = {
   id: number;
   name: string;
@@ -16,6 +21,8 @@ export type Activity = {
   twoMembersPrice: number;
   threeMembersPrice: number;
   fourMembersPrice: number;
+  createDate: Date;
+  status: FarmActivityStatus;
 };
 
 export type FarmActivityResponses = {
@@ -65,16 +72,25 @@ export const fetchFarmActivities = async (
 const FIXED_LIMIT = 20;
 export const fetchAllActivityByFarmId = ({
   farmId,
+  filters = {
+    startDate: format(startOfMonth(new Date()), "yyyy-MM-dd"),
+    endDate: format(endOfMonth(new Date()), "yyyy-MM-dd"),
+  },
 }: {
   farmId: string | number;
+  filters?: {
+    startDate: string;
+    endDate: string;
+  };
 }): Promise<Array<Activity>> => {
+  const { startDate, endDate } = filters;
   return axiosServices
     .get(`admin/farms/${farmId}/activities`, {
       params: {
         skip: 0,
         limit: FIXED_LIMIT,
-        startDate: format(startOfMonth(new Date()), "yyyy-MM-dd"),
-        endDate: format(endOfMonth(new Date()), "yyyy-MM-dd"),
+        startDate: startDate,
+        endDate: endDate,
       },
     })
     .then((response) => response.data.content);

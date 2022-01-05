@@ -12,7 +12,7 @@ import {
 
 export const VIEW_FARM_LIST = "view-farm-list";
 export const VIEW_FARM_ACTIVITIES = "view-farm-activities";
-const initialPagination = {
+export const initialPagination = {
   page: PaginationDefault.PAGE,
   pageSize: PaginationDefault.PAGE_SIZE,
 };
