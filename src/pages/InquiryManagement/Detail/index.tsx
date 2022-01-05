@@ -44,7 +44,7 @@ const InqiuryDetail = () => {
         <section className="flex justify-between items-center">
           <ul className="p-12 text-left">
             <li className="mb-4">
-              <b>Sender name:</b> Lung Thi Linh
+              <b>Sender name:</b> 홍길동
             </li>
             <li>
               <b>Send date:</b> 2/12/2021
@@ -55,7 +55,7 @@ const InqiuryDetail = () => {
               <b>Phone number:</b> 012-3456-888
             </li>
             <li>
-              <b>Email:</b> lunglinh@gmail.com
+              <b>Email:</b> honggik@email.com
             </li>
           </ul>
         </section>
