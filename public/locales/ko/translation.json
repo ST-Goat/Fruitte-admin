@@ -1,6 +1,6 @@
 {
     "common": {
-        "email": "아이디",
+        "email": "이메일",
         "password": "비밀번호",
         "mainMenu": "메인 메뉴",
         "search": "검색",
