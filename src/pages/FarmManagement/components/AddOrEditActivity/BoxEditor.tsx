@@ -1,5 +1,5 @@
 import { useState, useRef, memo, useEffect } from "react";
-import JoditEditor from "jodit-react";
+import Editor from "pages/common/Editor";
 import { Field, FieldInputProps, FieldMetaProps, FieldProps } from "formik";
 import { isEqual } from "lodash";
 
@@ -27,11 +27,11 @@ const JoditEditorCustomizer = memo(
       readonly: false,
     };
     return (
-      <JoditEditor
+      <Editor
         ref={editor}
         config={config}
         value={value}
-        onBlur={(newContent) => {
+        onBlur={(newContent: string) => {
           setValue(newContent);
         }}
       />

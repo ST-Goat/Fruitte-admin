@@ -7,13 +7,11 @@ import {
   loginSuccess,
   loginFailure,
 } from "../slices/auth";
-import { enqueueSnackbar } from "redux/slices/snackbar";
 
 import { homepageUrl, loginUrl } from "routes";
 import { login, LoginPayload } from "services/authentication";
 
 import CONFIGS from "shared/configs";
-import { SNACKBAR_VARIANTS } from "shared/comom.enum";
 import { addTokenToStorage, removeTokenInStorage } from "utilities/helper";
 
 function* handleLogin(payload: LoginPayload) {

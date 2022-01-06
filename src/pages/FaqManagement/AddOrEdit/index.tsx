@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, memo } from "react";
+import { useEffect, useState, useRef, memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { isEqual } from "lodash";
@@ -15,15 +15,16 @@ import {
   FieldMetaProps,
   FormikProps,
 } from "formik";
-import JoditEditor from "jodit-react";
+import Editor from "pages/common/Editor";
 import ButtonCustomizer from "pages/common/Button";
 
 import { faqCreateUrl, faqManagementUrl } from "routes";
 
 import { createNewFaq, editExistingFaq } from "services/faq";
 import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
-import { useAppDispatch } from "utilities";
+import { useAppDispatch, useAppSelector } from "utilities";
 import { enqueueSnackbar } from "redux/slices/snackbar";
+import { getAllFaq } from "redux/slices/faq";
 
 type JoditEditorCustomizerProps = {
   field: FieldInputProps<any>;
@@ -44,14 +45,10 @@ const JoditEditorCustomizer = memo(
     }, [value]);
 
     return (
-      <JoditEditor
+      <Editor
         ref={editor}
-        config={{
-          readonly: false,
-          width: "100%",
-        }}
         value={value}
-        onBlur={(newContent) => setValue(newContent)}
+        onBlur={(newContent: string) => setValue(newContent)}
       />
     );
   },
@@ -70,14 +67,16 @@ function AddOrEdit() {
   const history = useHistory();
   const { id: faqId } = useParams<any>();
   const dispatch = useAppDispatch();
+  const { isLoading, data: faqs } = useAppSelector((state) => state.faq);
   const isCreate = location.pathname === faqCreateUrl;
-  const [isLoading, setIsLoading] = useState(false);
-  const [faqDetail, setFaqDetail] = useState(initDetail);
+  const faqDetail = useMemo(() => {
+    const faqDataCurrent = faqs.find((item) => item.id.toString() === faqId);
+    return isCreate || !faqDataCurrent ? initDetail : faqDataCurrent;
+  }, [faqs, isCreate]);
 
   useEffect(() => {
-    if (!isCreate) {
-      setIsLoading(true);
-      //fetch data
+    if (!isCreate && faqs.length === 0) {
+      dispatch(getAllFaq(null));
     }
   }, []);
 
@@ -100,7 +99,13 @@ function AddOrEdit() {
 
   const handleEdit = async (values: any) => {
     try {
-      const response = await editExistingFaq({ faqId: faqId, data: values });
+      const response = await editExistingFaq({
+        faqId: faqId,
+        data: {
+          question: values.question,
+          answer: values.answer,
+        },
+      });
       if (response.status === HttpStatus.OK) {
         dispatch(
           enqueueSnackbar({
@@ -139,17 +144,6 @@ function AddOrEdit() {
                     name="question"
                     type="text"
                     label={t("pages.faq.question")}
-                    onClickIcon={() => {
-                      console.log("handle edit");
-                    }}
-                    disabled={false}
-                    EndIcon={
-                      <EditIcon
-                        color="action"
-                        fontSize="large"
-                        className="cursor-pointer active:transform active:scale-75"
-                      />
-                    }
                   />
                 </div>
                 <div className="flex items-center justify-center">
