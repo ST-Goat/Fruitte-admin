@@ -1,5 +1,4 @@
 import axiosServices from "./axiosServices";
-import { Pagination } from "shared/comom.enum";
 
 export type FaqItem = {
   id: number | string;
@@ -7,25 +6,14 @@ export type FaqItem = {
   answer: string;
 };
 
-export const fetchFaq = async (params: {
-  pagination: Pagination;
-  filters?: any;
-}): Promise<{
-  data: FaqItem[];
-  total: number;
-}> => {
-  const { page, pageSize } = params.pagination;
-  return axiosServices.get("admin/faqs").then((response) => ({
-    data: response.data.content.slice((page - 1) * pageSize, page * pageSize),
-    total: response.data.content.length,
-  }));
+export const fetchAllFaq = async (): Promise<FaqItem[]> => {
+  return axiosServices
+    .get("admin/faqs")
+    .then((response) => response.data.content);
 };
 
-export const createNewFaq = async ({
-  data,
-}: {
-  data: Exclude<FaqItem, "id">;
-}) => {
+type DataFaqForm = Pick<FaqItem, Exclude<keyof FaqItem, "id">>;
+export const createNewFaq = async ({ data }: { data: DataFaqForm }) => {
   return axiosServices.post("admin/faqs", { ...data });
 };
 
@@ -34,7 +22,7 @@ export const editExistingFaq = async ({
   data,
 }: {
   faqId: number | string;
-  data: Exclude<FaqItem, "id">;
+  data: DataFaqForm;
 }) => {
   return axiosServices.put(`admin/faqs/${faqId}`, { ...data });
 };

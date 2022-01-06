@@ -112,9 +112,11 @@ const convertFaqToViews = (
 
 const FaqView = ({
   faqs,
+  loading,
   pagination: { page, pageSize },
 }: {
   faqs: Faqs;
+  loading: boolean;
   pagination: Pagination;
 }) => {
   const history = useHistory();
@@ -130,7 +132,7 @@ const FaqView = ({
     <div>
       <TableCustomizer
         headers={headers}
-        loading={false}
+        loading={loading}
         totalRow={gettotalRowCurrent(faqs.total, page, pageSize)}
         data={convertFaqToViews(
           faqs.data,
