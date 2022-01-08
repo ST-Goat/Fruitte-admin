@@ -5,6 +5,9 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import Box from "@mui/material/Box";
 
+const isDate = (date: any) => {
+  return date instanceof Date && !isNaN(date.valueOf());
+};
 export default function DateRangePickerCustomizer({
   defaultValue,
   onChange,
@@ -24,7 +27,9 @@ export default function DateRangePickerCustomizer({
         value={value}
         onChange={(newValue) => {
           setValue(newValue);
-          onChange(newValue);
+          if (!newValue.some((item) => !isDate(item))) {
+            onChange(newValue);
+          }
         }}
         renderInput={(startProps, endProps) => (
           <React.Fragment>

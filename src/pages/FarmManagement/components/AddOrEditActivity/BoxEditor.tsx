@@ -23,13 +23,9 @@ const JoditEditorCustomizer = memo(
       });
     }, [value]);
 
-    const config = {
-      readonly: false,
-    };
     return (
       <Editor
         ref={editor}
-        config={config}
         value={value}
         onBlur={(newContent: string) => {
           setValue(newContent);

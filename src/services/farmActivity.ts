@@ -95,3 +95,86 @@ export const fetchAllActivityByFarmId = ({
     })
     .then((response) => response.data.content);
 };
+
+export type NewActivityData = {
+  name: string;
+  description: string;
+  info: string;
+  note: string;
+  duration: number;
+  oneMemberPrice: number;
+  twoMembersPrice: number;
+  threeMembersPrice: number;
+  fourMembersPrice: number;
+  activityImages: Array<{
+    type: string;
+    link: string;
+  }>;
+  activityAdditionalServices: Array<{
+    name: string;
+    price: number;
+  }>;
+};
+export const createNewActivityByFarmId = async ({
+  farmId,
+  data,
+}: {
+  farmId: string | number;
+  data: NewActivityData;
+}) => {
+  return axiosServices.post(`admin/farms/${farmId}/activities`, { ...data });
+};
+
+export const deleteFarmActivity = async ({
+  farmId,
+  activityId,
+}: {
+  farmId: string | number;
+  activityId: string | number;
+}) => {
+  return axiosServices.delete(
+    `admin/farms/${farmId}/activities/${activityId}`,
+    { params: { id: farmId, activityId: activityId } }
+  );
+};
+
+export type ExistedActivityData = {
+  name: string;
+  description: string;
+  info: string;
+  note: string;
+  duration: number;
+  oneMemberPrice: number;
+  twoMembersPrice: number;
+  threeMembersPrice: number;
+  fourMembersPrice: number;
+  activityImages: Array<{
+    type: string;
+    link: string;
+  }>;
+  newActivityAdditionalServices: Array<{
+    name: string;
+    price: number;
+  }>;
+  editActivityAdditionalServices: Array<{
+    id: number | string;
+    name: string;
+    price: number;
+  }>;
+  delActivityAdditionalServices: Array<number | string>;
+};
+export const updateExistedActivityByFarmId = async ({
+  farmId,
+  activityId,
+  data,
+}: {
+  farmId: string | number;
+  activityId: string | number;
+  data: ExistedActivityData;
+}) => {
+  return axiosServices.put(
+    `admin/farms/${farmId}/activities/${activityId}`,
+    data,
+    { params: { id: farmId, activityId: activityId } }
+  );
+};

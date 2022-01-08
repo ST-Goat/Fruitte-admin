@@ -7,6 +7,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 
 import { guid } from "utilities";
+import { useTranslation } from "react-i18next";
 
 export type OptionItem = {
   id: string;
@@ -20,10 +21,12 @@ const InputGroup = ({
   price,
   onChange,
   handleRemove,
+  translate,
 }: Omit<OptionItem, "id"> & {
   rowId: string;
   handleRemove: (rowId: string) => void;
   onChange: (rowId: string, newValue: Omit<OptionItem, "id">) => void;
+  translate: (str: string) => string;
 }) => {
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = { name, price };
@@ -67,7 +70,7 @@ const InputGroup = ({
         onClick={() => handleRemove(rowId)}
       >
         <RemoveIcon />
-        <Text className="font-bold">제거 하기</Text>
+        <Text className="font-bold">{translate("common.remove")}</Text>
       </div>
     </div>
   );
@@ -78,6 +81,7 @@ export type OptionalProductProps = {
 };
 
 function OptionalProducts({ defaultVaule }: OptionalProductProps) {
+  const { t } = useTranslation();
   const [options, setOptions] = useState<Array<OptionItem>>([]);
 
   const addNewRow = () => {
@@ -113,6 +117,7 @@ function OptionalProducts({ defaultVaule }: OptionalProductProps) {
               <div key={row.id} className="mb-4">
                 <InputGroup
                   {...row}
+                  translate={t}
                   rowId={row.id}
                   handleRemove={handleRemove}
                   onChange={handleChange}
@@ -122,7 +127,7 @@ function OptionalProducts({ defaultVaule }: OptionalProductProps) {
             <div className={cn("flex cursor-pointer")}>
               <AddIcon />
               <Text className="font-bold" onClick={addNewRow}>
-                추가하기
+                {t("common.insert")}
               </Text>
             </div>
           </div>

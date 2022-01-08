@@ -1,3 +1,5 @@
+import { useEffect, useMemo, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import { Formik, Form, FormikProps } from "formik";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
@@ -9,96 +11,98 @@ import Text from "pages/common/components/Text";
 import Input, { InputProps } from "pages/common/Formik/Input";
 import ButtonCustomizer from "pages/common/Button";
 import UploadImages, { UploadImageProps } from "./UploadImages";
-import EditIcon from "@mui/icons-material/Edit";
 import OptionalProducts, { OptionalProductProps } from "./OptionalProducts";
 import BoxEditor from "./BoxEditor";
-import { useState } from "react";
+
+import {
+  NewActivityData,
+  ExistedActivityData,
+  createNewActivityByFarmId,
+  updateExistedActivityByFarmId,
+  deleteFarmActivity,
+} from "services/farmActivity";
+import { farmDetailUrl } from "routes";
+import { HttpStatus } from "shared/comom.enum";
 
 type FieldItem = {
   id: string;
   keyLabel: string;
   name: string;
+  type?: string;
   component: React.FC<InputProps & UploadImageProps & OptionalProductProps>;
-  typeComponent: "input-with-control" | "image-upload" | "optional-products";
 };
 
 const fields: Array<FieldItem> = [
   {
     id: "field-name",
-    keyLabel: "체험 명",
+    keyLabel: "pages.farmActivity.activityName",
     name: "name",
     component: Input,
-    typeComponent: "input-with-control",
   },
   {
     id: "field-images",
-    keyLabel: "이미지",
-    name: "images",
+    keyLabel: "common.images",
+    name: "activityImages",
     component: UploadImages,
-    typeComponent: "image-upload",
   },
   {
     id: "field-one-person",
-    keyLabel: "1인 요금",
-    name: "rate1",
+    keyLabel: "pages.farmManagement.perPerson",
+    name: "oneMemberPrice",
+    type: "number",
     component: Input,
-    typeComponent: "input-with-control",
   },
   {
     id: "field-two-person",
-    keyLabel: "2인 요금",
-    name: "rate2",
+    keyLabel: "pages.farmManagement.twoPerson",
+    name: "twoMembersPrice",
+    type: "number",
     component: Input,
-    typeComponent: "input-with-control",
   },
   {
     id: "field-three-person",
-    keyLabel: "3인 요금",
-    name: "rate3",
+    keyLabel: "pages.farmManagement.threePerson",
+    name: "threeMembersPrice",
+    type: "number",
     component: Input,
-    typeComponent: "input-with-control",
   },
   {
     id: "field-four-person",
-    keyLabel: "4인 요금",
-    name: "rate4",
+    keyLabel: "pages.farmManagement.fourPerson",
+    name: "fourMembersPrice",
+    type: "number",
     component: Input,
-    typeComponent: "input-with-control",
   },
   {
     id: "field-optional-products",
-    keyLabel: "옵션 상품",
-    name: "optionalProducts",
+    keyLabel: "pages.farmActivity.optionalProducts",
+    name: "activityAdditionalServices",
     component: OptionalProducts,
-    typeComponent: "optional-products",
   },
   {
     id: "field-duration",
-    keyLabel: "체험 시간",
-    name: "timeActivity",
+    keyLabel: "pages.farmActivity.duration",
+    name: "duration",
+    type: "number",
     component: Input,
-    typeComponent: "input-with-control",
   },
   {
     id: "field-materials",
-    keyLabel: "준비물",
-    name: "materials",
+    keyLabel: "pages.farmActivity.materials",
+    name: "note",
     component: Input,
-    typeComponent: "input-with-control",
   },
   {
     id: "field-description",
-    keyLabel: "요약 설명",
+    keyLabel: "pages.farmActivity.briefDescription",
     name: "description",
     component: BoxEditor,
-    typeComponent: "input-with-control",
   },
   {
     id: "field-information",
-    keyLabel: "상세 정보",
-    name: "information",
+    keyLabel: "pages.farmActivity.information",
+    name: "info",
     component: BoxEditor,
-    typeComponent: "input-with-control",
   },
 ];
 
@@ -131,60 +135,91 @@ const Field = ({
   value: any;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 }) => {
-  const [disabled, setDisabled] = useState(true);
   return (
     <item.component
       id={item.id}
       name={item.name}
       fieldValue={value}
       setFieldValue={setFieldValue}
-      type="text"
+      type={item.type ?? "text"}
       placeholder="input any thing here..."
-      onClickIcon={() => setDisabled(!disabled)}
-      onBlur={() => setDisabled(true)}
-      disabled={disabled}
-      EndIcon={
-        item.typeComponent === "input-with-control" ? (
-          <EditIcon
-            color="action"
-            fontSize="large"
-            sx={{
-              "&": {
-                cursor: "pointer",
-              },
-              "&:active": {
-                transform: "scale(0.8)",
-              },
-            }}
-          />
-        ) : undefined
-      }
     />
   );
 };
 
-const initialValues = {
+const initialValues: NewActivityData = {
   name: "",
-  images: null,
-  rate1: "10,000 원",
-  rate2: "20,000 원",
-  rate3: "30,000 원",
-  rate4: "50,000 원",
-  optionalProducts: [],
-  timeActivity: "",
-  materials: "",
   description: "",
-  information: "",
+  info: "",
+  note: "",
+  duration: 0,
+  oneMemberPrice: 0,
+  twoMembersPrice: 0,
+  threeMembersPrice: 0,
+  fourMembersPrice: 0,
+  activityImages: [],
+  activityAdditionalServices: [],
 };
 function ActivityFormItem() {
   const { t } = useTranslation();
+  const history = useHistory();
+  const { farmId, activityId }: { farmId: string; activityId: string } =
+    useParams();
+  const [initialFormData, setInitialFormData] = useState(initialValues);
+
+  const isCreate = useMemo(() => activityId === "create", [activityId]);
+
+  useEffect(() => {
+    if (!isCreate) {
+      //fetch data with activity id
+      // setInitialFormData with response
+    }
+  }, [isCreate]);
+
+  const handleSubmit = async (values: any) => {
+    const newData: { [key: string]: any } = {
+      name: values.name,
+      description: values.description,
+      info: values.info,
+      note: values.note,
+      duration: Number(values.duration),
+      oneMemberPrice: Number(values.oneMemberPrice),
+      twoMembersPrice: Number(values.twoMembersPrice),
+      threeMembersPrice: Number(values.threeMembersPrice),
+      fourMembersPrice: Number(values.fourMembersPrice),
+    };
+    if (isCreate) {
+      newData.activityImages = values.activityImages;
+      newData.activityAdditionalServices = values.activityAdditionalServices;
+      const response = await createNewActivityByFarmId({
+        farmId: farmId,
+        data: newData as NewActivityData,
+      });
+      if (response.status === HttpStatus.OK) {
+        history.push(`${farmDetailUrl}/${farmId}`);
+      }
+    } else {
+      // put new data
+      newData.activityImages = values.activityImages;
+      newData.newActivityAdditionalServices = [];
+      newData.editActivityAdditionalServices = [];
+      newData.delActivityAdditionalServices = [];
+      const response = await updateExistedActivityByFarmId({
+        farmId: farmId,
+        activityId: activityId,
+        data: newData as ExistedActivityData,
+      });
+    }
+  };
+
+  const handleDeleteActivity = async () => {
+    await deleteFarmActivity({
+      farmId: farmId,
+      activityId: activityId,
+    });
+  };
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(values) => {
-        console.log(values);
-      }}
-    >
+    <Formik initialValues={initialFormData} onSubmit={handleSubmit}>
       {({ values, handleSubmit, setFieldValue }: FormikProps<any>) => (
         <Form>
           <Grid container item xs={12}>
@@ -192,28 +227,31 @@ function ActivityFormItem() {
               <Grid item xs={12}>
                 <LeftHeader />
               </Grid>
-              <Grid item xs={12}>
-                <div className="border-b-2 border-grey-default">
-                  <Text className={cn(MAGIRN_LEFT, "text-lg font-bold")}>
-                    체험
-                  </Text>
-                </div>
-              </Grid>
               <RowStyled
                 leftContent={
-                  <Text className={cn("text-lg font-bold")}>체험 1</Text>
+                  <Text className={cn("text-lg font-bold")}>
+                    {t("pages.farmActivity.title")}
+                  </Text>
                 }
                 rightContent={
-                  <DeleteIcon
-                    sx={{
-                      cursor: "pointer",
-                      "&:active": {
-                        transform: "scale(0.8)",
-                      },
-                    }}
-                  />
+                  <div className="flex justify-end">
+                    {!isCreate && (
+                      <DeleteIcon
+                        onClick={handleDeleteActivity}
+                        sx={{
+                          cursor: "pointer",
+                          "&:active": {
+                            transform: "scale(0.8)",
+                          },
+                        }}
+                      />
+                    )}
+                  </div>
                 }
               />
+              <Grid item xs={12}>
+                <div className="border-b-2 border-grey-default" />
+              </Grid>
               {fields.map((item, i) => {
                 return (
                   <RowStyled
@@ -235,9 +273,11 @@ function ActivityFormItem() {
               })}
               <Grid item xs={12}>
                 <div className="flex justify-center mt-8 mb-32">
-                  <ButtonCustomizer className="w-36">저장</ButtonCustomizer>
+                  <ButtonCustomizer className="w-36">
+                    {t("common.save")}
+                  </ButtonCustomizer>
                   <ButtonCustomizer className="w-36 ml-4" color="secondary">
-                    취소
+                    {t("common.cancel")}
                   </ButtonCustomizer>
                 </div>
               </Grid>

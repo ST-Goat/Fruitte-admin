@@ -10,11 +10,11 @@ import TableCustomizer from "pages/common/Table";
 import TablePaginations from "pages/common/Paginations";
 import DateRangePickerCustomizer from "pages/common/DateRangePicker";
 
-import { farmManagementActivityUrl } from "routes";
+import { farmDetailUrl } from "routes";
 import { initialPagination } from "../Container";
 import { gettotalRowCurrent } from "utilities";
 import { Activity, fetchAllActivityByFarmId } from "services/farmActivity";
-import { format, subDays } from "date-fns";
+import { format, subDays, addDays } from "date-fns";
 
 const headers = [
   {
@@ -70,7 +70,7 @@ function Activities({ farmId }: { farmId: string | number }) {
   const [pagination, setPagination] = useState(initialPagination);
   const [dateRange, setDateRange] = useState([
     subDays(new Date(), 30),
-    new Date(),
+    addDays(new Date(), 1),
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const [activities, setActivities] = useState<{
@@ -142,7 +142,7 @@ function Activities({ farmId }: { farmId: string | number }) {
             setDateRange(newValue);
           }}
         />
-        <Link to={`${farmManagementActivityUrl}/test-id`}>
+        <Link to={`${farmDetailUrl}/${farmId}/farm-activites/create`}>
           <ButtonCustomizer
             className="flex justify-center items-center w-64 rounded rounded-3xl"
             color="secondary"
