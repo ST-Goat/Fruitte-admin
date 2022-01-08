@@ -1,7 +1,6 @@
 import {
   userManagementUrl,
   farmManagementUrl,
-  farmManagementActivityUrl,
   farmCreationUrl,
   farmDetailUrl,
   farmReservationUrl,
@@ -99,12 +98,13 @@ export const menuItems: MenuItemProps[] = [
         key: "farm-management-detail",
         label: "",
         to: `${farmDetailUrl}/:id`,
+        exact: true,
         component: FarmDetail,
       },
       {
         key: "farm-management-activity-detail",
         label: "",
-        to: `${farmManagementActivityUrl}/:id`,
+        to: `${farmDetailUrl}/:farmId/farm-activites/:activityId`,
         component: AddOrEditActivity,
       },
       {

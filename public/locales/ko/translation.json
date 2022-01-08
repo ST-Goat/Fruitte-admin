@@ -25,7 +25,10 @@
         "all": "전체",
         "normal": "일반",
         "unused": "미사용",
-        "save": "저장"
+        "save": "저장",
+        "images": "이미지",
+        "remove": "제거 하기",
+        "insert": "추가하기"
     },
     "pages": {
         "login": {
@@ -115,7 +118,12 @@
             "reservationDetail": "예약 상세",
             "cancelReservation": "예약 취소",
             "complete": "완료",
-            "process": "처리"
+            "process": "처리",
+            "optionalProducts": "옵션 상품",
+            "duration": "체험 시간",
+            "materials": "준비물",
+            "briefDescription": "요약 설명",
+            "information": "상세 정보"
         },
         "announcement": {
             "title": "공지사항",

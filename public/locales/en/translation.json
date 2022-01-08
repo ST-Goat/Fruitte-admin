@@ -25,7 +25,10 @@
         "all": "All",
         "normal": "Normal",
         "unused": "Unused",
-        "save": "Save"
+        "save": "Save",
+        "images": "Images",
+        "remove": "Remove",
+        "insert": "Insert"
     },
     "pages": {
         "login": {
@@ -114,8 +117,13 @@
             "feedback": "Feedback",
             "reservationDetail": "Reservation Detail",
             "cancelReservation": "Cancel Reservation",
-            "complete": "complete",
-            "process": "process"
+            "complete": "Complete",
+            "process": "Process",
+            "optionalProducts": "Optional products",
+            "duration": "Duration",
+            "materials": "Materials",
+            "briefDescription": "Brief Description",
+            "information": "Information"
         },
         "announcement": {
             "title": "Notification",
