@@ -178,3 +178,40 @@ export const updateExistedActivityByFarmId = async ({
     { params: { id: farmId, activityId: activityId } }
   );
 };
+
+export type FarmActivityDetails = {
+  farmActivity: {
+    id: number | string;
+    name: string;
+    description: string;
+    note: string;
+    activityInfo: string;
+    oneMemberPrice: number;
+    twomembesrPrice: number;
+    threemembesrPrice: number;
+    fourmembesrPrice: number;
+    duration: number;
+    activityAdditionService: Array<{
+      id: number | string;
+      name: string;
+      price: number;
+    }>;
+  };
+  schedulesInActivity: Array<{
+    id: number | string;
+    startAt: string;
+    oneMemberCapacity: number;
+    twoMembersCapacity: number;
+    threeMembersCapacity: number;
+    fourMembersCapacity: number;
+  }>;
+};
+export const fetchFarmActivityDetail = async ({
+  activityId,
+}: {
+  activityId: string;
+}): Promise<FarmActivityDetails> => {
+  return axiosServices
+    .get(`common/farm-activities/${activityId}`)
+    .then((response) => response.data);
+};

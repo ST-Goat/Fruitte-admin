@@ -20,9 +20,13 @@ import {
   createNewActivityByFarmId,
   updateExistedActivityByFarmId,
   deleteFarmActivity,
+  fetchFarmActivityDetail,
 } from "services/farmActivity";
 import { farmDetailUrl } from "routes";
-import { HttpStatus } from "shared/comom.enum";
+import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
+import { differenceBy } from "lodash";
+import { enqueueSnackbar } from "redux/slices/snackbar";
+import { useAppDispatch } from "utilities";
 
 type FieldItem = {
   id: string;
@@ -162,17 +166,49 @@ const initialValues: NewActivityData = {
 };
 function ActivityFormItem() {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(true);
   const { farmId, activityId }: { farmId: string; activityId: string } =
     useParams();
-  const [initialFormData, setInitialFormData] = useState(initialValues);
+  const [initialFormData, setInitialFormData] =
+    useState<NewActivityData | null>(null);
 
   const isCreate = useMemo(() => activityId === "create", [activityId]);
 
+  const getFarmActivityDetails = async (id: string) => {
+    setIsLoading(true);
+    try {
+      const { farmActivity: activityResponse } = await fetchFarmActivityDetail({
+        activityId: id,
+      });
+      setInitialFormData({
+        name: activityResponse.name,
+        description: activityResponse.description,
+        info: activityResponse.activityInfo,
+        note: activityResponse.note,
+        duration: activityResponse.duration,
+        oneMemberPrice: activityResponse.oneMemberPrice,
+        twoMembersPrice: activityResponse.twomembesrPrice,
+        threeMembersPrice: activityResponse.threemembesrPrice,
+        fourMembersPrice: activityResponse.fourmembesrPrice,
+        activityImages: [],
+        activityAdditionalServices: activityResponse.activityAdditionService,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!isCreate) {
-      //fetch data with activity id
-      // setInitialFormData with response
+      //fetch data with activity id and setInitialFormData with response
+      getFarmActivityDetails(activityId);
+    } else {
+      setInitialFormData(initialValues);
+      setIsLoading(false);
     }
   }, [isCreate]);
 
@@ -188,27 +224,62 @@ function ActivityFormItem() {
       threeMembersPrice: Number(values.threeMembersPrice),
       fourMembersPrice: Number(values.fourMembersPrice),
     };
-    if (isCreate) {
-      newData.activityImages = values.activityImages;
-      newData.activityAdditionalServices = values.activityAdditionalServices;
-      const response = await createNewActivityByFarmId({
-        farmId: farmId,
-        data: newData as NewActivityData,
-      });
-      if (response.status === HttpStatus.OK) {
-        history.push(`${farmDetailUrl}/${farmId}`);
+    try {
+      if (isCreate) {
+        // create new data
+        newData.activityImages = values.activityImages;
+        newData.activityAdditionalServices = values.activityAdditionalServices;
+        await createNewActivityByFarmId({
+          farmId: farmId,
+          data: newData as NewActivityData,
+        });
+      } else {
+        // put new data
+        const editServices = values.activityAdditionalServices.filter(
+          (item: any) => Boolean(item.id)
+        );
+        const newServices = differenceBy(
+          values.activityAdditionalServices,
+          editServices,
+          "rowId"
+        );
+        const delServices = differenceBy(
+          initialFormData ? initialFormData.activityAdditionalServices : [],
+          editServices,
+          "id"
+        );
+        newData.activityImages = values.activityImages;
+        newData.newActivityAdditionalServices = newServices.map(
+          (value: any) => ({
+            name: value.name,
+            price: value.price,
+          })
+        );
+        newData.editActivityAdditionalServices = editServices.map(
+          (value: any) => ({
+            id: value.id,
+            name: value.name,
+            price: value.price,
+          })
+        );
+        newData.delActivityAdditionalServices = delServices.map(
+          (value: any) => value.id
+        );
+        await updateExistedActivityByFarmId({
+          farmId: farmId,
+          activityId: activityId,
+          data: newData as ExistedActivityData,
+        });
       }
-    } else {
-      // put new data
-      newData.activityImages = values.activityImages;
-      newData.newActivityAdditionalServices = [];
-      newData.editActivityAdditionalServices = [];
-      newData.delActivityAdditionalServices = [];
-      const response = await updateExistedActivityByFarmId({
-        farmId: farmId,
-        activityId: activityId,
-        data: newData as ExistedActivityData,
-      });
+      history.push(`${farmDetailUrl}/${farmId}`);
+      dispatch(
+        enqueueSnackbar({
+          message: "Success!",
+          variant: SNACKBAR_VARIANTS.SUCCESS,
+        })
+      );
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -218,6 +289,23 @@ function ActivityFormItem() {
       activityId: activityId,
     });
   };
+
+  if (isLoading) return <>...Loading</>;
+  if (!initialFormData)
+    return (
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <LeftHeader />
+        </Grid>
+        <Grid item xs={12}>
+          <div className="text-center text-xl font-bold text-red-600">
+            Something was wrong <br />
+            Can't find this activity's information, it is not exist or it is
+            deleted!
+          </div>
+        </Grid>
+      </Grid>
+    );
   return (
     <Formik initialValues={initialFormData} onSubmit={handleSubmit}>
       {({ values, handleSubmit, setFieldValue }: FormikProps<any>) => (
@@ -273,10 +361,14 @@ function ActivityFormItem() {
               })}
               <Grid item xs={12}>
                 <div className="flex justify-center mt-8 mb-32">
-                  <ButtonCustomizer className="w-36">
+                  <ButtonCustomizer type="submit" className="w-36">
                     {t("common.save")}
                   </ButtonCustomizer>
-                  <ButtonCustomizer className="w-36 ml-4" color="secondary">
+                  <ButtonCustomizer
+                    type="button"
+                    className="w-36 ml-4"
+                    color="secondary"
+                  >
                     {t("common.cancel")}
                   </ButtonCustomizer>
                 </div>
