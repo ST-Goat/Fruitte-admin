@@ -1,4 +1,4 @@
-import { useState } from "react";
+import findIndex from "lodash/findIndex";
 import cn from "classnames";
 
 import { Field, FieldInputProps } from "formik";
@@ -105,12 +105,16 @@ function OptionalProducts({ fieldValue, setFieldValue }: OptionalProductProps) {
   };
 
   const handleChange = (rowId: string, newValue: any) => {
-    const matchIndex = fieldValue.findIndex((item) => item.rowId === rowId);
-    setFieldValue("activityAdditionalServices", [
-      ...fieldValue.slice(0, matchIndex),
-      { rowId: rowId, ...newValue },
-      ...fieldValue.slice(matchIndex + 1),
-    ]);
+    const matchIndex = findIndex(fieldValue, (o) =>
+      Boolean(o.id) ? o.id === rowId : o.rowId === rowId
+    );
+    if (matchIndex !== -1) {
+      setFieldValue("activityAdditionalServices", [
+        ...fieldValue.slice(0, matchIndex),
+        { ...fieldValue[matchIndex], ...newValue },
+        ...fieldValue.slice(matchIndex + 1),
+      ]);
+    }
   };
 
   return (
