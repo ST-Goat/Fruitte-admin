@@ -28,7 +28,11 @@
         "save": "저장",
         "images": "이미지",
         "remove": "제거 하기",
-        "insert": "추가하기"
+        "insert": "추가하기",
+        "from": "에서",
+        "to": "에",
+        "before": "전에",
+        "loading": "로딩"
     },
     "pages": {
         "login": {
@@ -124,6 +128,16 @@
             "materials": "준비물",
             "briefDescription": "요약 설명",
             "information": "상세 정보"
+        },
+        "farmSchedule": {
+            "activity": "체험",
+            "date": "날짜",
+            "reservationTime": "예약 시간",
+            "onePerson": "1인팀",
+            "twoPerson": "2인팀",
+            "threePerson": "3인팀",
+            "fourPerson": "4인팀",
+            "createdSchedule": "생성된 일정"
         },
         "announcement": {
             "title": "공지사항",

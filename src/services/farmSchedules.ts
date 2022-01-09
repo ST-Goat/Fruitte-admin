@@ -1,7 +1,4 @@
 import axiosServices from "services/axiosServices";
-import startOfMonth from "date-fns/startOfMonth";
-import endOfMonth from "date-fns/endOfMonth";
-import format from "date-fns/format";
 
 export type ScheduleInfor = {
   id: number;
@@ -33,13 +30,43 @@ export type ScheduleItem = {
   scheduleInfos: ScheduleInfor[];
 };
 
-export const fetchFarmSchedules = (): Promise<ScheduleItem[]> => {
-  return axiosServices
-    .get("admin/schedules", {
-      params: {
-        startDate: format(startOfMonth(new Date()), "yyyy-MM-dd"),
-        endDate: format(endOfMonth(new Date()), "yyyy-MM-dd"),
-      },
-    })
-    .then((response) => response.data.content.activityInfos);
+export type NewScheduleData = Omit<ScheduleInfor, "id">;
+export const createNewScheduleOfAcitivityId = async ({
+  activityId,
+  data,
+}: {
+  activityId: string | number;
+  data: NewScheduleData;
+}) => {
+  return axiosServices.post(
+    `admin/activities/${activityId}/schedules`,
+    {
+      ...data,
+    },
+    { params: { id: activityId } }
+  );
+};
+
+export const editExistedSchedule = async ({
+  scheduleId,
+  data,
+}: {
+  scheduleId: string | number;
+  data: NewScheduleData;
+}) => {
+  return axiosServices.put(
+    `admin/schedules/${scheduleId}`,
+    { ...data },
+    { params: { id: scheduleId } }
+  );
+};
+
+export const deleteExistedSchedule = async ({
+  scheduleId,
+}: {
+  scheduleId: string | number;
+}) => {
+  return axiosServices.delete(`admin/schedules/${scheduleId}`, {
+    params: { id: scheduleId },
+  });
 };

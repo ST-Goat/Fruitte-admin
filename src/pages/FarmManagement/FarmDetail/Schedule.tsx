@@ -1,186 +1,109 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import cn from "classnames";
-import { Formik, Form, FormikProps } from "formik";
-import format from "date-fns/format";
+import { Formik, Form, FieldArray, FormikProps } from "formik";
+import { startOfDay, endOfDay, isWithinInterval, format } from "date-fns";
 
 import Grid from "@mui/material/Grid";
 import Text from "pages/common/components/Text";
-import Select from "pages/common/Formik/Select";
-import DatePickerCustomizer from "pages/common/Formik/DatePicker";
-import TimePickerCustomizer from "pages/common/Formik/TimePicker";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-
 import ButtonCustomizer from "pages/common/Button";
+import RowStyled from "../components/FarmSchedule/RowStyled";
+import Controller from "../components/FarmSchedule/Controller";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import ScheduleInfors from "../components/FarmSchedule/ScheduleInfors";
+import SchedulePrevious from "../components/FarmSchedule/SchedulePrevious";
 
-import { Activity, fetchAllActivityByFarmId } from "services/farmActivity";
 import {
-  fetchFarmSchedules,
-  ScheduleInfor,
-  ScheduleItem,
+  Activity,
+  fetchAllActivityByFarmId,
+  fetchFarmActivityDetail,
+} from "services/farmActivity";
+import type { ScheduleInfor as TypeScheduleInfor } from "services/farmSchedules";
+import {
+  createNewScheduleOfAcitivityId,
+  editExistedSchedule,
+  deleteExistedSchedule,
 } from "services/farmSchedules";
 
-import { guid } from "utilities";
-import { TextField } from "@mui/material";
+import { isDate, useAppDispatch } from "utilities";
+import { differenceBy, find } from "lodash";
+import { enqueueSnackbar } from "redux/slices/snackbar";
+import { SNACKBAR_VARIANTS } from "shared/comom.enum";
 
-const MAGIRN_LEFT = "ml-16";
-const MAGIRN_RIGHT = "mr-16";
-const MAGIRN_BOTTOM = "mb-8";
-
-const RowStyled = ({
-  leftContent,
-  rightContent,
-}: {
-  leftContent: any;
-  rightContent: any;
-}) => (
-  <>
-    <Grid item xs={2}>
-      <div className={cn(MAGIRN_LEFT, MAGIRN_BOTTOM, "h-full")}>
-        {leftContent}
-      </div>
-    </Grid>
-    <Grid item xs={10}>
-      <div className={cn(MAGIRN_RIGHT, MAGIRN_BOTTOM, "h-full")}>
-        {rightContent}
-      </div>
-    </Grid>
-  </>
-);
-
-type TimeRangeItem = {
-  id: string;
-  start: Date;
-  onePerson: number;
-  twoPerson: number;
-  threePerson: number;
-  fourPerson: number;
+const checkScheduleInDate = (scheduleStartAt: Date, DateSelected: Date) => {
+  const startDate = startOfDay(new Date(DateSelected));
+  const endDate = endOfDay(new Date(DateSelected));
+  return isWithinInterval(new Date(scheduleStartAt), {
+    start: startDate,
+    end: endDate,
+  });
 };
 
-const TimeRangePicker = ({
-  item,
-  handleRemove,
-  duration,
-}: {
-  item: TimeRangeItem;
-  duration: number;
-  handleRemove: () => void;
-}) => {
-  return (
-    <div className="mb-8">
-      <div className="flex items-center">
-        <div className="mr-4">
-          <RemoveCircleIcon
-            onClick={handleRemove}
-            fontSize="large"
-            sx={{
-              color: "#828282",
-              cursor: "pointer",
-              "&:active": {
-                transform: "scale(0.9)",
-              },
-            }}
-          />
-        </div>
-        <TimePickerCustomizer name="start" />
-        <div className="w-16" />
-        <TimePickerCustomizer
-          name="end"
-          readOnly
-          value={new Date(item.start.getTime() + duration * 1000)}
-          renderInput={(params: any) => <TextField {...params} />}
-        />
-      </div>
-      <div className="grid grid-cols-2 gap-4 ml-12 mt-8">
-        <div className="flex items-center">
-          <Text>1인팀</Text>
-          <input
-            className="ml-4 p-4 border border-primary-default rounded-md"
-            defaultValue={0}
-            type="number"
-          />
-        </div>
-        <div className="flex items-center">
-          <Text>2인팀</Text>
-          <input
-            className="ml-4 p-4 border border-primary-default rounded-md"
-            defaultValue={0}
-            type="number"
-          />
-        </div>
-        <div className="flex items-center">
-          <Text>3인팀</Text>
-          <input
-            className="ml-4 p-4 border border-primary-default rounded-md"
-            defaultValue={0}
-            type="number"
-          />
-        </div>
-        <div className="flex items-center">
-          <Text>4인팀</Text>
-          <input
-            className="ml-4 p-4 border border-primary-default rounded-md"
-            defaultValue={0}
-            type="number"
-          />
-        </div>
-      </div>
-    </div>
-  );
+const createNewScheduleList = async (
+  schedules: TypeScheduleInfor[],
+  acitivityId: string | number
+) => {
+  if (schedules.length === 0) return;
+  return Promise.all([
+    ...schedules.map((item) =>
+      createNewScheduleOfAcitivityId({
+        activityId: acitivityId,
+        data: {
+          startAt: item.startAt,
+          oneMemberCapacity: item.oneMemberCapacity,
+          twoMembersCapacity: item.twoMembersCapacity,
+          threeMembersCapacity: item.threeMembersCapacity,
+          fourMembersCapacity: item.fourMembersCapacity,
+        },
+      })
+    ),
+  ]);
 };
 
-const SchedulePrevious = ({ data }: { data: ScheduleItem[] }) => {
-  const lastActivityInfor = data[data.length - 1];
-  if (!lastActivityInfor) return <></>;
-  return (
-    <>
-      {lastActivityInfor.scheduleInfos.map((item: ScheduleInfor) => (
-        <RowStyled
-          key={item.id}
-          leftContent={
-            <Text className="h-full font-bold text-lg py-8 border-b border-grey-300">
-              {format(new Date(item.startAt), "HH:mm")} <br />
-              {format(new Date(item.startAt), "yyyy/MM/dd")}
-            </Text>
-          }
-          rightContent={
-            <div className="h-full py-8 border-b border-grey-300">
-              <Text className="font-bold text-lg">
-                {lastActivityInfor.name}
-              </Text>
-              <Text>{lastActivityInfor.description}</Text>
-            </div>
-          }
-        />
-      ))}
-    </>
-  );
+const editExitedScheduleList = async (schedules: TypeScheduleInfor[]) => {
+  if (schedules.length === 0) return;
+  return Promise.all([
+    ...schedules.map((item) =>
+      editExistedSchedule({
+        scheduleId: item.id,
+        data: {
+          startAt: item.startAt,
+          oneMemberCapacity: item.oneMemberCapacity,
+          twoMembersCapacity: item.twoMembersCapacity,
+          threeMembersCapacity: item.threeMembersCapacity,
+          fourMembersCapacity: item.fourMembersCapacity,
+        },
+      })
+    ),
+  ]);
+};
+
+const deleteScheduleList = async (scheduleIds: Array<string | number>) => {
+  if (!scheduleIds) return;
+  return Promise.all([
+    ...scheduleIds.map((id) => deleteExistedSchedule({ scheduleId: id })),
+  ]);
 };
 
 const TWO_HOURS = 7200;
 function Schedule({ farmId }: { farmId: string }) {
   const { t } = useTranslation();
-  const [timeRangeList, setTimeRangeList] = useState<Array<TimeRangeItem>>([]);
+  const dispatch = useAppDispatch();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<
     Activity | undefined
   >(undefined);
-  const [schedulePrevious, setSchedulePrevious] = useState<ScheduleItem[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [schedulePrevious, setSchedulePrevious] = useState<TypeScheduleInfor[]>(
+    []
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [initialFormData, setInitialFormData] = useState<{
+    scheduleInfors: any[];
+  }>({
+    scheduleInfors: [],
+  });
 
   const rangeTimeSchedule = selectedActivity?.duration ?? TWO_HOURS;
-
-  const handleAddNewTimeRange = () => {
-    const newTimeRangeItem = {
-      id: guid(),
-      start: new Date(),
-      onePerson: 0,
-      twoPerson: 0,
-      threePerson: 0,
-      fourPerson: 0,
-    };
-    setTimeRangeList((prev) => [...prev, newTimeRangeItem]);
-  };
 
   useEffect(() => {
     async function fetchAllActivityOptions() {
@@ -195,110 +118,168 @@ function Schedule({ farmId }: { farmId: string }) {
     }
     fetchAllActivityOptions();
   }, [farmId]);
+  async function fetchSchedulePrevious({
+    activityId,
+  }: {
+    activityId: string | number;
+  }) {
+    setIsLoading(true);
+    try {
+      // need control with activity id here
+      const { schedulesInActivity } = await fetchFarmActivityDetail({
+        activityId: activityId,
+      });
+      setSchedulePrevious(schedulesInActivity);
+      setInitialFormData((prev) => ({
+        ...prev,
+        scheduleInfors: schedulesInActivity.filter((item) =>
+          checkScheduleInDate(item.startAt, selectedDate)
+        ),
+      }));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
     //fetchFarmSchedules
-    async function fetchSchedulePrevious() {
-      try {
-        // need control with activity id here
-        const response = await fetchFarmSchedules();
-        setSchedulePrevious(response.slice(-3));
-      } catch (error) {
-        console.log(error);
-      }
+    if (selectedActivity && selectedActivity.id) {
+      fetchSchedulePrevious({
+        activityId: selectedActivity?.id,
+      });
     }
-    fetchSchedulePrevious();
-  }, [selectedActivity]);
+  }, [selectedActivity, selectedDate]);
 
+  const handleSubmit = async (values: any) => {
+    try {
+      const listScheduleInfors = values.scheduleInfors;
+      if (!listScheduleInfors || listScheduleInfors.length === 0) {
+        return;
+      }
+      const editedSchedules: TypeScheduleInfor[] = [];
+      const newSchedules: TypeScheduleInfor[] = [];
+      listScheduleInfors.forEach((schedule: TypeScheduleInfor) => {
+        if (!schedule.id) {
+          newSchedules.push(schedule);
+          return;
+        }
+        const match = find(initialFormData.scheduleInfors, schedule);
+        if (!match) editedSchedules.push(schedule);
+      });
+      const deletedSchedules: TypeScheduleInfor[] = differenceBy(
+        initialFormData.scheduleInfors,
+        values.scheduleInfors,
+        "id"
+      );
+
+      if (selectedActivity) {
+        await Promise.all([
+          createNewScheduleList(newSchedules, selectedActivity?.id),
+          editExitedScheduleList(editedSchedules),
+          deleteScheduleList(deletedSchedules.map((item) => item.id)),
+        ]);
+        await fetchSchedulePrevious({ activityId: selectedActivity?.id });
+        dispatch(
+          enqueueSnackbar({
+            message: "Success!",
+            variant: SNACKBAR_VARIANTS.SUCCESS,
+          })
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
-      <Formik
-        initialValues={{ activity: "", date: "", rangeTime: [] }}
-        onSubmit={(values) => {
-          console.log(values);
+      <Grid
+        sx={{
+          border: "1px solid #BDBDBD",
+          paddingTop: "4rem",
+          paddingBottom: "4rem",
         }}
+        container
       >
-        {({ values, handleSubmit, setFieldValue }: FormikProps<any>) => (
-          <Form>
-            <Grid
-              sx={{
-                border: "1px solid #BDBDBD",
-                paddingTop: "4rem",
-                paddingBottom: "4rem",
-              }}
-              container
-            >
-              <RowStyled
-                leftContent={<Text className="font-bold text-xl">체험</Text>}
-                rightContent={
-                  <Select
-                    name="activity"
-                    options={activities.map((item) => ({
-                      id: item.id,
-                      label: item.name,
-                      value: item.id,
-                    }))}
-                    onChange={(e) => {
-                      const idSelected = e.target.value;
-                      setSelectedActivity(
-                        activities.find((item) => item.id === idSelected)
-                      );
-                    }}
+        <Controller
+          translate={t}
+          activities={activities}
+          selectedDate={selectedDate}
+          onChangeDate={(newDate) => {
+            if (isDate(newDate)) {
+              setSelectedDate(newDate as Date);
+            }
+          }}
+          setSelectedActivity={setSelectedActivity}
+        />
+        {isLoading ? (
+          <>{t("common.loading")}</>
+        ) : (
+          <Formik initialValues={initialFormData} onSubmit={handleSubmit}>
+            {({ values }: FormikProps<any>) => (
+              <Form className="w-full">
+                <Grid container item xs={12}>
+                  <RowStyled
+                    leftContent={
+                      <Text className="mt-4 font-bold text-xl">
+                        {t("pages.farmSchedule.reservationTime")}
+                      </Text>
+                    }
+                    rightContent={
+                      <FieldArray name="scheduleInfors">
+                        {(arrayHelpers) => (
+                          <>
+                            <ScheduleInfors
+                              fieldName="scheduleInfors"
+                              values={values.scheduleInfors}
+                              arrayHelpers={arrayHelpers}
+                              duration={rangeTimeSchedule}
+                            />
+                            <div className="mt-4 ml-12">
+                              <AddCircleIcon
+                                onClick={() => {
+                                  arrayHelpers.push({
+                                    startAt: new Date(),
+                                    oneMemberCapacity: 0,
+                                    twoMembersCapacity: 0,
+                                    threeMembersCapacity: 0,
+                                    fourMembersCapacity: 0,
+                                  });
+                                }}
+                                fontSize="large"
+                                sx={{
+                                  color: "#4C9C2E",
+                                  cursor: "pointer",
+                                  "&:active": {
+                                    transform: "scale(0.9)",
+                                  },
+                                }}
+                              />
+                            </div>
+                          </>
+                        )}
+                      </FieldArray>
+                    }
                   />
-                }
-              />
-              <RowStyled
-                leftContent={<Text className="font-bold text-xl">날짜</Text>}
-                rightContent={
-                  <div className="w-80">
-                    <DatePickerCustomizer name="date" />
-                  </div>
-                }
-              />
-              <RowStyled
-                leftContent={<Text className="font-bold text-xl">날짜</Text>}
-                rightContent={
-                  <div>
-                    {timeRangeList.map((item) => (
-                      <TimeRangePicker
-                        key={item.id}
-                        item={item}
-                        duration={rangeTimeSchedule}
-                        handleRemove={() => {
-                          setTimeRangeList((prev) =>
-                            prev.filter(
-                              (timeRangeItem) => timeRangeItem.id !== item.id
-                            )
-                          );
-                        }}
-                      />
-                    ))}
 
-                    <div className="mt-4 ml-12">
-                      <AddCircleIcon
-                        onClick={handleAddNewTimeRange}
-                        fontSize="large"
-                        sx={{
-                          color: "#4C9C2E",
-                          cursor: "pointer",
-                          "&:active": {
-                            transform: "scale(0.9)",
-                          },
-                        }}
-                      />
-                    </div>
-                  </div>
-                }
-              />
-            </Grid>
-            <div className="flex items-center justify-end pr-64">
-              <ButtonCustomizer type="submit" className="px-8 rounded-3xl mt-8">
-                {t("common.save")}
-              </ButtonCustomizer>
-            </div>
-          </Form>
+                  <RowStyled
+                    leftContent={<></>}
+                    rightContent={
+                      <ButtonCustomizer
+                        type="submit"
+                        className="px-8 rounded-3xl mt-8"
+                      >
+                        {t("common.save")}
+                      </ButtonCustomizer>
+                    }
+                  />
+                </Grid>
+              </Form>
+            )}
+          </Formik>
         )}
-      </Formik>
+      </Grid>
       <Grid
         sx={{
           paddingTop: "4rem",
@@ -307,9 +288,17 @@ function Schedule({ farmId }: { farmId: string }) {
         container
       >
         <Grid item xs={12}>
-          <div className="h-16 bg-grey-default" />
+          <div className="py-4 bg-secondary1-default">
+            <Text className="font-bold text-xl text-white-default ml-4">
+              {t("pages.farmSchedule.createdSchedule").toUpperCase()}
+            </Text>
+          </div>
         </Grid>
-        <SchedulePrevious data={schedulePrevious} />
+        <SchedulePrevious
+          activityDetail={selectedActivity}
+          data={schedulePrevious}
+          loading={isLoading}
+        />
       </Grid>
     </div>
   );

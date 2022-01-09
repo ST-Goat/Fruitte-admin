@@ -1,8 +1,6 @@
 import { PaginationDefault } from "shared/comom.enum";
 import axiosServices from "services/axiosServices";
-import startOfMonth from "date-fns/startOfMonth";
-import endOfMonth from "date-fns/endOfMonth";
-import format from "date-fns/format";
+import { ScheduleInfor } from "./farmSchedules";
 
 export enum FarmActivityStatus {
   ACTIVE = 0,
@@ -10,7 +8,7 @@ export enum FarmActivityStatus {
 }
 
 export type Activity = {
-  id: number;
+  id: number | string;
   name: string;
   farmName: string;
   description: string;
@@ -69,28 +67,15 @@ export const fetchFarmActivities = async (
     });
 };
 
-const FIXED_LIMIT = 20;
 export const fetchAllActivityByFarmId = ({
   farmId,
-  filters = {
-    startDate: format(startOfMonth(new Date()), "yyyy-MM-dd"),
-    endDate: format(endOfMonth(new Date()), "yyyy-MM-dd"),
-  },
 }: {
   farmId: string | number;
-  filters?: {
-    startDate: string;
-    endDate: string;
-  };
 }): Promise<Array<Activity>> => {
-  const { startDate, endDate } = filters;
   return axiosServices
     .get(`admin/farms/${farmId}/activities`, {
       params: {
-        skip: 0,
-        limit: FIXED_LIMIT,
-        startDate: startDate,
-        endDate: endDate,
+        id: farmId,
       },
     })
     .then((response) => response.data.content);
@@ -197,19 +182,12 @@ export type FarmActivityDetails = {
       price: number;
     }>;
   };
-  schedulesInActivity: Array<{
-    id: number | string;
-    startAt: string;
-    oneMemberCapacity: number;
-    twoMembersCapacity: number;
-    threeMembersCapacity: number;
-    fourMembersCapacity: number;
-  }>;
+  schedulesInActivity: Array<ScheduleInfor>;
 };
 export const fetchFarmActivityDetail = async ({
   activityId,
 }: {
-  activityId: string;
+  activityId: string | number;
 }): Promise<FarmActivityDetails> => {
   return axiosServices
     .get(`common/farm-activities/${activityId}`)
