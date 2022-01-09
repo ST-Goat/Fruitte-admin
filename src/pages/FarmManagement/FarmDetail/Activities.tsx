@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import Text from "pages/common/components/Text";
 import ButtonCustomizer from "pages/common/Button";
@@ -67,6 +67,7 @@ export const convertFarmActivityDataView = (
 
 function Activities({ farmId }: { farmId: string | number }) {
   const { i18n, t } = useTranslation();
+  const history = useHistory();
   const [pagination, setPagination] = useState(initialPagination);
   const [dateRange, setDateRange] = useState([
     subDays(new Date(), 30),
@@ -167,12 +168,18 @@ function Activities({ farmId }: { farmId: string | number }) {
             <TableCustomizer
               headers={headers}
               loading={false}
+              hover
               totalRow={gettotalRowCurrent(
                 dataTable.total,
                 pagination.page,
                 pagination.pageSize
               )}
               data={dataTable.data}
+              handleClickRow={(row) => {
+                history.push(
+                  `${farmDetailUrl}/${farmId}/farm-activites/${row.id}`
+                );
+              }}
             />
           </div>
         </TablePaginations>
