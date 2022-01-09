@@ -8,13 +8,11 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import NoActivities from "../components/NoActivities";
 import TableCustomizer from "pages/common/Table";
 import TablePaginations from "pages/common/Paginations";
-import DateRangePickerCustomizer from "pages/common/DateRangePicker";
 
 import { farmDetailUrl } from "routes";
 import { initialPagination } from "../Container";
 import { gettotalRowCurrent } from "utilities";
 import { Activity, fetchAllActivityByFarmId } from "services/farmActivity";
-import { format, subDays, addDays } from "date-fns";
 
 const headers = [
   {
@@ -69,10 +67,6 @@ function Activities({ farmId }: { farmId: string | number }) {
   const { i18n, t } = useTranslation();
   const history = useHistory();
   const [pagination, setPagination] = useState(initialPagination);
-  const [dateRange, setDateRange] = useState([
-    subDays(new Date(), 30),
-    addDays(new Date(), 1),
-  ]);
   const [isLoading, setIsLoading] = useState(false);
   const [activities, setActivities] = useState<{
     data: Activity[];
@@ -83,21 +77,11 @@ function Activities({ farmId }: { farmId: string | number }) {
   });
 
   useEffect(() => {
-    async function getFarmActivitiesPerMonth({
-      startDate,
-      endDate,
-    }: {
-      startDate: string;
-      endDate: string;
-    }) {
+    async function getFarmActivitiesPerMonth() {
       setIsLoading(true);
       try {
         const response = await fetchAllActivityByFarmId({
           farmId: farmId,
-          filters: {
-            startDate: startDate,
-            endDate: endDate,
-          },
         });
         setActivities({
           data: response,
@@ -109,15 +93,8 @@ function Activities({ farmId }: { farmId: string | number }) {
         setIsLoading(false);
       }
     }
-    const startDate = dateRange[0];
-    const endDate = dateRange[1];
-    if (startDate && endDate) {
-      getFarmActivitiesPerMonth({
-        startDate: format(startDate, "yyyy-MM-dd"),
-        endDate: format(endDate, "yyyy-MM-dd"),
-      });
-    }
-  }, [dateRange, farmId]);
+    getFarmActivitiesPerMonth();
+  }, [farmId]);
 
   const dataTable = useMemo(() => {
     return {
@@ -136,13 +113,7 @@ function Activities({ farmId }: { farmId: string | number }) {
   };
   return (
     <div>
-      <div className="flex justify-between mt-8 mb-16">
-        <DateRangePickerCustomizer
-          defaultValue={dateRange as [any, any]}
-          onChange={(newValue) => {
-            setDateRange(newValue);
-          }}
-        />
+      <div className="flex justify-end mt-8 mb-16">
         <Link to={`${farmDetailUrl}/${farmId}/farm-activites/create`}>
           <ButtonCustomizer
             className="flex justify-center items-center w-64 rounded rounded-3xl"

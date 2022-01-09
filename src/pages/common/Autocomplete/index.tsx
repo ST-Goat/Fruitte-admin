@@ -9,9 +9,9 @@ export type Option = {
 };
 
 export type SelectProps = {
-  name: string;
+  name?: string;
   options: Array<Option>;
-  onChange?: (event: React.ChangeEvent<any>) => void;
+  onChange?: (newValue: any) => void;
   fullWidth?: boolean;
   field?: FieldInputProps<any>;
 } & {
@@ -33,9 +33,21 @@ function AutoCompleteCustomizer({
         options={options}
         fullWidth={fullWidth}
         getOptionLabel={(option) => option.label}
+        {...props}
         value={field?.value ?? props.value}
-        onChange={(event: React.SyntheticEvent, value: any) => {
-          onChange && onChange(event);
+        onChange={(event: React.SyntheticEvent, value: any, reason) => {
+          if (reason === "clear") {
+            onChange && onChange(undefined);
+            field &&
+              field.onChange({
+                target: {
+                  name: name,
+                  value: undefined,
+                },
+              });
+            return;
+          }
+          onChange && onChange(value);
           if (Boolean(value))
             field &&
               field.onChange({
@@ -45,7 +57,6 @@ function AutoCompleteCustomizer({
                 },
               });
         }}
-        {...props}
         renderInput={(params) => (
           <TextField
             sx={{

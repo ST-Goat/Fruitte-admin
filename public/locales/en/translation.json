@@ -28,7 +28,11 @@
         "save": "Save",
         "images": "Images",
         "remove": "Remove",
-        "insert": "Insert"
+        "insert": "Insert",
+        "from": "From",
+        "to": "To",
+        "before": "Before",
+        "loading": "Loading"
     },
     "pages": {
         "login": {
@@ -124,6 +128,16 @@
             "materials": "Materials",
             "briefDescription": "Brief Description",
             "information": "Information"
+        },
+        "farmSchedule": {
+            "activity": "Activity",
+            "date": "Date",
+            "reservationTime": "Reservation time",
+            "onePerson": "1 person team",
+            "twoPerson": "2 person team",
+            "threePerson": "3 person team",
+            "fourPerson": "4 person team",
+            "createdSchedule": "Created Schedule"
         },
         "announcement": {
             "title": "Notification",

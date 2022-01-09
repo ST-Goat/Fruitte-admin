@@ -4,10 +4,8 @@ import DateRangePicker, { DateRange } from "@mui/lab/DateRangePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import Box from "@mui/material/Box";
+import { isDate } from "utilities/helper";
 
-const isDate = (date: any) => {
-  return date instanceof Date && !isNaN(date.valueOf());
-};
 export default function DateRangePickerCustomizer({
   defaultValue,
   onChange,
@@ -24,6 +22,8 @@ export default function DateRangePickerCustomizer({
       <DateRangePicker
         startText="Start Date"
         endText="End Date"
+        inputFormat="yyyy/MM/dd"
+        disableMaskedInput
         value={value}
         onChange={(newValue) => {
           setValue(newValue);

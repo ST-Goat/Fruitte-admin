@@ -59,3 +59,7 @@ export const validateEmail = (value: string) => {
   }
   return error;
 };
+
+export const isDate = (date: any) => {
+  return date instanceof Date && !isNaN(date.valueOf());
+};
