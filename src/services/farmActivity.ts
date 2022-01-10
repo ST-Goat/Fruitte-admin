@@ -1,6 +1,7 @@
 import { PaginationDefault } from "shared/comom.enum";
 import axiosServices from "services/axiosServices";
 import { ScheduleInfor } from "./farmSchedules";
+import { type } from "os";
 
 export enum FarmActivityStatus {
   ACTIVE = 0,
@@ -81,6 +82,11 @@ export const fetchAllActivityByFarmId = ({
     .then((response) => response.data.content);
 };
 
+export type ActivityAddition = {
+  id?: string | number;
+  name: string;
+  price: number;
+};
 export type NewActivityData = {
   name: string;
   description: string;
@@ -95,10 +101,7 @@ export type NewActivityData = {
     type: string;
     link: string;
   }>;
-  activityAdditionalServices: Array<{
-    name: string;
-    price: number;
-  }>;
+  activityAdditionalServices: Array<ActivityAddition>;
 };
 export const createNewActivityByFarmId = async ({
   farmId,

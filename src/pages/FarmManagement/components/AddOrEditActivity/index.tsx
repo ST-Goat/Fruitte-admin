@@ -16,6 +16,7 @@ import BoxEditor from "./BoxEditor";
 
 import {
   NewActivityData,
+  ActivityAddition,
   ExistedActivityData,
   createNewActivityByFarmId,
   updateExistedActivityByFarmId,
@@ -23,8 +24,8 @@ import {
   fetchFarmActivityDetail,
 } from "services/farmActivity";
 import { farmDetailUrl } from "routes";
-import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
-import { differenceBy } from "lodash";
+import { SNACKBAR_VARIANTS } from "shared/comom.enum";
+import { differenceBy, isEqual } from "lodash";
 import { enqueueSnackbar } from "redux/slices/snackbar";
 import { useAppDispatch } from "utilities";
 
@@ -130,21 +131,13 @@ const RowStyled = ({
   </>
 );
 
-const Field = ({
-  item,
-  value,
-  setFieldValue,
-}: {
-  item: FieldItem;
-  value: any;
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
-}) => {
+const FieldWrapper = ({ item, value }: { item: FieldItem; value: any }) => {
   return (
     <item.component
       id={item.id}
       name={item.name}
       fieldValue={value}
-      setFieldValue={setFieldValue}
+      // setFieldValue={setFieldValue}
       type={item.type ?? "text"}
       placeholder="input any thing here..."
     />
@@ -172,7 +165,7 @@ function ActivityFormItem() {
   const { farmId, activityId }: { farmId: string; activityId: string } =
     useParams();
   const [initialFormData, setInitialFormData] =
-    useState<NewActivityData | null>(null);
+    useState<NewActivityData>(initialValues);
 
   const isCreate = useMemo(() => activityId === "create", [activityId]);
 
@@ -206,9 +199,6 @@ function ActivityFormItem() {
     if (!isCreate) {
       //fetch data with activity id and setInitialFormData with response
       getFarmActivityDetails(activityId);
-    } else {
-      setInitialFormData(initialValues);
-      setIsLoading(false);
     }
   }, [isCreate]);
 
@@ -235,34 +225,35 @@ function ActivityFormItem() {
         });
       } else {
         // put new data
-        const editServices = values.activityAdditionalServices.filter(
-          (item: any) => Boolean(item.id)
-        );
-        const newServices = differenceBy(
-          values.activityAdditionalServices,
-          editServices,
-          "rowId"
-        );
-        const delServices = differenceBy(
-          initialFormData ? initialFormData.activityAdditionalServices : [],
-          editServices,
+        const listOptionalProducts = values.activityAdditionalServices;
+        const editList: ActivityAddition[] = [];
+        const newList: ActivityAddition[] = [];
+        listOptionalProducts.forEach((option: any) => {
+          if (Boolean(option.id)) {
+            const match = initialFormData.activityAdditionalServices.find(
+              (item) => item.id === option.id
+            );
+            if (match && !isEqual(option, match)) editList.push(option);
+            return;
+          }
+          newList.push(option);
+        });
+        const delList: ActivityAddition[] = differenceBy(
+          initialFormData.activityAdditionalServices,
+          listOptionalProducts,
           "id"
         );
         newData.activityImages = values.activityImages;
-        newData.newActivityAdditionalServices = newServices.map(
-          (value: any) => ({
-            name: value.name,
-            price: value.price,
-          })
-        );
-        newData.editActivityAdditionalServices = editServices.map(
-          (value: any) => ({
-            id: value.id,
-            name: value.name,
-            price: value.price,
-          })
-        );
-        newData.delActivityAdditionalServices = delServices.map(
+        newData.newActivityAdditionalServices = newList.map((value: any) => ({
+          name: value.name,
+          price: value.price,
+        }));
+        newData.editActivityAdditionalServices = editList.map((value: any) => ({
+          id: value.id,
+          name: value.name,
+          price: value.price,
+        }));
+        newData.delActivityAdditionalServices = delList.map(
           (value: any) => value.id
         );
         await updateExistedActivityByFarmId({
@@ -308,7 +299,7 @@ function ActivityFormItem() {
     );
   return (
     <Formik initialValues={initialFormData} onSubmit={handleSubmit}>
-      {({ values, handleSubmit, setFieldValue }: FormikProps<any>) => (
+      {({ values }: FormikProps<any>) => (
         <Form>
           <Grid container item xs={12}>
             <Grid container spacing={3}>
@@ -350,11 +341,7 @@ function ActivityFormItem() {
                       </Text>
                     }
                     rightContent={
-                      <Field
-                        item={item}
-                        value={values[item.name]}
-                        setFieldValue={setFieldValue}
-                      />
+                      <FieldWrapper item={item} value={values[item.name]} />
                     }
                   />
                 );

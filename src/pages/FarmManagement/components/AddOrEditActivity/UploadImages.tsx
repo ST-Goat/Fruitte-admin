@@ -4,8 +4,8 @@ import cn from "classnames";
 
 export type UploadImageProps = {
   name: string;
-  fieldValue: any;
-  setFieldValue: any;
+  // fieldValue: any;
+  // setFieldValue: any;
 };
 
 const NoneImageFrame = ({ prevSrc }: { prevSrc: string }) => (
@@ -27,9 +27,9 @@ const NoneImageFrame = ({ prevSrc }: { prevSrc: string }) => (
 const listImage = [1, 2, 3];
 const UploadImages = ({
   name,
-  fieldValue,
-  setFieldValue,
-}: UploadImageProps) => {
+}: // fieldValue,
+// setFieldValue,
+UploadImageProps) => {
   const fileRef = useRef<any>(null);
   const [mainSrcPreview, setMainSrcPreview] = useState("");
   const [srcPreviews, setSrcPreviews] = useState<Array<string>>([]);
@@ -55,7 +55,7 @@ const UploadImages = ({
             if (Boolean(firstFile))
               setMainSrcPreview(URL.createObjectURL(firstFile));
             setSrcPreviews(listSrc);
-            setFieldValue(name, newValues);
+            // setFieldValue(name, newValues);
           }
         }}
       />
