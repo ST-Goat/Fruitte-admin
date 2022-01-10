@@ -4,6 +4,8 @@ import AutoCompleteCustomizer from "pages/common/Autocomplete";
 import DatePickerCustomizer from "pages/common/DatePicker";
 
 import { Activity } from "services/farmActivity";
+import isBefore from "date-fns/isBefore";
+import startOfDay from "date-fns/startOfDay";
 
 const Controller = ({
   translate,
@@ -54,9 +56,9 @@ const Controller = ({
           <div className="w-72">
             <DatePickerCustomizer
               value={selectedDate}
-              // onChange={(newDate) => {
-              //   if (isDate(newDate)) setSelectedDate(newDate as Date);
-              // }}
+              shouldDisableDate={(date: Date) =>
+                isBefore(date, startOfDay(new Date()))
+              }
               onChange={onChangeDate}
             />
           </div>
