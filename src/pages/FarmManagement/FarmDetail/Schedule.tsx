@@ -84,7 +84,7 @@ const deleteScheduleList = async (scheduleIds: Array<string | number>) => {
   ]);
 };
 
-const TWO_HOURS = 7200;
+const TWO_HOURS = 120; //dv:minutes
 function Schedule({ farmId }: { farmId: string }) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();

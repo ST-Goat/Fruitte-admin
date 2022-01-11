@@ -34,7 +34,27 @@ type FieldItem = {
   keyLabel: string;
   name: string;
   type?: string;
+  validate?: (text: string) => string;
   component: React.FC<InputProps & UploadImageProps & OptionalProductProps>;
+};
+
+const validateInterger = (text: string) => {
+  let error = "";
+  if (!/^\d+$/g.test(text)) error = "This must be number and integer number!";
+  return error;
+};
+
+const validatePositiveNumber = (text: string) => {
+  let error = "";
+  if (!text || Number(text) < 0)
+    error = "This number must be a positive number!";
+  return error;
+};
+
+const requiredField = (text: string) => {
+  let error = "";
+  if (!text) error = "This field is required!";
+  return error;
 };
 
 const fields: Array<FieldItem> = [
@@ -42,6 +62,7 @@ const fields: Array<FieldItem> = [
     id: "field-name",
     keyLabel: "pages.farmActivity.activityName",
     name: "name",
+    validate: requiredField,
     component: Input,
   },
   {
@@ -55,6 +76,7 @@ const fields: Array<FieldItem> = [
     keyLabel: "pages.farmManagement.perPerson",
     name: "oneMemberPrice",
     type: "number",
+    validate: validatePositiveNumber,
     component: Input,
   },
   {
@@ -62,6 +84,7 @@ const fields: Array<FieldItem> = [
     keyLabel: "pages.farmManagement.twoPerson",
     name: "twoMembersPrice",
     type: "number",
+    validate: validatePositiveNumber,
     component: Input,
   },
   {
@@ -69,6 +92,7 @@ const fields: Array<FieldItem> = [
     keyLabel: "pages.farmManagement.threePerson",
     name: "threeMembersPrice",
     type: "number",
+    validate: validatePositiveNumber,
     component: Input,
   },
   {
@@ -76,6 +100,7 @@ const fields: Array<FieldItem> = [
     keyLabel: "pages.farmManagement.fourPerson",
     name: "fourMembersPrice",
     type: "number",
+    validate: validatePositiveNumber,
     component: Input,
   },
   {
@@ -89,6 +114,7 @@ const fields: Array<FieldItem> = [
     keyLabel: "pages.farmActivity.duration",
     name: "duration",
     type: "number",
+    validate: validateInterger,
     component: Input,
   },
   {
@@ -137,7 +163,7 @@ const FieldWrapper = ({ item, value }: { item: FieldItem; value: any }) => {
       id={item.id}
       name={item.name}
       fieldValue={value}
-      // setFieldValue={setFieldValue}
+      validate={item.validate}
       type={item.type ?? "text"}
       placeholder="input any thing here..."
     />
@@ -166,11 +192,11 @@ function ActivityFormItem() {
     useParams();
   const [initialFormData, setInitialFormData] =
     useState<NewActivityData>(initialValues);
+  const [isErrorActivityDetail, setIsErrorActivityDetail] = useState(false);
 
   const isCreate = useMemo(() => activityId === "create", [activityId]);
 
   const getFarmActivityDetails = async (id: string) => {
-    setIsLoading(true);
     try {
       const { farmActivity: activityResponse } = await fetchFarmActivityDetail({
         activityId: id,
@@ -182,13 +208,14 @@ function ActivityFormItem() {
         note: activityResponse.note,
         duration: activityResponse.duration,
         oneMemberPrice: activityResponse.oneMemberPrice,
-        twoMembersPrice: activityResponse.twomembesrPrice,
-        threeMembersPrice: activityResponse.threemembesrPrice,
-        fourMembersPrice: activityResponse.fourmembesrPrice,
+        twoMembersPrice: activityResponse.twoMembersPrice,
+        threeMembersPrice: activityResponse.threeMembersPrice,
+        fourMembersPrice: activityResponse.fourMembersPrice,
         activityImages: [],
         activityAdditionalServices: activityResponse.activityAdditionService,
       });
     } catch (error) {
+      setIsErrorActivityDetail(true);
       console.log(error);
     } finally {
       setIsLoading(false);
@@ -199,7 +226,10 @@ function ActivityFormItem() {
     if (!isCreate) {
       //fetch data with activity id and setInitialFormData with response
       getFarmActivityDetails(activityId);
+    } else {
+      setIsLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCreate]);
 
   const handleSubmit = async (values: any) => {
@@ -282,7 +312,7 @@ function ActivityFormItem() {
   };
 
   if (isLoading) return <>...Loading</>;
-  if (!initialFormData)
+  if (!initialFormData || isErrorActivityDetail)
     return (
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -336,7 +366,7 @@ function ActivityFormItem() {
                   <RowStyled
                     key={item.id}
                     leftContent={
-                      <Text className={cn("text-lg font-bold")}>
+                      <Text className={cn("text-lg font-bold", "mt-4")}>
                         {t(item.keyLabel)}
                       </Text>
                     }

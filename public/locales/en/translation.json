@@ -124,7 +124,7 @@
             "complete": "Complete",
             "process": "Process",
             "optionalProducts": "Optional products",
-            "duration": "Duration",
+            "duration": "Duration(m)",
             "materials": "Materials",
             "briefDescription": "Brief Description",
             "information": "Information"

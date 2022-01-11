@@ -1,11 +1,10 @@
 import { PaginationDefault } from "shared/comom.enum";
 import axiosServices from "services/axiosServices";
 import { ScheduleInfor } from "./farmSchedules";
-import { type } from "os";
 
 export enum FarmActivityStatus {
-  ACTIVE = 0,
-  DEACTIVE = 1,
+  ACTIVE = 1,
+  DEACTIVE = 0,
 }
 
 export type Activity = {
@@ -175,9 +174,9 @@ export type FarmActivityDetails = {
     note: string;
     activityInfo: string;
     oneMemberPrice: number;
-    twomembesrPrice: number;
-    threemembesrPrice: number;
-    fourmembesrPrice: number;
+    twoMembersPrice: number;
+    threeMembersPrice: number;
+    fourMembersPrice: number;
     duration: number;
     activityAdditionService: Array<{
       id: number | string;

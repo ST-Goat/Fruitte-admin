@@ -1,6 +1,7 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
+import uniqueId from "lodash/uniqueId";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -115,7 +116,7 @@ export default function TableCustomizer({
               <StyledTableRow
                 className={hover ? "row__hover-bg-grey" : ""}
                 onClick={() => handleClickRow && handleClickRow(row)}
-                key={row.id}
+                key={`${uniqueId()}-${row.id}`}
               >
                 {headers.map((head, i) => {
                   const isComponent = typeof row[head.keyData] === "function";
