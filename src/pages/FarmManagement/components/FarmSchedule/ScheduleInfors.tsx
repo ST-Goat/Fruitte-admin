@@ -79,8 +79,8 @@ const ScheduleInfors = memo(
                     <TimePickerCustomizer
                       readOnly
                       value={addSeconds(
-                        new Date(schedule.startAt).getTime(),
-                        duration
+                        new Date(schedule.startAt),
+                        duration * 60
                       )}
                     />
                   </div>
