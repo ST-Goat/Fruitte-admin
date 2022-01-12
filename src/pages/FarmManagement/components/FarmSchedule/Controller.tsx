@@ -42,6 +42,7 @@ const Controller = ({
                   activities.find((item) => item.id === idSelected)
                 );
               }}
+              placeholder="Please choose an activity first"
             />
           </div>
         }

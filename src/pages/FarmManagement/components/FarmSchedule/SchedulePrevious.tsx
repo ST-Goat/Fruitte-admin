@@ -6,7 +6,10 @@ import Text from "pages/common/components/Text";
 
 import { ScheduleInfor } from "services/farmSchedules";
 import { Activity } from "services/farmActivity";
+import { useEffect, useState } from "react";
+import classNames from "classnames";
 
+const DEFAULT_LIMIT = 3;
 const SchedulePrevious = ({
   data,
   activityDetail,
@@ -17,6 +20,10 @@ const SchedulePrevious = ({
   loading: boolean;
 }) => {
   const { t } = useTranslation();
+  const [limit, setLimit] = useState(DEFAULT_LIMIT);
+  useEffect(() => {
+    setLimit(DEFAULT_LIMIT);
+  }, [activityDetail]);
   if (loading)
     return (
       <div className="w-full py-8 text-center font-bold text-xl">
@@ -31,7 +38,7 @@ const SchedulePrevious = ({
     );
   return (
     <>
-      {data.map((item: ScheduleInfor) => (
+      {data.slice(0, limit).map((item: ScheduleInfor) => (
         <RowStyled
           key={item.id}
           leftContent={
@@ -48,6 +55,20 @@ const SchedulePrevious = ({
           }
         />
       ))}
+      {limit < data.length && (
+        <Text
+          onClick={() => setLimit((prev) => prev + DEFAULT_LIMIT)}
+          className={classNames(
+            "w-full mt-4",
+            "text-center font-bold text-lg",
+            "cursor-pointer",
+            "hover:underline",
+            "active:transform active:scale-95"
+          )}
+        >
+          Show more
+        </Text>
+      )}
     </>
   );
 };

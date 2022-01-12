@@ -7,10 +7,16 @@ import Stack from "@mui/material/Stack";
 export type TimePickerCustomizerProps = {
   value: Date | null;
   onChange?: (newValue: Date | null) => void;
+  error?: boolean;
+  backgroundInputColor?: string;
+  helperText?: any;
 } & { [key: string]: any };
 const TimePickerCustomizer = ({
   value,
   onChange,
+  error = false,
+  backgroundInputColor = "transparent",
+  helperText = "",
   ...props
 }: TimePickerCustomizerProps) => {
   return (
@@ -22,14 +28,23 @@ const TimePickerCustomizer = ({
           renderInput={(params) => (
             <TextField
               {...params}
+              error={error}
+              helperText={helperText}
               sx={{
-                border: "1px solid #76848d",
                 borderRadius: "5px",
-                "&": {
-                  borderColor: "#4C9C2E",
+                "& .MuiInputBase-root": {
+                  "& fieldset": {
+                    borderColor: !error
+                      ? "#4C9C2E !important"
+                      : "#EB5757 !important",
+                    borderWidth: !error ? "1px" : "2px",
+                  },
                 },
                 "& .Mui-focused fieldset": {
-                  borderColor: "#4C9C2E !important",
+                  borderWidth: "2px",
+                },
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: backgroundInputColor,
                 },
               }}
             />

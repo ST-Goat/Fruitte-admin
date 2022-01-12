@@ -53,6 +53,7 @@ const createNewScheduleList = async (
           twoMembersCapacity: item.twoMembersCapacity,
           threeMembersCapacity: item.threeMembersCapacity,
           fourMembersCapacity: item.fourMembersCapacity,
+          lastBookingTime: item.lastBookingTime,
         },
       })
     ),
@@ -71,6 +72,7 @@ const editExitedScheduleList = async (schedules: TypeScheduleInfor[]) => {
           twoMembersCapacity: item.twoMembersCapacity,
           threeMembersCapacity: item.threeMembersCapacity,
           fourMembersCapacity: item.fourMembersCapacity,
+          lastBookingTime: item.lastBookingTime,
         },
       })
     ),
@@ -83,6 +85,28 @@ const deleteScheduleList = async (scheduleIds: Array<string | number>) => {
     ...scheduleIds.map((id) => deleteExistedSchedule({ scheduleId: id })),
   ]);
 };
+
+const AddNewScheduleIcon = ({
+  disabled,
+  onClick,
+}: {
+  disabled: boolean;
+  onClick: () => void;
+}) => (
+  <AddCircleIcon
+    onClick={() => {
+      !disabled && onClick();
+    }}
+    fontSize="large"
+    sx={{
+      color: disabled ? "#828282" : "#4C9C2E",
+      cursor: disabled ? "auto" : "pointer",
+      "&:active": {
+        transform: disabled ? "none" : "scale(0.9)",
+      },
+    }}
+  />
+);
 
 const TWO_HOURS = 120; //dv:minutes
 function Schedule({ farmId }: { farmId: string }) {
@@ -150,6 +174,7 @@ function Schedule({ farmId }: { farmId: string }) {
         activityId: selectedActivity?.id,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedActivity, selectedDate]);
 
   const handleSubmit = async (values: any) => {
@@ -173,7 +198,6 @@ function Schedule({ farmId }: { farmId: string }) {
         values.scheduleInfors,
         "id"
       );
-
       if (selectedActivity) {
         await Promise.all([
           createNewScheduleList(newSchedules, selectedActivity?.id),
@@ -235,26 +259,21 @@ function Schedule({ farmId }: { farmId: string }) {
                               values={values.scheduleInfors}
                               arrayHelpers={arrayHelpers}
                               duration={rangeTimeSchedule}
+                              selectedDate={selectedDate}
                             />
                             <div className="mt-4 ml-12">
-                              <AddCircleIcon
+                              <AddNewScheduleIcon
                                 onClick={() => {
                                   arrayHelpers.push({
-                                    startAt: new Date(),
+                                    startAt: new Date(selectedDate),
                                     oneMemberCapacity: 0,
                                     twoMembersCapacity: 0,
                                     threeMembersCapacity: 0,
                                     fourMembersCapacity: 0,
+                                    lastBookingTime: new Date(selectedDate),
                                   });
                                 }}
-                                fontSize="large"
-                                sx={{
-                                  color: "#4C9C2E",
-                                  cursor: "pointer",
-                                  "&:active": {
-                                    transform: "scale(0.9)",
-                                  },
-                                }}
+                                disabled={!selectedDate || !selectedActivity}
                               />
                             </div>
                           </>
@@ -268,6 +287,7 @@ function Schedule({ farmId }: { farmId: string }) {
                     rightContent={
                       <ButtonCustomizer
                         type="submit"
+                        disabled={!selectedActivity}
                         className="px-8 rounded-3xl mt-8"
                       >
                         {t("common.save")}
