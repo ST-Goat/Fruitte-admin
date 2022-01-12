@@ -5,12 +5,20 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 
 export type DateTimePickerCustomizerProps = {
-  value: Date | null | undefined;
-  onChange?: (newValue: Date | null | undefined) => void;
+  value: Date | null;
+  onChange?: (newValue: Date | null) => void;
+  error?: boolean;
+  helperText?: any;
+  backgroundInputColor?: string;
+} & {
+  [key: string]: any;
 };
 const DateTimePickerCustomizer = ({
   value,
   onChange,
+  error = false,
+  helperText,
+  backgroundInputColor = "transparent",
   ...props
 }: DateTimePickerCustomizerProps) => {
   return (
@@ -19,11 +27,23 @@ const DateTimePickerCustomizer = ({
         renderInput={(params) => (
           <TextField
             {...params}
+            error={error}
+            helperText={helperText}
             sx={{
-              border: "1px solid #76848d",
               borderRadius: "5px",
-              "&": {
-                borderColor: "#4C9C2E",
+              "& .MuiInputBase-root": {
+                "& fieldset": {
+                  borderColor: !error
+                    ? "#4C9C2E !important"
+                    : "#EB5757 !important",
+                  borderWidth: !error ? "1px" : "2px",
+                },
+              },
+              "& .Mui-focused fieldset": {
+                borderWidth: "2px",
+              },
+              "& .MuiOutlinedInput-root": {
+                backgroundColor: backgroundInputColor,
               },
             }}
           />

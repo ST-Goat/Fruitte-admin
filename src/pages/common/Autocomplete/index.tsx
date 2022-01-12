@@ -14,6 +14,7 @@ export type SelectProps = {
   onChange?: (newValue: any) => void;
   fullWidth?: boolean;
   field?: FieldInputProps<any>;
+  placeholder?: string;
 } & {
   [key: string]: any;
 };
@@ -24,6 +25,7 @@ function AutoCompleteCustomizer({
   fullWidth = true,
   options,
   field,
+  placeholder,
   ...props
 }: SelectProps) {
   return (
@@ -59,6 +61,7 @@ function AutoCompleteCustomizer({
         }}
         renderInput={(params) => (
           <TextField
+            placeholder={placeholder ?? ""}
             sx={{
               border: "1px solid #76848d",
               borderRadius: "0.75rem",

@@ -7,6 +7,7 @@ export type ScheduleInfor = {
   twoMembersCapacity: number;
   threeMembersCapacity: number;
   fourMembersCapacity: number;
+  lastBookingTime: Date;
 };
 
 export type ScheduleItem = {
