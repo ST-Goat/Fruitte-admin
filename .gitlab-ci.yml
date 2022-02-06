@@ -18,8 +18,8 @@ Build:
   image: node:14
   stage: build
   script:
-    - yarn install
-    - yarn build
+    - npm install
+    - npm run build
   artifacts:
     paths:
       - build/
