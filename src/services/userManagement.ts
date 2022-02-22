@@ -19,7 +19,7 @@ export type Partner = {
   createdAt: string;
 };
 
-export type UserListResponse = {
+export type PartnerListResponse = {
   content: Partner[];
   metadata: {
     limit: number;
@@ -47,7 +47,7 @@ export const fetchPartners = async (
     },
     filters: {},
   }
-): Promise<UserListResponse> => {
+): Promise<PartnerListResponse> => {
   const { page, pageSize } = params.pagination;
   const { keyword, fieldName = "name", filterStatus } = params.filters;
   return axiosService

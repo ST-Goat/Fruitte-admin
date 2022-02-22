@@ -72,6 +72,17 @@
             "active": "Active",
             "inActive": "Inactive"
         },
+        "requestPartner": {
+            "title": "Request Partner",
+            "name": "Name",
+            "description": "Description",
+            "phone": "Phone",
+            "status": "Status",
+            "createDate": "Create Date",
+            "approveStatus": "approve",
+            "pendingStatus": "pending",
+            "declinedStatus": "decilined"
+        },
         "farmManagement": {
             "title": "Farm Management",
             "farmList": "Farm List",
