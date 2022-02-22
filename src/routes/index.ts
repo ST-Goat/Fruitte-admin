@@ -24,4 +24,6 @@ export const faqManagementUrl = "/faq-management";
 export const faqCreateUrl = `${faqManagementUrl}/create`;
 export const faqDetailUrl = `${faqManagementUrl}/detail`;
 
+export const requestPartnerUrl = "/request-partner";
+
 export const farmActivityUrl = "/farm-activity";

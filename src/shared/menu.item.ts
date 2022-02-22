@@ -13,6 +13,7 @@ import {
   faqManagementUrl,
   faqCreateUrl,
   faqDetailUrl,
+  requestPartnerUrl,
 } from "routes";
 
 import Main from "pages/main/Main";
@@ -35,13 +36,14 @@ import FaqManagement from "pages/FaqManagement";
 import PeopleIcon from "@mui/icons-material/People";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
-import LocalActivityIcon from "@mui/icons-material/LocalActivity";
+import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import PaymentIcon from "@mui/icons-material/Payment";
 import BookOnlineIcon from "@mui/icons-material/BookOnline";
 import CoPresentIcon from "@mui/icons-material/CoPresent";
 import QuizIcon from "@mui/icons-material/Quiz";
 import FaqAddOrEdit from "pages/FaqManagement/AddOrEdit";
+import RequestPartner from "pages/RequestPartner";
 
 export type MenuItemProps = {
   key: string;
@@ -78,6 +80,13 @@ export const menuItems: MenuItemProps[] = [
         component: UserDetail,
       },
     ],
+  },
+  {
+    key: "request-partner",
+    label: "pages.requestPartner.title",
+    to: requestPartnerUrl,
+    component: RequestPartner,
+    icon: GroupWorkIcon,
   },
   {
     key: "farm-management",
