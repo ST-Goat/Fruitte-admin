@@ -44,7 +44,8 @@ function UserManagementContainer() {
       });
       setUsers({
         data: response.content,
-        total: response.metadata.total,
+        // total: response.metadata.total,
+        total: response.content.length,
       });
     } catch (error) {
       console.log(error);
@@ -54,6 +55,7 @@ function UserManagementContainer() {
   }
   useEffect(() => {
     fetchUserListData(pagination, filters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.page, pagination.pageSize]);
 
   return (

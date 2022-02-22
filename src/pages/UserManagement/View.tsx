@@ -12,7 +12,6 @@ import type { Filters } from "services/userManagement";
 
 import type { UserState } from "./Container";
 import { gettotalRowCurrent } from "utilities";
-import { REQUEST_PARTNER_STATUS } from "services/userManagement";
 
 type UserManagementViewProps = Omit<
   Omit<TablePaginationProps, "children">,
@@ -70,23 +69,21 @@ const headers = [
   },
 ];
 
-const ItemStatus = ({ status }: { status: REQUEST_PARTNER_STATUS }) => {
+const ItemStatus = ({ status }: { status: boolean }) => {
   const { t } = useTranslation();
   switch (status) {
-    case REQUEST_PARTNER_STATUS.PENDING:
+    case false:
       return (
-        <span className="text-red-700">
-          {t("pages.userManagement.pendingStatus")}
+        <span className="font-bold text-red-700">
+          {t("pages.userManagement.inActive")}
         </span>
       );
-    case REQUEST_PARTNER_STATUS.APPROVE:
+    case true:
       return (
-        <span className="text-green-700">
-          {t("pages.userManagement.approveStatus")}
+        <span className="font-bold text-green-700">
+          {t("pages.userManagement.active")}
         </span>
       );
-    case REQUEST_PARTNER_STATUS.DECLINE:
-      return <span>{t("pages.userManagement.declinedStatus")}</span>;
     default:
       return <></>;
   }
@@ -128,8 +125,8 @@ function UserManagementView({
               totalRow={gettotalRowCurrent(users.total, page, rowsPerPage)}
               data={users.data.map((item, i) => ({
                 ...item,
-                createdAt: new Date(item.createdAt).toLocaleDateString(),
-                status: () => <ItemStatus status={item.status} />,
+                createdAt: new Date(item.updatedAt).toLocaleDateString(),
+                status: () => <ItemStatus status={item.isActive} />,
                 no: (page - 1) * rowsPerPage + i + 1,
               }))}
               handleClickRow={(row) => {

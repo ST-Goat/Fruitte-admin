@@ -68,7 +68,9 @@
             "cancelReservation": "Cancel Reservation",
             "approveStatus": "approve",
             "pendingStatus": "pending",
-            "declinedStatus": "decilined"
+            "declinedStatus": "decilined",
+            "active": "Active",
+            "inActive": "Inactive"
         },
         "farmManagement": {
             "title": "Farm Management",
