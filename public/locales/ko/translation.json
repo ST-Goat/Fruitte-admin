@@ -68,7 +68,9 @@
             "cancelReservation": "예약 취소",
             "approveStatus": "일반회원",
             "pendingStatus": "농장유저 요청",
-            "declinedStatus": "탈퇴회원"
+            "declinedStatus": "탈퇴회원",
+            "active": "Active",
+            "inActive": "Inactive"
         },
         "farmManagement": {
             "title": "농장 관리",

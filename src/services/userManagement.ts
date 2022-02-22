@@ -2,7 +2,7 @@ import { PaginationDefault } from "shared/comom.enum";
 import axiosService from "./axiosServices";
 
 import { Pagination } from "shared/comom.enum";
-const endpointUrl = "admin/request-partners";
+const endpointPartnerUrl = "admin/request-partners";
 
 export enum REQUEST_PARTNER_STATUS {
   APPROVE = "APPROVE",
@@ -10,7 +10,7 @@ export enum REQUEST_PARTNER_STATUS {
   PENDING = "PENDING",
 }
 
-export type User = {
+export type Partner = {
   id: string;
   name: string;
   email: string;
@@ -20,7 +20,7 @@ export type User = {
 };
 
 export type UserListResponse = {
-  content: User[];
+  content: Partner[];
   metadata: {
     limit: number;
     offset: number;
@@ -36,7 +36,7 @@ export type Filters = {
   filterStatus?: REQUEST_PARTNER_STATUS;
 };
 
-export const fetchUserList = async (
+export const fetchPartners = async (
   params: {
     pagination: Pagination;
     filters: Filters;
@@ -51,13 +51,55 @@ export const fetchUserList = async (
   const { page, pageSize } = params.pagination;
   const { keyword, fieldName = "name", filterStatus } = params.filters;
   return axiosService
-    .get(endpointUrl, {
+    .get(endpointPartnerUrl, {
       params: {
         limit: pageSize,
         skip: (page - 1) * pageSize,
         keywork: keyword,
         fieldName: Boolean(keyword) ? fieldName : undefined,
         filterStatus,
+      },
+    })
+    .then((response) => response.data);
+};
+
+const endpointUserUrl = "admin/users";
+
+export enum UserType {
+  FARMER = "FARMER",
+  NORMAL = "NORMAL",
+  ADMIN = "ADMIN",
+}
+
+export enum LoginType {
+  NORMAL = "NORMAL",
+  ANONYMOUS = "ANONYMOUS",
+}
+export type User = {
+  email: string;
+  id: number;
+  userType: UserType;
+  isActive: boolean;
+  loginType: LoginType;
+  phone: string;
+  updatedAt: Date;
+  name: string;
+};
+
+export const fetchUserList = async (params: {
+  pagination?: Pagination;
+  filters?: Filters;
+}) => {
+  if (!params.pagination) {
+    return axiosService.get(endpointUserUrl).then((response) => response.data);
+  }
+  const { page, pageSize } = params.pagination;
+  return axiosService
+    .get(endpointUserUrl, {
+      params: {
+        limit: pageSize,
+        skip: (page - 1) * pageSize,
+        userName: params.filters?.keyword,
       },
     })
     .then((response) => response.data);

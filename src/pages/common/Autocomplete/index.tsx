@@ -2,8 +2,10 @@ import React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import type { FieldInputProps } from "formik";
+import { isArray } from "lodash";
 
 export type Option = {
+  id?: any;
   label: string;
   value: any;
 };
@@ -35,6 +37,13 @@ function AutoCompleteCustomizer({
         options={options}
         fullWidth={fullWidth}
         getOptionLabel={(option) => option.label}
+        renderOption={(props, option) => {
+          return (
+            <li {...props} key={option.id ?? option.label}>
+              {option.label}
+            </li>
+          );
+        }}
         {...props}
         value={field?.value ?? props.value}
         onChange={(event: React.SyntheticEvent, value: any, reason) => {
@@ -44,7 +53,7 @@ function AutoCompleteCustomizer({
               field.onChange({
                 target: {
                   name: name,
-                  value: undefined,
+                  value: isArray(value) ? [] : undefined,
                 },
               });
             return;

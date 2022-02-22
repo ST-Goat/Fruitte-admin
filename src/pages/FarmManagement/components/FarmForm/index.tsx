@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Form, Formik, FormikProps } from "formik";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import { difference, filter } from "lodash";
 import InputWithLabel from "pages/common/Formik/Input/InputWithLabel";
 import Text from "pages/common/components/Text";
 import ButtonCustomizer from "pages/common/Button";
+import SelectAdvance from "./SelectAdvance";
 
 import { farmManagementUrl } from "routes";
 
@@ -15,11 +16,10 @@ import {
   FarmerItem,
   updateFarmWithData,
 } from "services/farmManagement";
+import { fetchUserList, User } from "services/userManagement";
 import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
 import { useAppDispatch } from "utilities";
 import { enqueueSnackbar } from "redux/slices/snackbar";
-import SelectAdvance from "./SelectAdvance";
-
 import { validatePhone, validateEmail } from "utilities/helper";
 
 const validateRequired = (text: string) => {
@@ -160,13 +160,37 @@ function FarmForm({
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [isLoadingProcess, setIsLoadingProcess] = useState(false);
+  const [allUsers, setAllUsers] = useState<
+    Array<{ id: number; label: string; value: any }>
+  >([]);
 
   const settlementCycleOptions = [
     { label: t("pages.farmManagement.twoWeeks"), value: 15 },
     { label: t("pages.farmManagement.fourWeeks"), value: 1 },
   ];
 
-  const ownerOptions = fakeFamers;
+  let ignore = false;
+  useEffect(() => {
+    async function fetchAllUsers() {
+      try {
+        const response = await fetchUserList({});
+        setAllUsers(
+          response.content.map((user: User) => ({
+            id: user.id,
+            label: !user.name ? user.email : user.name,
+            value: user.id,
+          }))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (!ignore) fetchAllUsers();
+    return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      ignore = true;
+    };
+  }, []);
 
   const handleSubmit = async (values: any) => {
     setIsLoadingProcess(true);
@@ -233,7 +257,7 @@ function FarmForm({
       case "settlementCycle__field":
         return settlementCycleOptions;
       case "farmUser__field":
-        return ownerOptions;
+        return allUsers;
       default:
         return [];
     }
@@ -248,9 +272,10 @@ function FarmForm({
       settlementCycle: settlementCycleOptions.find(
         (item) => item.value === initData.settlementCycle
       ),
-      farmers: filter(fakeFamers, (o) => listIdInitFamers.includes(o.id)),
+      farmers: filter(allUsers, (o) => listIdInitFamers.includes(o.id)),
     };
-  }, [initData, fakeFamers]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initData, allUsers]);
   return (
     <div className="px-16">
       <Text className="m-auto text-center font-bold text-4xl">
