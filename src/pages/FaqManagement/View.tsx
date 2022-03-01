@@ -1,16 +1,18 @@
-import TableCustomizer from "pages/common/Table";
-import { FaqItem } from "services/faq";
-import { Pagination } from "shared/comom.enum";
-
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-
-import { gettotalRowCurrent } from "utilities";
-import { Faqs } from "./Container";
 import ConfirmModal from "./ConfirmModal";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { faqDetailUrl } from "routes";
+
+import TableCustomizer from "pages/common/Table";
+import { deleteFaq, FaqItem } from "services/faq";
+import { HttpStatus, Pagination, SNACKBAR_VARIANTS } from "shared/comom.enum";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import { gettotalRowCurrent, useAppDispatch } from "utilities";
+import { Faqs } from "./Container";
+import { getAllFaq } from "redux/slices/faq";
+import { enqueueSnackbar } from "redux/slices/snackbar";
 
 const headers = [
   {
@@ -122,8 +124,25 @@ const FaqView = ({
   const history = useHistory();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [idSelected, setIdSelected] = useState<string | number | null>(null);
+  const dispatch = useAppDispatch();
 
   const handleDeleteQuestion = async () => {
+    try {
+      if (idSelected) {
+        const response = await deleteFaq(idSelected);
+        if (response.status === HttpStatus.OK) {
+          dispatch(
+            enqueueSnackbar({
+              message: "Success!",
+              variant: SNACKBAR_VARIANTS.SUCCESS,
+            })
+          );
+          dispatch(getAllFaq(null));
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
     // await delete idSelected
     setIdSelected(null);
     setIsOpenModal(false);

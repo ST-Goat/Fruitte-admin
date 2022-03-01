@@ -185,7 +185,8 @@
             "title": "Reservation Management",
             "bookingDate": "Booking date",
             "user": "User",
-            "activityName": "Activity name"
+            "activityName": "Activity name",
+            "cancelReservationTitle": "Are you sure you want to cancel this reservation?"
         },
         "inquiry": {
             "title": "Inquiry Management",
