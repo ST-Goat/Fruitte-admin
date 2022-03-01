@@ -26,3 +26,7 @@ export const editExistingFaq = async ({
 }) => {
   return axiosServices.put(`admin/faqs/${faqId}`, { ...data });
 };
+
+export const deleteFaq = async (faqId: number | string) => {
+  return axiosServices.delete(`admin/faqs/${faqId}`);
+};

@@ -185,7 +185,8 @@
             "title": "예약 관리",
             "bookingDate": "예약 날짜",
             "user": "유저",
-            "activityName": "체험"
+            "activityName": "체험",
+            "cancelReservationTitle": "Are you sure you want to cancel this reservation?"
         },
         "inquiry": {
             "title": "문의 관리",

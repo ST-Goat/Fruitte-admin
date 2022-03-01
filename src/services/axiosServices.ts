@@ -128,5 +128,9 @@ class AxiosService {
   async delete(endpoint: string, options?: Options) {
     return this.service.delete(endpoint, options);
   }
+
+  async patch(endpoint: string, payload?: any, options?: Options) {
+    return this.service.patch(endpoint, payload, options);
+  }
 }
 export default new AxiosService();
