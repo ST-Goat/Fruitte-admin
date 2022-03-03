@@ -1,9 +1,9 @@
 import axiosServices from "./axiosServices";
 
 export enum ReservationStatus {
-  BOOKED = "Booked",
-  COMPLETED = "Completed",
-  CANCELLED = "Cancelled",
+  BOOKING = "BOOKING",
+  COMPLETED = "DONE",
+  CANCELLED = "CANCEL",
 }
 
 export const fetchReservations = async ({
@@ -14,6 +14,7 @@ export const fetchReservations = async ({
   farmId,
   userId,
   status,
+  search,
 }: {
   startDate?: string;
   endDate?: string;
@@ -22,6 +23,7 @@ export const fetchReservations = async ({
   farmId?: string | number;
   userId?: string | number;
   status?: ReservationStatus;
+  search?: string;
 }) => {
   return axiosServices
     .get("admin/reservations", {
@@ -35,9 +37,13 @@ export const fetchReservations = async ({
         status,
       },
     })
-    .then((res) => res.data.content);
+    .then((res) => res.data);
 };
 
 export const cancelReservationById = async (id: string | number) => {
   return axiosServices.patch(`admin/reservations/${id}/cancel`);
+};
+
+export const getReservationDetail = async (id: string | number) => {
+  return axiosServices.get(`user/reservations/${id}`).then((res) => res.data);
 };

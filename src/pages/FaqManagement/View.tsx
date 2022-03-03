@@ -1,7 +1,8 @@
-import ConfirmModal from "./ConfirmModal";
+import ConfirmModal from "pages/common/ConfirmModal";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { faqDetailUrl } from "routes";
+import { useTranslation } from "react-i18next";
 
 import TableCustomizer from "pages/common/Table";
 import { deleteFaq, FaqItem } from "services/faq";
@@ -125,6 +126,7 @@ const FaqView = ({
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [idSelected, setIdSelected] = useState<string | number | null>(null);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const handleDeleteQuestion = async () => {
     try {
@@ -171,6 +173,7 @@ const FaqView = ({
         open={isOpenModal}
         handleAccepted={handleDeleteQuestion}
         handleClose={() => setIsOpenModal(false)}
+        title={t("pages.faq.deleteModalTitle")}
       />
     </div>
   );

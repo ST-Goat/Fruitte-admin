@@ -34,6 +34,7 @@ function FarmManagementContainer() {
     total: 0,
   });
   const [viewCurrent, setViewCurrent] = useState<ViewCurrent>(VIEW_FARM_LIST);
+  const [reload, setReload] = useState(false);
 
   const onChangeFilters = useCallback(
     (name: string, value: string | undefined) => {
@@ -82,10 +83,12 @@ function FarmManagementContainer() {
   useEffect(() => {
     fetchViewData(viewCurrent, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination.page, pagination.pageSize, viewCurrent]);
+  }, [pagination.page, pagination.pageSize, viewCurrent, reload]);
 
   const submitFilters = (newFilter: Filters) => {
-    fetchViewData(viewCurrent, newFilter);
+    setFilters(newFilter);
+    setPagination(initialPagination);
+    setReload(!reload);
   };
   return (
     <div>

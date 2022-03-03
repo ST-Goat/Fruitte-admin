@@ -1,7 +1,5 @@
 import { useTranslation } from "react-i18next";
-
 import ButtonCustomizer from "pages/common/Button";
-
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 
@@ -24,17 +22,19 @@ const ConfirmModal = ({
   open,
   handleAccepted,
   handleClose,
+  title,
 }: {
   open: boolean;
   handleClose: () => void;
   handleAccepted: () => void;
+  title: string;
 }) => {
   const { t } = useTranslation();
 
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={{ ...modalStyles }}>
-        <h2 className="text-center">{t("pages.faq.deleteModalTitle")}</h2>
+        <h2 className="text-center">{title}</h2>
         <div className="mt-4 flex justify-center items-center">
           <ButtonCustomizer
             className="mr-4 px-8 w-1/3"

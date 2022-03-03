@@ -32,11 +32,6 @@ const headers = [
     keyData: "status",
   },
   {
-    id: "View-Action-col",
-    keyLabel: "common.view",
-    keyData: "view",
-  },
-  {
     id: "Cancel-action-col",
     keyLabel: "common.cancel",
     keyData: "cancel",
@@ -69,20 +64,26 @@ const fakeData = [
   },
 ];
 
-function ReservationView() {
+function ReservationView({
+  isLoading,
+  data,
+}: {
+  isLoading: boolean;
+  data: any[];
+}) {
   const history = useHistory();
 
   return (
     <div>
       <TableCustomizer
         headers={headers}
-        loading={false}
+        loading={isLoading}
         hover
         totalRow={gettotalRowCurrent(100, 1, 10)}
         handleClickRow={(row) => {
           history.push(`${bookingDetailUrl}/${row.id}`);
         }}
-        data={fakeData}
+        data={data}
       />
     </div>
   );

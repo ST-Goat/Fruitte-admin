@@ -186,7 +186,18 @@
             "bookingDate": "예약 날짜",
             "user": "유저",
             "activityName": "체험",
-            "cancelReservationTitle": "Are you sure you want to cancel this reservation?"
+            "cancelReservationTitle": "Are you sure you want to cancel this reservation?",
+            "bookingStatus": "Booked",
+            "cancelStatus": "Cancelled",
+            "completeStatus": "Completed",
+            "farmLocation": "Farm location",
+            "phoneNumber": "Phone number",
+            "staff": "Staff",
+            "price": "Price",
+            "type": "Type",
+            "additonalService": "Additonal service",
+            "cancelReservation": "Cancel reservation",
+            "viewBill": "View billing information"
         },
         "inquiry": {
             "title": "문의 관리",
