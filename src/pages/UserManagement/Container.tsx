@@ -25,8 +25,14 @@ function UserManagementContainer() {
     data: [],
     total: 0,
   });
+  const [reload, setReload] = useState(false);
+
   const submitFilters = () => {
-    fetchUserListData(pagination, filters);
+    setPagination({
+      page: PaginationDefault.PAGE,
+      pageSize: PaginationDefault.PAGE_SIZE,
+    });
+    setReload(!reload);
   };
   const onChangeFilters = useCallback(
     (name: string, value: string | undefined) => {
@@ -56,7 +62,7 @@ function UserManagementContainer() {
   useEffect(() => {
     fetchUserListData(pagination, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination.page, pagination.pageSize]);
+  }, [pagination.page, pagination.pageSize, reload]);
 
   return (
     <div>

@@ -69,7 +69,7 @@ module.exports = {
           default: "#2F80ED"
         },
         success: {
-          default: "#27AE60"
+          default: "#4C9C2E"
         },
         warning: {
           default: "#E2B93B"

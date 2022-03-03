@@ -5,13 +5,17 @@ import { useTranslation } from "react-i18next";
 
 import Text from "pages/common/components/Text";
 import ButtonCustomizer from "pages/common/Button";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
+import ConfirmModal from "pages/common/ConfirmModal";
 
-import { fetchReservations, cancelReservationById } from "services/reservation";
+import {
+  fetchReservations,
+  cancelReservationById,
+  ReservationStatus,
+} from "services/reservation";
 import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
 import { useAppDispatch } from "utilities";
 import { enqueueSnackbar } from "redux/slices/snackbar";
+import classNames from "classnames";
 
 const ReservationItem = ({
   data,
@@ -40,6 +44,25 @@ const ReservationItem = ({
         <Text className="text-center">
           예약일 : {format(new Date(farmSchedule.createdAt), "yyyy/MM/dd")}{" "}
         </Text>
+        <Text
+          className={classNames(
+            "font-bold text-center",
+            (function () {
+              switch (data.reservationStatus) {
+                case ReservationStatus.BOOKING:
+                  return "text-black-default";
+                case ReservationStatus.COMPLETED:
+                  return "text-success-default";
+                case ReservationStatus.CANCELLED:
+                  return "text-error-default";
+                default:
+                  return "";
+              }
+            })()
+          )}
+        >
+          {data.reservationStatus}
+        </Text>
       </div>
       <div className="flex-grow">
         {farmInfo.name} <br />
@@ -60,71 +83,24 @@ const ReservationItem = ({
   );
 };
 
-const modalStyles = {
-  position: "absolute" as "absolute",
-  borderRadius: "20px",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-};
-
-const ConfirmModal = ({
-  open,
-  handleAccepted,
-  handleClose,
-}: {
-  open: boolean;
-  handleClose: () => void;
-  handleAccepted: () => void;
-}) => {
-  const { t } = useTranslation();
-
-  return (
-    <Modal open={open} onClose={handleClose}>
-      <Box sx={{ ...modalStyles }}>
-        <h2 className="text-center">
-          {t("pages.reservation.cancelReservationTitle")}
-        </h2>
-        <div className="mt-4 flex justify-center items-center">
-          <ButtonCustomizer
-            className="mr-4 px-8 w-1/3"
-            onClick={handleAccepted}
-          >
-            Yes
-          </ButtonCustomizer>
-          <ButtonCustomizer
-            color="secondary"
-            className="px-8 w-1/3"
-            onClick={handleClose}
-          >
-            No
-          </ButtonCustomizer>
-        </div>
-      </Box>
-    </Modal>
-  );
-};
-
 function Reservation() {
   const [reservations, setReservations] = useState([]);
   const [idCancel, setIdCancel] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { id: farmId } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const getReservations = async ({ farmId }: { farmId: string | number }) => {
+    setIsLoading(true);
     try {
       const response = await fetchReservations({ farmId });
-      setReservations(response);
+      setReservations(response.content);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -132,6 +108,7 @@ function Reservation() {
     try {
       const response = await cancelReservationById(id);
       if (response.status === HttpStatus.OK) {
+        await getReservations({ farmId: farmId });
         dispatch(
           enqueueSnackbar({
             message: "Success!",
@@ -143,7 +120,7 @@ function Reservation() {
       console.log(error);
     }
   };
-  // requestCancelReservation(item.id)
+
   useEffect(() => {
     getReservations({ farmId: farmId });
   }, []);
@@ -154,16 +131,20 @@ function Reservation() {
         RESERVATION LIST
       </div>
       <div>
-        {reservations.map((item: any) => (
-          <ReservationItem
-            key={item.id}
-            data={item}
-            handleCancel={() => {
-              setIdCancel(item.id);
-              setIsOpenModal(true);
-            }}
-          />
-        ))}
+        {isLoading ? (
+          <>...Loading</>
+        ) : (
+          reservations.map((item: any) => (
+            <ReservationItem
+              key={item.id}
+              data={item}
+              handleCancel={() => {
+                setIdCancel(item.id);
+                setIsOpenModal(true);
+              }}
+            />
+          ))
+        )}
       </div>
       <ConfirmModal
         open={isOpenModal}
@@ -177,6 +158,7 @@ function Reservation() {
           setIsOpenModal(false);
           setIdCancel(null);
         }}
+        title={t("pages.reservation.cancelReservationTitle")}
       />
     </>
   );
