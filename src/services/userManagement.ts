@@ -63,6 +63,10 @@ export const fetchPartners = async (
     .then((response) => response.data);
 };
 
+export const cancelPartnerById = (id: string | number, status: boolean) => {
+  return axiosService.patch(`admin/request-partners/${id}`, { status });
+};
+
 const endpointUserUrl = "admin/users";
 
 export enum UserType {

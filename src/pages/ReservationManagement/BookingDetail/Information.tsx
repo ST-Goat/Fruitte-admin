@@ -7,7 +7,7 @@ import ButtonCustomizer from "pages/common/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 
-import { format } from "date-fns";
+import { format, addMinutes } from "date-fns";
 import { ReservationStatus } from "services/reservation";
 
 const modalStyles = {
@@ -16,13 +16,62 @@ const modalStyles = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 500,
+  width: 336,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   pt: 2,
   px: 4,
   pb: 3,
+};
+
+const Bill = ({
+  data,
+  activityName,
+  duration,
+  startAt,
+}: {
+  data: any;
+  activityName: string;
+  duration: number;
+  startAt: string;
+}) => {
+  return (
+    <ul>
+      <h3 className="text-xl font-bold">
+        {format(new Date(data?.createdAt), "yyyy/MM/dd")}
+      </h3>
+      <h4 className="text-md font-bold">Information</h4>
+      <li className="flex items-center py-4 justify-between border-b border-grey-default">
+        <div className="text-grey-300">Status</div>
+        <div className="font-medium">{data?.billStatus}</div>
+      </li>
+      <li className="flex items-center py-4 justify-between border-b border-grey-default">
+        <div className="text-grey-300">Activity</div>
+        <div className="font-medium">{activityName}</div>
+      </li>
+      {/* <li className="flex items-center py-4 justify-between border-b border-grey-default">
+        <div className="text-grey-300">Additional service</div>
+        <div className="font-medium">Service 1</div>
+      </li> */}
+      <li className="flex items-center py-4 justify-between border-b border-grey-default">
+        <div className="text-grey-300">Time</div>
+        <div className="font-medium">{`${format(
+          new Date(startAt),
+          "HH:mm"
+        )} - ${format(addMinutes(new Date(startAt), duration), "HH:mm")}`}</div>
+      </li>
+      <li className="flex items-center py-4 justify-between border-b border-grey-default">
+        <div className="text-grey-300">People</div>
+        <div className="font-medium">{data?.teamType}</div>
+      </li>
+      <li className="pt-2 font-bold">Price</li>
+      <li className="flex items-center py-4 justify-between">
+        <div className="text-grey-300">Total price</div>
+        <div className="text-green-700">{data?.totalPrice}</div>
+      </li>
+    </ul>
+  );
 };
 
 const BookingInformation = ({
@@ -48,6 +97,7 @@ const BookingInformation = ({
     teamType,
     startAt,
     reservationStatus,
+    farmSchedule,
   } = detail;
   return (
     <>
@@ -144,7 +194,11 @@ const BookingInformation = ({
           >
             {t("pages.reservation.cancelReservation")}
           </ButtonCustomizer>
-          <ButtonCustomizer style={{ minWidth: 200 }} onClick={handleViewBill}>
+          <ButtonCustomizer
+            disabled={!bill}
+            style={{ minWidth: 200 }}
+            onClick={handleViewBill}
+          >
             {t("pages.reservation.viewBill")}
           </ButtonCustomizer>
         </div>
@@ -156,12 +210,12 @@ const BookingInformation = ({
         }}
       >
         <Box sx={{ ...modalStyles }}>
-          <ul>
-            <li>activityPrice: {bill?.activityPrice}</li>
-            <li>additionTotalPrice: {bill?.additionTotalPrice}</li>
-            <li>billStatus: {bill?.billStatus}</li>
-            <li>createdAt: {format(new Date(bill.createdAt), "yyyy/MM/dd")}</li>
-          </ul>
+          <Bill
+            data={bill}
+            activityName={farmActivity?.name}
+            duration={farmActivity?.duration}
+            startAt={farmSchedule?.startAt}
+          />
         </Box>
       </Modal>
     </>

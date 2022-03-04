@@ -75,9 +75,11 @@ const ReservationItem = ({
       </div>
       <div className="flex flex-col justify-evenly">
         {/* <ButtonCustomizer onClick={handleEdit}>수정</ButtonCustomizer> */}
-        <ButtonCustomizer color="secondary" onClick={handleCancel}>
-          예약취소
-        </ButtonCustomizer>
+        {data.reservationStatus === ReservationStatus.BOOKING && (
+          <ButtonCustomizer color="secondary" onClick={handleCancel}>
+            예약취소
+          </ButtonCustomizer>
+        )}
       </div>
     </div>
   );

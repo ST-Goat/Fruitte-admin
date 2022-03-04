@@ -81,7 +81,10 @@
             "createDate": "Create Date",
             "approveStatus": "approve",
             "pendingStatus": "pending",
-            "declinedStatus": "decilined"
+            "declinedStatus": "decilined",
+            "accepted": "Accepted",
+            "cancelTitle": "Do you want cancel this partner?",
+            "acceptedTitle": "Do you want accept this partner?"
         },
         "farmManagement": {
             "title": "농장 관리",
