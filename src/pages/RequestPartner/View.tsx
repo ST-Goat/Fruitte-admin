@@ -1,5 +1,3 @@
-import { useHistory } from "react-router";
-import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import BreadCrumb from "pages/common/BreadCrumb";
@@ -13,6 +11,7 @@ import { REQUEST_PARTNER_STATUS } from "services/userManagement";
 
 import { gettotalRowCurrent } from "utilities";
 import type { PartnerState } from "./Container";
+import ButtonCustomizer from "pages/common/Button";
 
 type PartnerViewProps = Omit<
   Omit<TablePaginationProps, "children">,
@@ -23,6 +22,7 @@ type PartnerViewProps = Omit<
   loading: Boolean;
   submitFilters: () => void;
   onChangeFilters: (name: string, value: any) => void;
+  handleCancel: (partner: { id: string | number; status: boolean }) => void;
 };
 
 const headers = [
@@ -68,6 +68,12 @@ const headers = [
     keyLabel: "pages.requestPartner.createDate",
     keyData: "createdAt",
   },
+  {
+    id: "Cancel-col",
+    keyLabel: "",
+    keyData: "cancelAction",
+    styledHead: { width: "120px" },
+  },
 ];
 
 const ItemStatus = ({ status }: { status: REQUEST_PARTNER_STATUS }) => {
@@ -105,7 +111,9 @@ function RequestPartnerView({
   rowsPerPage,
   page,
   handleChangePage,
+  handleCancel,
 }: PartnerViewProps) {
+  const { t } = useTranslation();
   return (
     <div>
       <BreadCrumb />
@@ -131,6 +139,31 @@ function RequestPartnerView({
                 createdAt: new Date(item.createdAt).toLocaleDateString(),
                 status: () => <ItemStatus status={item.status} />,
                 no: (page - 1) * rowsPerPage + i + 1,
+                cancelAction: () => {
+                  return (
+                    <ButtonCustomizer
+                      color={
+                        item.status === REQUEST_PARTNER_STATUS.APPROVE
+                          ? "secondary"
+                          : "primary"
+                      }
+                      className="w-full"
+                      onClick={() => {
+                        handleCancel({
+                          id: item.id,
+                          status:
+                            item.status === REQUEST_PARTNER_STATUS.APPROVE
+                              ? false
+                              : true,
+                        });
+                      }}
+                    >
+                      {item.status === REQUEST_PARTNER_STATUS.APPROVE
+                        ? t("common.cancel")
+                        : t("pages.requestPartner.accepted")}
+                    </ButtonCustomizer>
+                  );
+                },
               }))}
             />
           </div>
