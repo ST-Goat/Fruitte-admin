@@ -115,3 +115,15 @@ export const fetchUserDetails = (userId: string | number): Promise<User> => {
     .get(`${endpointUserUrl}/${userId}`)
     .then((response) => response.data);
 };
+
+export const changeUserPassword = ({
+  id,
+  newPassword,
+}: {
+  id: string | number;
+  newPassword: string;
+}) => {
+  return axiosService
+    .patch(`${endpointUserUrl}/${id}/change-password`, { newPassword })
+    .then((response) => response.data);
+};

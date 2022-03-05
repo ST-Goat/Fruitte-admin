@@ -59,7 +59,7 @@
             "createDate": "Create Date",
             "userDetails": "User Details",
             "deleteMember": "Delete member",
-            "resetPassword": "Reset Password",
+            "resetPassword": "Change Password",
             "farmAuthorization": "Farm Authorization",
             "date": "Date",
             "farmInformation": "Farm Information",
@@ -71,7 +71,9 @@
             "declinedStatus": "decilined",
             "active": "Active",
             "inActive": "Inactive",
-            "reservationList": "Reservation list"
+            "reservationList": "Reservation list",
+            "changePasswordTitle": "Do you want to change this password?",
+            "newPassword": "New password"
         },
         "requestPartner": {
             "title": "Request Partner",
