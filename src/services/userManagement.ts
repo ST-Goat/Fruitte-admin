@@ -88,6 +88,7 @@ export type User = {
   phone: string;
   updatedAt: Date;
   name: string;
+  avatarUrl?: string;
 };
 
 export const fetchUserList = async (params: {
@@ -106,5 +107,11 @@ export const fetchUserList = async (params: {
         userName: params.filters?.keyword,
       },
     })
+    .then((response) => response.data);
+};
+
+export const fetchUserDetails = (userId: string | number): Promise<User> => {
+  return axiosService
+    .get(`${endpointUserUrl}/${userId}`)
     .then((response) => response.data);
 };

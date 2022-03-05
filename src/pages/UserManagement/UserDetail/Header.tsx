@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import cn from "classnames";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import BreadCrumb, { BreadItem } from "pages/common/BreadCrumb";
 import SearchBox from "pages/common/SearchBox";
@@ -10,15 +10,23 @@ import Text from "pages/common/components/Text";
 
 import { userManagementUrl } from "routes";
 import ButtonCustomizer from "pages/common/Button";
+import type { User } from "services/userManagement";
 
-function UserDetailHeader() {
+function UserDetailHeader({
+  data,
+  onChangeSearch,
+  handleSearch,
+}: {
+  data: User;
+  handleSearch: () => void;
+  onChangeSearch: (text: string) => void;
+}) {
   const { t } = useTranslation();
-  let { id }: { id: string } = useParams();
   const breadCrumbs: BreadItem[] = [
     { keyLabel: "pages.userManagement.title", href: userManagementUrl },
     {
       keyLabel: "pages.userManagement.userDetails",
-      href: `${userManagementUrl}/${id}`,
+      href: `${userManagementUrl}/${data.id}`,
     },
   ];
   return (
@@ -29,25 +37,38 @@ function UserDetailHeader() {
           <Grid item xs={4}>
             <div className="flex">
               <Avatar
-                sx={{ width: 92, height: 92 }}
-                alt="#user"
-                src="https://i.pravatar.cc/300"
+                sx={{ width: 92, height: 92, fontSize: "3rem" }}
+                alt={
+                  data?.avatarUrl
+                    ? "A"
+                    : data.name
+                    ? data.name.charAt(0).toUpperCase()
+                    : data?.email
+                    ? data.email.charAt(0).toUpperCase()
+                    : ""
+                }
+                src={data?.avatarUrl ?? "/blank_image_grey.svg"}
               />
               <div className="ml-3">
-                <Text className="font-bold text-xl">홍길동</Text>
-                <Text className="font-bold text-xl">honggik@email.com</Text>
+                <Text className="font-bold text-xl">{data?.name}</Text>
+                <Text className="font-bold text-xl">{data?.email}</Text>
                 <Text
                   className={cn(
-                    "w-max px-4 py-1",
+                    "w-max px-4 py-1 mt-2",
                     "font-bold bg-grey-400 text-center text-sm",
-                    false ? "text-red-700" : "text-primary-default"
+                    data?.isActive ? "text-primary-default" : "text-red-700",
+                    "bg-grey-100"
                   )}
                 >
-                  일반
+                  {data?.isActive
+                    ? t("pages.userManagement.active")
+                    : t("pages.userManagement.inActive")}
                 </Text>
               </div>
             </div>
-            <div className="mt-8 font-bold text-xl">예약 목록</div>
+            <div className="mt-8 font-bold text-xl">
+              {t("pages.userManagement.reservationList")}
+            </div>
           </Grid>
           <Grid
             container
@@ -71,7 +92,9 @@ function UserDetailHeader() {
             <div className="w-full flex justify-end mb-4">
               <SearchBox
                 name="search"
-                onChange={(e: React.ChangeEvent<any>) => {}}
+                onChange={(e: React.ChangeEvent<any>) => {
+                  onChangeSearch(e.target.value);
+                }}
                 placeholder={t("")}
                 style={{ minWidth: "480px" }}
               />
@@ -79,9 +102,7 @@ function UserDetailHeader() {
                 <ButtonCustomizer
                   variant="primary"
                   className="text-white font-bold"
-                  onClick={() => {
-                    console.log("test");
-                  }}
+                  onClick={handleSearch}
                 >
                   {t("common.search")}
                 </ButtonCustomizer>
