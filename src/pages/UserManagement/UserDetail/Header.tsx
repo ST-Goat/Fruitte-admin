@@ -1,16 +1,17 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import cn from "classnames";
-import { Link } from "react-router-dom";
 
 import BreadCrumb, { BreadItem } from "pages/common/BreadCrumb";
 import SearchBox from "pages/common/SearchBox";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import Text from "pages/common/components/Text";
+import ButtonCustomizer from "pages/common/Button";
 
 import { userManagementUrl } from "routes";
-import ButtonCustomizer from "pages/common/Button";
 import type { User } from "services/userManagement";
+import PasswordModal from "./PasswordModal";
 
 function UserDetailHeader({
   data,
@@ -29,8 +30,11 @@ function UserDetailHeader({
       href: `${userManagementUrl}/${data.id}`,
     },
   ];
+  const [isOpenModal, setIsOpenModal] = useState({
+    changePassword: false,
+  });
   return (
-    <div>
+    <>
       <BreadCrumb data={breadCrumbs} />
       <div className="mt-6 border-b border-grey-400 pb-2">
         <Grid container>
@@ -79,15 +83,20 @@ function UserDetailHeader({
             xs={8}
           >
             <div className="w-full flex justify-end">
-              <Link className="ml-8 underline text-xl hover:opacity-80" to="#">
+              <p className="ml-8 hover:underline text-xl hover:font-bold cursor-pointer">
                 {t("pages.userManagement.deleteMember")}
-              </Link>
-              <Link className="ml-8 underline text-xl hover:opacity-80" to="#">
+              </p>
+              <p
+                className="ml-8 hover:underline text-xl hover:font-bold cursor-pointer"
+                onClick={() =>
+                  setIsOpenModal((prev) => ({ ...prev, changePassword: true }))
+                }
+              >
                 {t("pages.userManagement.resetPassword")}
-              </Link>
-              <Link className="ml-8 underline text-xl hover:opacity-80" to="#">
+              </p>
+              <p className="ml-8 hover:underline text-xl hover:font-bold cursor-pointer">
                 {t("pages.userManagement.farmAuthorization")}
-              </Link>
+              </p>
             </div>
             <div className="w-full flex justify-end mb-4">
               <SearchBox
@@ -111,7 +120,15 @@ function UserDetailHeader({
           </Grid>
         </Grid>
       </div>
-    </div>
+
+      <PasswordModal
+        userId={data?.id}
+        open={isOpenModal.changePassword}
+        handleClose={() =>
+          setIsOpenModal((prev) => ({ ...prev, changePassword: false }))
+        }
+      />
+    </>
   );
 }
 

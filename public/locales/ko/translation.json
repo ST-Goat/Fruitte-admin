@@ -71,7 +71,9 @@
             "declinedStatus": "탈퇴회원",
             "active": "Active",
             "inActive": "Inactive",
-            "reservationList": "예약 목록"
+            "reservationList": "예약 목록",
+            "changePasswordTitle": "Do you want to change this password?",
+            "newPassword": "New password"
         },
         "requestPartner": {
             "title": "Request Partner",

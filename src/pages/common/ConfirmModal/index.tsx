@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import ButtonCustomizer from "pages/common/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -29,8 +28,6 @@ const ConfirmModal = ({
   handleAccepted: () => void;
   title: string;
 }) => {
-  const { t } = useTranslation();
-
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={{ ...modalStyles }}>
