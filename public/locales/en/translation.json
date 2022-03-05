@@ -70,7 +70,8 @@
             "pendingStatus": "pending",
             "declinedStatus": "decilined",
             "active": "Active",
-            "inActive": "Inactive"
+            "inActive": "Inactive",
+            "reservationList": "Reservation list"
         },
         "requestPartner": {
             "title": "Request Partner",

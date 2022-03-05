@@ -70,7 +70,8 @@
             "pendingStatus": "농장유저 요청",
             "declinedStatus": "탈퇴회원",
             "active": "Active",
-            "inActive": "Inactive"
+            "inActive": "Inactive",
+            "reservationList": "예약 목록"
         },
         "requestPartner": {
             "title": "Request Partner",

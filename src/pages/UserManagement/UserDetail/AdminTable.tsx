@@ -4,6 +4,7 @@ import TablePaginations from "pages/common/Paginations";
 import TableCustomizer from "pages/common/Table";
 import Text from "pages/common/components/Text";
 import ButtonCustomizer from "pages/common/Button";
+import { Pagination } from "shared/comom.enum";
 
 const headers = [
   {
@@ -36,60 +37,79 @@ const headers = [
 ];
 
 export type AdminTableProps = {
+  data: { data: Array<any>; total: number };
+  isLoading: boolean;
+  pagination: Pagination;
+  setPagination: React.Dispatch<Pagination>;
   handleCancleReservation: (id: any) => void;
 };
 
-function AdminTable({ handleCancleReservation }: AdminTableProps) {
+const convertDataToView = (
+  reservationData: Array<any>,
+  translate: (text: string) => string,
+  handleCancel: (id: string | number) => void
+) => {
+  return reservationData.map((item, i) => ({
+    ...item,
+    date: () => (
+      <div>
+        <Text className="font-bold text-base">19:00</Text>
+        <Text className="font-bold text-base">2021/10/10</Text>
+        <Text className="mt-4 font-bold text-base">예약일: 10/09/2021 </Text>
+      </div>
+    ),
+    farmInformation: () => (
+      <div>
+        <Text className="text-left font-bold text-base">농장명</Text>
+        <Text className="text-left font-bold text-base">체험명</Text>
+        <Text className="mt-6 text-left text-base pr-32">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quod commodi
+          velit eum voluptatem non saepe totam. Excepturi, molestiae! Molestias
+          alia
+        </Text>
+      </div>
+    ),
+    price: () => (
+      <div>
+        <Text className="mb-4 font-bold text-base">10.000 원</Text>
+        <ButtonCustomizer
+          color="red"
+          variant="primary"
+          onClick={() => {
+            handleCancel(item.id);
+          }}
+        >
+          {translate("pages.userManagement.cancelReservation")}
+        </ButtonCustomizer>
+      </div>
+    ),
+  }));
+};
+
+function AdminTable({
+  data,
+  pagination,
+  isLoading,
+  setPagination,
+  handleCancleReservation,
+}: AdminTableProps) {
   const { t } = useTranslation();
 
-  const fakeData = [
-    {
-      id: 1,
-      date: () => (
-        <div>
-          <Text className="font-bold text-base">19:00</Text>
-          <Text className="font-bold text-base">2021/10/10</Text>
-          <Text className="mt-4 font-bold text-base">예약일: 10/09/2021 </Text>
-        </div>
-      ),
-      farmInformation: () => (
-        <div>
-          <Text className="text-left font-bold text-base">농장명</Text>
-          <Text className="text-left font-bold text-base">체험명</Text>
-          <Text className="mt-6 text-left text-base pr-32">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quod
-            commodi velit eum voluptatem non saepe totam. Excepturi, molestiae!
-            Molestias alia
-          </Text>
-        </div>
-      ),
-      price: () => (
-        <div>
-          <Text className="mb-4 font-bold text-base">10.000 원</Text>
-          <ButtonCustomizer
-            color="red"
-            variant="primary"
-            onClick={handleCancleReservation}
-          >
-            {t("pages.userManagement.cancelReservation")}
-          </ButtonCustomizer>
-        </div>
-      ),
-    },
-  ];
   return (
     <TablePaginations
-      count={100}
-      rowsPerPage={10}
-      page={1}
-      handleChangePage={() => {}}
+      count={data.total}
+      rowsPerPage={pagination.pageSize}
+      page={pagination.page}
+      handleChangePage={(newPage) => {
+        setPagination({ ...pagination, page: newPage });
+      }}
     >
       <div className="rounded-md border-2 border-grey-300">
         <TableCustomizer
           headers={headers}
-          loading={false}
-          totalRow={10}
-          data={fakeData}
+          loading={isLoading}
+          totalRow={pagination.pageSize}
+          data={convertDataToView(data.data, t, handleCancleReservation)}
         />
       </div>
     </TablePaginations>
