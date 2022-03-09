@@ -9,7 +9,8 @@ import { store } from "redux/store";
 import { enqueueSnackbar } from "redux/slices/snackbar";
 
 type Options = {
-  params: any;
+  params?: any;
+  headers?: any;
 };
 
 let isAlreadyFetchingAccessToken = false;

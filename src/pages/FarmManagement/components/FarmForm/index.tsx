@@ -174,18 +174,19 @@ function FarmForm({
     async function fetchAllUsers() {
       try {
         const response = await fetchUserList({});
-        setAllUsers(
-          response.content.map((user: User) => ({
-            id: user.id,
-            label: !user.name ? user.email : user.name,
-            value: user.id,
-          }))
-        );
+        if (!ignore)
+          setAllUsers(
+            response.content.map((user: User) => ({
+              id: user.id,
+              label: !user.name ? user.email : user.name,
+              value: user.id,
+            }))
+          );
       } catch (error) {
         console.log(error);
       }
     }
-    if (!ignore) fetchAllUsers();
+    fetchAllUsers();
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       ignore = true;

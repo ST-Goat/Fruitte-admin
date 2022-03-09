@@ -29,25 +29,25 @@ const headers = [
   {
     id: "Price-one-person-col",
     keyLabel: "pages.farmManagement.perPerson",
-    keyData: "oneMemberPrice",
+    keyData: "servicePrice[1]",
   },
 
   {
     id: "Price-two-person-col",
     keyLabel: "pages.farmManagement.twoPerson",
-    keyData: "twoMembersPrice",
+    keyData: "servicePrice[2]",
   },
 
   {
     id: "Price-three-person-col",
     keyLabel: "pages.farmManagement.threePerson",
-    keyData: "threeMembersPrice",
+    keyData: "servicePrice[3]",
   },
 
   {
     id: "Price-four-person-col",
     keyLabel: "pages.farmManagement.fourPerson",
-    keyData: "fourMembersPrice",
+    keyData: "servicePrice[4]",
   },
 ];
 export const convertFarmActivityDataView = (

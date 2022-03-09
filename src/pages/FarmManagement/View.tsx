@@ -169,19 +169,19 @@ export const convertFarmActivityDataView = (
       <ul>
         <li className="text-left">
           <b>{`${translate("pages.farmManagement.perPerson")}: `}</b>
-          {item.oneMemberPrice}
+          {item.servicePrice[1]}
         </li>
         <li className="text-left">
           <b>{`${translate("pages.farmManagement.twoPerson")}: `}</b>
-          {item.twoMembersPrice}
+          {item.servicePrice[2]}
         </li>
         <li className="text-left">
           <b>{`${translate("pages.farmManagement.threePerson")}: `}</b>
-          {item.threeMembersPrice}
+          {item.servicePrice[3]}
         </li>
         <li className="text-left">
           <b>{`${translate("pages.farmManagement.fourPerson")}: `}</b>
-          {item.fourMembersPrice}
+          {item.servicePrice[4]}
         </li>
       </ul>
     ),

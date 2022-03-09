@@ -2,10 +2,25 @@ import { PaginationDefault } from "shared/comom.enum";
 import axiosServices from "services/axiosServices";
 import { ScheduleInfor } from "./farmSchedules";
 
+// this if fix for during servicePrice is not done.
+const FIX_PREV_PRICE = {
+  oneMemberPrice: 0,
+  twoMembersPrice: 0,
+  threeMembersPrice: 0,
+  fourMembersPrice: 0,
+};
+
 export enum FarmActivityStatus {
   ACTIVE = 1,
   DEACTIVE = 0,
 }
+
+export type ServicePrice = {
+  "1": number;
+  "2": number;
+  "3": number;
+  "4": number;
+};
 
 export type Activity = {
   id: number | string;
@@ -15,12 +30,12 @@ export type Activity = {
   info: string;
   note: string;
   duration: number;
-  oneMemberPrice: number;
-  twoMembersPrice: number;
-  threeMembersPrice: number;
-  fourMembersPrice: number;
+  servicePrice: ServicePrice;
   createDate: Date;
   status: FarmActivityStatus;
+  openDays: string;
+  maxEnrolment: number;
+  activityImages: Array<any>;
 };
 
 export type FarmActivityResponses = {
@@ -92,14 +107,10 @@ export type NewActivityData = {
   info: string;
   note: string;
   duration: number;
-  oneMemberPrice: number;
-  twoMembersPrice: number;
-  threeMembersPrice: number;
-  fourMembersPrice: number;
-  activityImages: Array<{
-    type: string;
-    link: string;
-  }>;
+  servicePrice: ServicePrice;
+  openDays: string;
+  maxEnrolment: number;
+  activityImages: Array<any>;
   activityAdditionalServices: Array<ActivityAddition>;
 };
 export const createNewActivityByFarmId = async ({
@@ -109,7 +120,9 @@ export const createNewActivityByFarmId = async ({
   farmId: string | number;
   data: NewActivityData;
 }) => {
-  return axiosServices.post(`admin/farms/${farmId}/activities`, { ...data });
+  return axiosServices.post(`admin/farms/${farmId}/activities`, {
+    ...data,
+  });
 };
 
 export const deleteFarmActivity = async ({
@@ -131,14 +144,10 @@ export type ExistedActivityData = {
   info: string;
   note: string;
   duration: number;
-  oneMemberPrice: number;
-  twoMembersPrice: number;
-  threeMembersPrice: number;
-  fourMembersPrice: number;
-  activityImages: Array<{
-    type: string;
-    link: string;
-  }>;
+  servicePrice: ServicePrice;
+  openDays: string;
+  maxEnrolment: number;
+  activityImages: Array<any>;
   newActivityAdditionalServices: Array<{
     name: string;
     price: number;
@@ -161,7 +170,7 @@ export const updateExistedActivityByFarmId = async ({
 }) => {
   return axiosServices.put(
     `admin/farms/${farmId}/activities/${activityId}`,
-    data,
+    { ...data, ...FIX_PREV_PRICE },
     { params: { id: farmId, activityId: activityId } }
   );
 };
@@ -173,16 +182,17 @@ export type FarmActivityDetails = {
     description: string;
     note: string;
     activityInfo: string;
-    oneMemberPrice: number;
-    twoMembersPrice: number;
-    threeMembersPrice: number;
-    fourMembersPrice: number;
     duration: number;
+    openDays: string;
+    maxEnrolment: number;
+    activityImages: Array<any>;
     activityAdditionService: Array<{
       id: number | string;
       name: string;
       price: number;
     }>;
+    servicePrice: ServicePrice;
+    mainPictureUrl: string;
   };
   schedulesInActivity: Array<ScheduleInfor>;
 };

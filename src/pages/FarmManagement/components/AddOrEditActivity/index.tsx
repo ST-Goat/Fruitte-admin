@@ -13,6 +13,9 @@ import ButtonCustomizer from "pages/common/Button";
 import UploadImages, { UploadImageProps } from "./UploadImages";
 import OptionalProducts, { OptionalProductProps } from "./OptionalProducts";
 import BoxEditor from "./BoxEditor";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import ConfirmModal from "pages/common/ConfirmModal";
 
 import {
   NewActivityData,
@@ -28,6 +31,7 @@ import { SNACKBAR_VARIANTS } from "shared/comom.enum";
 import { differenceBy, isEqual } from "lodash";
 import { enqueueSnackbar } from "redux/slices/snackbar";
 import { useAppDispatch } from "utilities";
+import { uploadFiles } from "services/upload";
 
 type FieldItem = {
   id: string;
@@ -57,6 +61,13 @@ const requiredField = (text: string) => {
   return error;
 };
 
+const validateMaxEnrolment = (text: string) => {
+  let error = "";
+  if (!text || Number(text) < 0 || Number(text) > 4)
+    error = "This number must be bigger 0 and maximum is 4";
+  return error;
+};
+
 const fields: Array<FieldItem> = [
   {
     id: "field-name",
@@ -72,9 +83,23 @@ const fields: Array<FieldItem> = [
     component: UploadImages,
   },
   {
+    id: "field-open-days",
+    keyLabel: "pages.farmActivity.openDays",
+    name: "openDays",
+    component: Input,
+  },
+  {
+    id: "field-max-enrolment",
+    keyLabel: "pages.farmActivity.maxEnrolment",
+    name: "maxEnrolment",
+    type: "number",
+    validate: validateMaxEnrolment,
+    component: Input,
+  },
+  {
     id: "field-one-person",
     keyLabel: "pages.farmManagement.perPerson",
-    name: "oneMemberPrice",
+    name: "servicePrice[1]",
     type: "number",
     validate: validatePositiveNumber,
     component: Input,
@@ -82,7 +107,7 @@ const fields: Array<FieldItem> = [
   {
     id: "field-two-person",
     keyLabel: "pages.farmManagement.twoPerson",
-    name: "twoMembersPrice",
+    name: "servicePrice[2]",
     type: "number",
     validate: validatePositiveNumber,
     component: Input,
@@ -90,7 +115,7 @@ const fields: Array<FieldItem> = [
   {
     id: "field-three-person",
     keyLabel: "pages.farmManagement.threePerson",
-    name: "threeMembersPrice",
+    name: "servicePrice[3]",
     type: "number",
     validate: validatePositiveNumber,
     component: Input,
@@ -98,7 +123,7 @@ const fields: Array<FieldItem> = [
   {
     id: "field-four-person",
     keyLabel: "pages.farmManagement.fourPerson",
-    name: "fourMembersPrice",
+    name: "servicePrice[4]",
     type: "number",
     validate: validatePositiveNumber,
     component: Input,
@@ -157,17 +182,51 @@ const RowStyled = ({
   </>
 );
 
-const FieldWrapper = ({ item, value }: { item: FieldItem; value: any }) => {
+const FieldWrapper = ({
+  item,
+  value,
+  setFieldValue,
+}: {
+  item: FieldItem;
+  value: any;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+}) => {
   return (
     <item.component
       id={item.id}
       name={item.name}
       fieldValue={value}
+      setFieldValue={setFieldValue}
       validate={item.validate}
       type={item.type ?? "text"}
       placeholder="input any thing here..."
     />
   );
+};
+
+const handleUploadImageAws3 = async (
+  listImage: Array<any>,
+  callback?: ({ loading }: { loading: boolean }) => void
+): Promise<{ main: string; sub: string[] }> => {
+  const result: any = {
+    main: "",
+    sub: [],
+  };
+  if (callback) callback({ loading: true });
+  const response = await Promise.all(
+    listImage.map((item) =>
+      typeof item === "string"
+        ? new Promise((resolve) => resolve(item))
+        : uploadFiles({ file: item }).then((response) =>
+            response.isSuccess ? response.data?.link : null
+          )
+    )
+  ).finally(() => {
+    if (callback) callback({ loading: false });
+  });
+  result.main = response[0];
+  result.sub = response.slice(1);
+  return result;
 };
 
 const initialValues: NewActivityData = {
@@ -176,10 +235,14 @@ const initialValues: NewActivityData = {
   info: "",
   note: "",
   duration: 0,
-  oneMemberPrice: 0,
-  twoMembersPrice: 0,
-  threeMembersPrice: 0,
-  fourMembersPrice: 0,
+  servicePrice: {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+  },
+  openDays: "",
+  maxEnrolment: 0,
   activityImages: [],
   activityAdditionalServices: [],
 };
@@ -188,6 +251,8 @@ function ActivityFormItem() {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingUpload, setIsLoadingUpload] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const { farmId, activityId }: { farmId: string; activityId: string } =
     useParams();
   const [initialFormData, setInitialFormData] =
@@ -201,17 +266,20 @@ function ActivityFormItem() {
       const { farmActivity: activityResponse } = await fetchFarmActivityDetail({
         activityId: id,
       });
+
       setInitialFormData({
         name: activityResponse.name,
         description: activityResponse.description,
         info: activityResponse.activityInfo,
         note: activityResponse.note,
         duration: activityResponse.duration,
-        oneMemberPrice: activityResponse.oneMemberPrice,
-        twoMembersPrice: activityResponse.twoMembersPrice,
-        threeMembersPrice: activityResponse.threeMembersPrice,
-        fourMembersPrice: activityResponse.fourMembersPrice,
-        activityImages: [],
+        servicePrice: activityResponse.servicePrice,
+        activityImages: [
+          activityResponse.mainPictureUrl,
+          ...activityResponse.activityImages,
+        ],
+        openDays: activityResponse.openDays,
+        maxEnrolment: Number(activityResponse.maxEnrolment),
         activityAdditionalServices: activityResponse.activityAdditionService,
       });
     } catch (error) {
@@ -239,15 +307,27 @@ function ActivityFormItem() {
       info: values.info,
       note: values.note,
       duration: Number(values.duration),
-      oneMemberPrice: Number(values.oneMemberPrice),
-      twoMembersPrice: Number(values.twoMembersPrice),
-      threeMembersPrice: Number(values.threeMembersPrice),
-      fourMembersPrice: Number(values.fourMembersPrice),
+      servicePrice: {
+        "1": Number(values.servicePrice[1]),
+        "2": Number(values.servicePrice[2]),
+        "3": Number(values.servicePrice[3]),
+        "4": Number(values.servicePrice[4]),
+      },
+      openDays: values.openDays,
+      maxEnrolment: Number(values.maxEnrolment),
     };
     try {
       if (isCreate) {
         // create new data
-        newData.activityImages = values.activityImages;
+        // handle upload image with Aws3
+        const { main, sub } = await handleUploadImageAws3(
+          values.activityImages,
+          ({ loading }) => {
+            setIsLoadingUpload(loading);
+          }
+        );
+        newData.mainPictureUrl = main;
+        newData.activityImages = sub;
         newData.activityAdditionalServices = values.activityAdditionalServices;
         await createNewActivityByFarmId({
           farmId: farmId,
@@ -273,7 +353,10 @@ function ActivityFormItem() {
           listOptionalProducts,
           "id"
         );
-        newData.activityImages = values.activityImages;
+        // handle upload image with Aws3
+        // newData.activityImages = handleUploadImageAws3(values.activityImages);
+        newData.mainPictureUrl = initialFormData.activityImages[0];
+        newData.activityImages = initialFormData.activityImages.slice(1);
         newData.newActivityAdditionalServices = newList.map((value: any) => ({
           name: value.name,
           price: value.price,
@@ -308,6 +391,14 @@ function ActivityFormItem() {
     await deleteFarmActivity({
       farmId: farmId,
       activityId: activityId,
+    }).then((_) => {
+      dispatch(
+        enqueueSnackbar({
+          message: "Success!",
+          variant: SNACKBAR_VARIANTS.SUCCESS,
+        })
+      );
+      history.push(`${farmDetailUrl}/${farmId}`);
     });
   };
 
@@ -328,73 +419,91 @@ function ActivityFormItem() {
       </Grid>
     );
   return (
-    <Formik initialValues={initialFormData} onSubmit={handleSubmit}>
-      {({ values }: FormikProps<any>) => (
-        <Form>
-          <Grid container item xs={12}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <LeftHeader />
-              </Grid>
-              <RowStyled
-                leftContent={
-                  <Text className={cn("text-lg font-bold")}>
-                    {t("pages.farmActivity.title")}
-                  </Text>
-                }
-                rightContent={
-                  <div className="flex justify-end">
-                    {!isCreate && (
-                      <DeleteIcon
-                        onClick={handleDeleteActivity}
-                        sx={{
-                          cursor: "pointer",
-                          "&:active": {
-                            transform: "scale(0.8)",
-                          },
-                        }}
-                      />
-                    )}
+    <>
+      <Formik initialValues={initialFormData} onSubmit={handleSubmit}>
+        {({ values, setFieldValue }: FormikProps<any>) => (
+          <Form>
+            <Grid container item xs={12}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <LeftHeader />
+                </Grid>
+                <RowStyled
+                  leftContent={
+                    <Text className={cn("text-lg font-bold")}>
+                      {t("pages.farmActivity.title")}
+                    </Text>
+                  }
+                  rightContent={
+                    <div className="flex justify-end">
+                      {!isCreate && (
+                        <DeleteIcon
+                          onClick={() => setIsOpenModal(true)}
+                          sx={{
+                            cursor: "pointer",
+                            "&:active": {
+                              transform: "scale(0.8)",
+                            },
+                          }}
+                        />
+                      )}
+                    </div>
+                  }
+                />
+                <Grid item xs={12}>
+                  <div className="border-b-2 border-grey-default" />
+                </Grid>
+                {fields.map((item, i) => {
+                  return (
+                    <RowStyled
+                      key={item.id}
+                      leftContent={
+                        <Text className={cn("text-lg font-bold", "mt-4")}>
+                          {t(item.keyLabel)}
+                        </Text>
+                      }
+                      rightContent={
+                        <FieldWrapper
+                          item={item}
+                          value={values[item.name]}
+                          setFieldValue={setFieldValue}
+                        />
+                      }
+                    />
+                  );
+                })}
+                <Grid item xs={12}>
+                  <div className="flex justify-center mt-8 mb-32">
+                    <ButtonCustomizer type="submit" className="w-36">
+                      {t("common.save")}
+                    </ButtonCustomizer>
+                    <ButtonCustomizer
+                      type="button"
+                      className="w-36 ml-4"
+                      color="secondary"
+                    >
+                      {t("common.cancel")}
+                    </ButtonCustomizer>
                   </div>
-                }
-              />
-              <Grid item xs={12}>
-                <div className="border-b-2 border-grey-default" />
-              </Grid>
-              {fields.map((item, i) => {
-                return (
-                  <RowStyled
-                    key={item.id}
-                    leftContent={
-                      <Text className={cn("text-lg font-bold", "mt-4")}>
-                        {t(item.keyLabel)}
-                      </Text>
-                    }
-                    rightContent={
-                      <FieldWrapper item={item} value={values[item.name]} />
-                    }
-                  />
-                );
-              })}
-              <Grid item xs={12}>
-                <div className="flex justify-center mt-8 mb-32">
-                  <ButtonCustomizer type="submit" className="w-36">
-                    {t("common.save")}
-                  </ButtonCustomizer>
-                  <ButtonCustomizer
-                    type="button"
-                    className="w-36 ml-4"
-                    color="secondary"
-                  >
-                    {t("common.cancel")}
-                  </ButtonCustomizer>
-                </div>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Form>
-      )}
-    </Formik>
+          </Form>
+        )}
+      </Formik>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoadingUpload}
+      >
+        <CircularProgress color="success" size={64} />
+      </Backdrop>
+      <ConfirmModal
+        open={isOpenModal}
+        handleAccepted={handleDeleteActivity}
+        handleClose={() => setIsOpenModal(false)}
+        title={t("pages.farmActivity.confirmDelete")}
+      />
+    </>
   );
 }
 
