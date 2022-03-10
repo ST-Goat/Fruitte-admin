@@ -355,8 +355,14 @@ function ActivityFormItem() {
         );
         // handle upload image with Aws3
         // newData.activityImages = handleUploadImageAws3(values.activityImages);
-        newData.mainPictureUrl = initialFormData.activityImages[0];
-        newData.activityImages = initialFormData.activityImages.slice(1);
+        const { main, sub } = await handleUploadImageAws3(
+          values.activityImages,
+          ({ loading }) => {
+            setIsLoadingUpload(loading);
+          }
+        );
+        newData.mainPictureUrl = main;
+        newData.activityImages = sub;
         newData.newActivityAdditionalServices = newList.map((value: any) => ({
           name: value.name,
           price: value.price,
