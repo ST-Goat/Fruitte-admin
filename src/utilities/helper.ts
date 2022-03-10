@@ -63,3 +63,28 @@ export const validateEmail = (value: string) => {
 export const isDate = (date: any) => {
   return date instanceof Date && !isNaN(date.valueOf());
 };
+
+export const getValueWithKeyAdvance = (
+  obj: { [key in string]: any },
+  key: string
+) => {
+  if (typeof key !== "string" || !obj) return null;
+  let arr = key.split(".");
+  arr = arr
+    .map((item) => {
+      return item.split(/\[|\]/g);
+    })
+    .flat()
+    .filter((str) => str !== "");
+  if (arr.length === 1) return obj[key];
+
+  const calculateValue: any = (
+    obj: { [key in string]: any },
+    arrKey: string[]
+  ) => {
+    if (arrKey.length === 0) return obj;
+    return calculateValue(obj[arrKey[0]], arrKey.slice(1));
+  };
+
+  return calculateValue(obj, arr);
+};

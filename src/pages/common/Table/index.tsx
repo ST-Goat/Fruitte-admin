@@ -13,6 +13,7 @@ import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
 import { PaginationDefault } from "shared/comom.enum";
 import { NewHOC } from "utilities/useHOC";
+import { getValueWithKeyAdvance } from "utilities/helper";
 
 import "./index.scss";
 
@@ -131,7 +132,7 @@ export default function TableCustomizer({
                         </TableCell>
                       ) : (
                         <StyledTableCell align="center" {...head.styledBodyCol}>
-                          {row[head.keyData] ?? ""}
+                          {getValueWithKeyAdvance(row, head.keyData) ?? ""}
                         </StyledTableCell>
                       )}
                     </React.Fragment>
