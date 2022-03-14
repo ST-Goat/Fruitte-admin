@@ -1,5 +1,5 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 
@@ -8,11 +8,40 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 import { Size } from "shared/comom.enum";
 import { inquiryManagementUrl } from "routes";
+import { fetchInquiryDetail } from "services/inquiry";
+
+import type { Inquiry } from "services/inquiry";
+import { format } from "date-fns/esm";
 
 const InqiuryDetail = () => {
   const history = useHistory();
+  const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [detail, setDetail] = useState<Inquiry | null>(null);
 
+  let ignore = false;
+  const getInquiryDetails = async (_id: string) => {
+    if (!ignore) setIsLoading(true);
+    try {
+      const response = await fetchInquiryDetail({ id: _id });
+      if (!ignore) setDetail(response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      if (!ignore) setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    getInquiryDetails(id);
+    return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      ignore = true;
+    };
+  }, [id]);
+
+  if (!detail) return <>Something was wrong!...</>;
+  if (isLoading) return <>Loading...</>;
   return (
     <div>
       <div>
@@ -44,38 +73,27 @@ const InqiuryDetail = () => {
         <section className="flex justify-between items-center">
           <ul className="p-12 text-left">
             <li className="mb-4">
-              <b>Sender name:</b> 홍길동
+              <b>{t("pages.inquiry.senderName")}:</b> {detail.sender}
             </li>
             <li>
-              <b>Send date:</b> 2/12/2021
+              <b>{t("pages.inquiry.senderDate")}:</b>{" "}
+              {format(new Date(detail.createdAt), "yyyy/MM/dd")}
             </li>
           </ul>
           <ul className="p-12 text-left">
             <li className="mb-4">
-              <b>Phone number:</b> 012-3456-888
+              <b>{t("pages.inquiry.phoneNumber")}:</b> {detail.phone}
             </li>
             <li>
-              <b>Email:</b> honggik@email.com
+              <b>{t("common.email")}:</b> {detail.email}
             </li>
           </ul>
         </section>
         <section className="p-12">
-          <h3 className="font-bold text-left">
-            Title: I want to know how to book an activity
-          </h3>
+          <h3 className="font-bold text-left">Title: {detail.title}</h3>
           <div className="mt-4 text-left">
-            <b>Message body:</b>
-            <p>
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-              quae ab illo inventore veritatis et quasi architecto beatae vitae
-              dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-              aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
-              eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam
-              est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci
-              velit, sed quia non numquam eius modi tempora incidunt ut labore
-              et dolore magnam aliquam quaerat voluptatem.
-            </p>
+            <b>{t("pages.inquiry.messageBody")}:</b>
+            <p>{detail.content}</p>
           </div>
         </section>
       </div>

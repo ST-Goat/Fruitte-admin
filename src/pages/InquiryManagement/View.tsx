@@ -4,6 +4,7 @@ import TableCustomizer from "pages/common/Table";
 
 import { gettotalRowCurrent } from "utilities";
 import { inquiryDetailUrl } from "routes";
+import { format } from "date-fns/esm";
 
 const headers = [
   {
@@ -31,47 +32,36 @@ const headers = [
     keyLabel: "common.content",
     keyData: "content",
   },
-  {
-    id: "Action-col",
-    keyLabel: "pages.inquiry.action",
-    keyData: "action",
-    styledHead: {
-      minWidth: 150,
-    },
-  },
 ];
 
-const fakeData = [
-  {
-    id: 123123,
-    no: 1,
-    sendDate: "1/12/2021",
-    sender: "홍길동",
-    email: "honggik@email.com",
-    content:
-      "안녕하세요 체험 예약 문의 드립니다",
-    action: () => (
-      <span className="underline active:transform active:scale-95 cursor-pointer inline-block">
-        더 보기
-      </span>
-    ),
-  },
-];
-
-const InquiryView = () => {
+const InquiryView = ({
+  inquiries,
+  loading,
+  page,
+  pageSize,
+}: {
+  inquiries: { data: any[]; total: number };
+  loading: boolean;
+  page: number;
+  pageSize: number;
+}) => {
   const history = useHistory();
 
   return (
     <div>
       <TableCustomizer
         headers={headers}
-        loading={false}
+        loading={loading}
         hover
-        totalRow={gettotalRowCurrent(100, 1, 10)}
+        totalRow={inquiries.total}
         handleClickRow={(row) => {
           history.push(`${inquiryDetailUrl}/${row.id}`);
         }}
-        data={fakeData}
+        data={inquiries.data.map((item, i) => ({
+          no: (page - 1) * pageSize + i + 1,
+          sendDate: format(new Date(item.createdAt), "yyyy/MM/dd"),
+          ...item,
+        }))}
       />
     </div>
   );

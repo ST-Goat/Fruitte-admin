@@ -212,7 +212,13 @@
             "title": "Inquiry Management",
             "sendDate": "Send date",
             "action": "Action",
-            "sender": "Sender"
+            "sender": "Sender",
+            "done": "Done",
+            "new": "New",
+            "senderName": "Sender name",
+            "inquiryDetails": "Inquiry details",
+            "phoneNumber": "Phone number",
+            "messageBody": "Message body"
         },
         "faq": {
             "title": "FAQ",
