@@ -8,7 +8,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 import { Size } from "shared/comom.enum";
 import { inquiryManagementUrl } from "routes";
-import { fetchInquiryDetail } from "services/inquiry";
+import { fetchInquiryDetail, InquiryStatus } from "services/inquiry";
 
 import type { Inquiry } from "services/inquiry";
 import { format } from "date-fns/esm";
@@ -82,7 +82,7 @@ const InqiuryDetail = () => {
           </ul>
           <ul className="p-12 text-left">
             <li className="mb-4">
-              <b>{t("pages.inquiry.phoneNumber")}:</b> {detail.phone}
+              {/* <b>{t("pages.inquiry.phoneNumber")}:</b> {detail.phone} */}
             </li>
             <li>
               <b>{t("common.email")}:</b> {detail.email}
@@ -90,7 +90,20 @@ const InqiuryDetail = () => {
           </ul>
         </section>
         <section className="p-12">
-          <h3 className="font-bold text-left">Title: {detail.title}</h3>
+          {/* <h3 className="font-bold text-left">Title: {detail.title}</h3> */}
+          <h3 className="font-bold text-left">
+            {t("common.status")}:{" "}
+            <span
+              className={classNames(
+                "font-bold",
+                detail.status === InquiryStatus.DONE
+                  ? "text-success-default"
+                  : "text-info-default"
+              )}
+            >
+              {detail.status}
+            </span>
+          </h3>
           <div className="mt-4 text-left">
             <b>{t("pages.inquiry.messageBody")}:</b>
             <p>{detail.content}</p>
