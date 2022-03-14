@@ -212,7 +212,13 @@
             "title": "문의 관리",
             "sendDate": "문의 받은 날짜",
             "action": "액션",
-            "sender": "발송자"
+            "sender": "발송자",
+            "done": "Done",
+            "new": "New",
+            "senderName": "Sender name",
+            "inquiryDetails": "Inquiry details",
+            "phoneNumber": "Phone number",
+            "messageBody": "Message body"
         },
         "faq": {
             "title": "FAQ",
