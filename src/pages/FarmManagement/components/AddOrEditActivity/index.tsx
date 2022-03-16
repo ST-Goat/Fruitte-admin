@@ -28,7 +28,7 @@ import {
 } from "services/farmActivity";
 import { farmDetailUrl } from "routes";
 import { SNACKBAR_VARIANTS } from "shared/comom.enum";
-import { differenceBy, isEqual } from "lodash";
+import { differenceBy, difference, isEqual, without } from "lodash";
 import { enqueueSnackbar } from "redux/slices/snackbar";
 import { useAppDispatch } from "utilities";
 import { uploadFiles } from "services/upload";
@@ -363,6 +363,10 @@ function ActivityFormItem() {
         );
         newData.mainPictureUrl = main;
         newData.activityImages = sub;
+        newData.delImageLinks = difference(
+          without(initialFormData.activityImages, main),
+          sub
+        );
         newData.newActivityAdditionalServices = newList.map((value: any) => ({
           name: value.name,
           price: value.price,
