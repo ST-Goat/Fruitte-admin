@@ -32,7 +32,9 @@
     "from": "에서",
     "to": "에",
     "before": "전에",
-    "loading": "로딩"
+    "loading": "로딩",
+    "open": "Open",
+    "resolved": "Resolved"
   },
   "pages": {
     "login": {
@@ -124,7 +126,8 @@
       "threePerson": "3인 요금",
       "fourPerson": "4인 요금",
       "twoWeeks": "2주",
-      "fourWeeks": "4주"
+      "fourWeeks": "4주",
+      "feedbackDetails": "Feedback Details"
     },
     "farmActivity": {
       "title": "농장 체험",

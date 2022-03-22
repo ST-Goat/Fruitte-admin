@@ -88,6 +88,17 @@ export enum SNACKBAR_VARIANTS {
   INFO = "info",
 }
 
+export enum USER_TYPES {
+  ADMIN = "ADMIN",
+  NORMAL = "NORMAL",
+  OTHER = "OTHER",
+  FARMER = "FARMER",
+}
+
+export enum EVENT_TYPES {
+  FEEDBACK_RESOLVED = "FEEDBACK_RESOLVED",
+}
+
 export type Pagination = {
   page: number;
   pageSize: number;

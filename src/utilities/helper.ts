@@ -1,3 +1,4 @@
+import { EVENT_TYPES } from "shared/comom.enum";
 import CONFIGS from "shared/configs";
 
 export const guid = () => {
@@ -87,4 +88,13 @@ export const getValueWithKeyAdvance = (
   };
 
   return calculateValue(obj, arr);
+};
+
+export const triggerEvent = (
+  eventType: EVENT_TYPES,
+  data?: any,
+  element = window
+) => {
+  const event = new CustomEvent(eventType, { detail: data });
+  element.dispatchEvent(event);
 };
