@@ -44,6 +44,7 @@ import CoPresentIcon from "@mui/icons-material/CoPresent";
 import QuizIcon from "@mui/icons-material/Quiz";
 import FaqAddOrEdit from "pages/FaqManagement/AddOrEdit";
 import RequestPartner from "pages/RequestPartner";
+import FeedbackDetail from "pages/FarmManagement/FarmDetail/Feedback/Detail";
 
 export type MenuItemProps = {
   key: string;
@@ -121,6 +122,13 @@ export const menuItems: MenuItemProps[] = [
         label: "",
         to: `${farmReservationUrl}/:id`,
         component: AddOrEditReservation,
+      },
+      {
+        key: "farm-management-feedback-detail",
+        label: "",
+        to: `${farmDetailUrl}/:id/feedbacks/:feedbackId`,
+        exact: true,
+        component: FeedbackDetail,
       },
     ],
   },
