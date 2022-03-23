@@ -162,7 +162,7 @@
       "createdSchedule": "확정된 일정"
     },
     "announcement": {
-      "title": "전송 날짜",
+      "title": "알림 관리",
       "createDate": "생성일",
       "createAnnouncement": "공지사항 생성",
       "createModalTitle": "정말 해당 공지사항을 생성 하시겠습니까?",
