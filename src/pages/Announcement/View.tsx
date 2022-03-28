@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory } from "react-router-dom";
+import DOMPurify from "dompurify";
 
 import TableCustomizer from "pages/common/Table";
 import ButtonCustomizer from "pages/common/Button";
@@ -11,6 +12,11 @@ import Box from "@mui/material/Box";
 
 import { gettotalRowCurrent } from "utilities/paginations";
 import { announcementUrl } from "routes";
+import { format } from "date-fns/esm";
+import { HttpStatus, Pagination, SNACKBAR_VARIANTS } from "shared/comom.enum";
+import { deleteAnnouncement } from "services/announcement";
+import { enqueueSnackbar } from "redux/slices/snackbar";
+import { useAppDispatch } from "utilities/useHook";
 
 const headers = [
   {
@@ -70,7 +76,7 @@ const modalStyles = {
 };
 
 type ModalContentType = {
-  type: "create" | "edit" | "delete" | null;
+  type: "create" | "delete" | null;
   title: string;
   leftBtn: string;
   rightBtn: string;
@@ -113,38 +119,50 @@ const ConfirmModal = ({
 
 const convertData = (
   data: any[],
+  history: any,
   Modals: { [key: string]: ModalContentType },
+  pagination: Pagination,
   handleOpenModal: (modal: ModalContentType, id: any) => void
 ) => {
-  const fakeData = [
-    {
-      id: "fake-id-1",
-      no: 1,
-      title: "test-title",
-      content: "test-content",
-      creationDate: new Date().toLocaleDateString(),
-      delete: () => (
-        <DeleteIcon
-          onClick={() => {
-            handleOpenModal(Modals.delete, "fake-id-1");
-          }}
-          className="cursor-pointer active:transform active:scale-75"
-        />
-      ),
-      edit: () => (
-        <EditIcon
-          onClick={() => {
-            handleOpenModal(Modals.edit, "fake-id-1");
-          }}
-          className="cursor-pointer active:transform active:scale-75"
-        />
-      ),
-    },
-  ];
-  return fakeData;
+  return data.map((item, index) => ({
+    ...item,
+    no: (pagination.page - 1) * pagination.pageSize + index + 1,
+    creationDate: format(new Date(item.createdAt), "yyyy/MM/dd"),
+    content: () => (
+      <div
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.content) }}
+      />
+    ),
+    delete: () => (
+      <DeleteIcon
+        onClick={() => {
+          handleOpenModal(Modals.delete, item.id);
+        }}
+        className="cursor-pointer active:transform active:scale-75"
+      />
+    ),
+    edit: () => (
+      <EditIcon
+        onClick={() => {
+          history.push(`${announcementUrl}/${item.id}`);
+        }}
+        className="cursor-pointer active:transform active:scale-75"
+      />
+    ),
+  }));
 };
 
-function AnnouncementView() {
+function AnnouncementView({
+  isLoading,
+  announcements,
+  pagination,
+  handleRefresh,
+}: {
+  isLoading: boolean;
+  announcements: { data: any[]; total: number };
+  pagination: Pagination;
+  handleRefresh: () => void;
+}) {
   const { t } = useTranslation();
   const history = useHistory();
   const Modals: { [key: string]: ModalContentType } = {
@@ -152,12 +170,6 @@ function AnnouncementView() {
       type: "create",
       title: t("pages.announcement.createModalTitle"),
       leftBtn: t("common.create"),
-      rightBtn: t("common.cancel"),
-    },
-    edit: {
-      type: "edit",
-      title: t("pages.announcement.editModalTitle"),
-      leftBtn: t("common.edit"),
       rightBtn: t("common.cancel"),
     },
     delete: {
@@ -175,7 +187,7 @@ function AnnouncementView() {
     rightBtn: "",
   });
   const [idSelected, setIdSelected] = useState(null);
-  const [announcementList, setAnnouncementList] = useState([]);
+  const dispatch = useAppDispatch();
 
   const handleOpenModal = (modal: ModalContentType, id: any) => {
     setModalContent(modal);
@@ -188,15 +200,32 @@ function AnnouncementView() {
     setIdSelected(null);
   };
 
+  const deletingAnnouncement = async (_id: string) => {
+    try {
+      const response = await deleteAnnouncement({ id: _id });
+      if (response.status === HttpStatus.OK) {
+        handleRefresh();
+        dispatch(
+          enqueueSnackbar({
+            message: "Success!",
+            variant: SNACKBAR_VARIANTS.SUCCESS,
+          })
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      handleCloseModal();
+    }
+  };
+
   const handleAccepted = () => {
     switch (modalContent.type) {
       case "create":
         history.push(`${announcementUrl}/create`);
         break;
-      case "edit":
-        history.push(`${announcementUrl}/${idSelected}`);
-        break;
       case "delete":
+        if (idSelected) deletingAnnouncement(idSelected);
         break;
       default:
         break;
@@ -215,9 +244,15 @@ function AnnouncementView() {
       <TableCustomizer
         headers={headers}
         hover={false}
-        loading={false}
+        loading={isLoading}
         totalRow={gettotalRowCurrent(100, 1, 10)}
-        data={convertData(announcementList, Modals, handleOpenModal)}
+        data={convertData(
+          announcements.data,
+          history,
+          Modals,
+          pagination,
+          handleOpenModal
+        )}
         handleClickRow={(row) => {
           // history.push(`${location.pathname}/${row.id}`);
         }}
