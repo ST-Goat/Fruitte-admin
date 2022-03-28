@@ -25,6 +25,7 @@ import { useAppDispatch, triggerEvent } from "utilities";
 import { farmDetailUrl } from "routes";
 import { gettotalRowCurrent, useEventListener } from "utilities";
 import { enqueueSnackbar } from "redux/slices/snackbar";
+import { throttle } from "lodash";
 
 const feedbackHeaders = [
   {
@@ -71,9 +72,11 @@ export type Filters = {
 const CheckBoxAction = ({
   feedBackId,
   status,
+  handleRefresh,
 }: {
   feedBackId: string;
   status: FeedbackStatus;
+  handleRefresh: () => void;
 }) => {
   const [checked, setChecked] = useState(
     status === FeedbackStatus.ON_GOING ? false : true
@@ -88,6 +91,7 @@ const CheckBoxAction = ({
             variant: SNACKBAR_VARIANTS.SUCCESS,
           })
         );
+        throttle(handleRefresh, 300);
       });
     }
   });
@@ -107,7 +111,8 @@ const convertFeedbackData = (
   data: FeedbackType[],
   page: number,
   pageSize: number,
-  translate: (text: string) => string
+  translate: (text: string) => string,
+  handleRefresh: () => void
 ) => {
   return data.map((item, index) => ({
     id: item.id,
@@ -129,7 +134,13 @@ const convertFeedbackData = (
           : translate("common.resolved")}
       </div>
     ),
-    read: () => <CheckBoxAction feedBackId={item.id} status={item.status} />,
+    read: () => (
+      <CheckBoxAction
+        feedBackId={item.id}
+        status={item.status}
+        handleRefresh={handleRefresh}
+      />
+    ),
   }));
 };
 
@@ -221,7 +232,8 @@ function Feedback() {
                 feedbacks.data,
                 pagination.page,
                 pagination.pageSize,
-                t
+                t,
+                () => setReload((prev) => !prev)
               )}
               handleClickRow={(row) => {
                 history.push(`${farmDetailUrl}/${farmId}/feedbacks/${row.id}`);
@@ -237,7 +249,7 @@ function Feedback() {
           }}
           color="secondary"
         >
-          Mark as resolved
+          {t("pages.farmManagement.markAsResolved")}
         </ButtonCustomizer>
       </div>
     </>

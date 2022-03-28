@@ -75,7 +75,8 @@
             "inActive": "Inactive",
             "reservationList": "Reservation list",
             "changePasswordTitle": "Do you want to change this password?",
-            "newPassword": "New password"
+            "newPassword": "New password",
+            "deleteModalTitle": "Are you sure you want to delete this user?"
         },
         "requestPartner": {
             "title": "Request Partner",
@@ -127,7 +128,9 @@
             "fourPerson": "4 person",
             "twoWeeks": "2 weeks",
             "fourWeeks": "4 weeks",
-            "feedbackDetails": "Feedback Details"
+            "feedbackDetails": "Feedback Details",
+            "deleteFarmModalTitle": "Are you sure you want to delete this farm?",
+            "markAsResolved": "Mark as resolved"
         },
         "farmActivity": {
             "title": "Farm Activity",

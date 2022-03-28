@@ -107,7 +107,12 @@ export const fetchUserList = async (params: {
         userName: params.filters?.keyword,
       },
     })
-    .then((response) => response.data);
+    .then((response) => ({
+      ...response.data,
+      content: response.data.content.filter(
+        (user: User) => user.userType !== UserType.ADMIN
+      ),
+    }));
 };
 
 export const fetchUserDetails = (userId: string | number): Promise<User> => {
@@ -126,4 +131,10 @@ export const changeUserPassword = ({
   return axiosService
     .patch(`${endpointUserUrl}/${id}/change-password`, { newPassword })
     .then((response) => response.data);
+};
+
+export const deleteUserWithId = (userId: string | number) => {
+  return axiosService.delete(`${endpointUserUrl}/${userId}`, {
+    params: { id: userId },
+  });
 };
