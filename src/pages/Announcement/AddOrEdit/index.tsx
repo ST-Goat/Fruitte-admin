@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { isEqual } from "lodash";
 
 import InputWithLabel, {
@@ -18,6 +18,13 @@ import {
 import JoditEditor from "jodit-react";
 import ButtonCustomizer from "pages/common/Button";
 
+import {
+  createNewAnnouncement,
+  fetchAnnouncementDetail,
+} from "services/announcement";
+import { useAppDispatch } from "utilities/useHook";
+import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
+import { enqueueSnackbar } from "redux/slices/snackbar";
 import { announcementUrl } from "routes";
 
 type JoditEditorCustomizerProps = {
@@ -56,45 +63,75 @@ const JoditEditorCustomizer = memo(
   ) => isEqual(prevProps, nextProps)
 );
 
-const fakeItem = {
-  title: "fake-title",
-  content: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum`,
-};
-
 const initialValue = {
   title: "",
   content: "",
 };
+type announcementForm = {
+  title: string;
+  content: string;
+};
 function AddOrEdit() {
-  const location = useLocation();
+  const { id: announcementId } = useParams<{ id: string }>();
   const { t } = useTranslation();
-  const [announcement, setAnnouncement] = useState<{
-    title: string;
-    content: string;
-  }>(initialValue);
+  const [isLoading, setIsLoading] = useState(false);
+  const [announcement, setAnnouncement] =
+    useState<announcementForm>(initialValue);
+  const getDetailOfAnnouncementId = async (_id: string) => {
+    setIsLoading(true);
+    try {
+      const response = await fetchAnnouncementDetail({ id: _id });
+      if (response.status === HttpStatus.OK) {
+        setAnnouncement({
+          title: response.data.content.title,
+          content: response.data.content.content,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (location.pathname !== `/${announcementUrl}/create`) {
-      //fetch data
-      setAnnouncement(fakeItem);
+    if (announcementId !== "create") {
+      getDetailOfAnnouncementId(announcementId);
     }
-  }, []);
+  }, [announcementId]);
+
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+  const handleSubmit = async (values: announcementForm) => {
+    try {
+      const response = await createNewAnnouncement(values);
+      if (response.status === HttpStatus.OK) {
+        dispatch(
+          enqueueSnackbar({
+            message: "Success!",
+            variant: SNACKBAR_VARIANTS.SUCCESS,
+          })
+        );
+        history.push(announcementUrl);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
       <h1 className="mb-4 font-bold text-4xl">
         {t("pages.announcement.title")}
       </h1>
-      {Boolean(announcement) ? (
+      {Boolean(announcement && !isLoading) ? (
         <div className="p-8">
           <Formik
             initialValues={{
               title: announcement.title,
               content: announcement.content,
             }}
-            onSubmit={(values) => {
-              console.log("submit", values);
-            }}
+            onSubmit={handleSubmit}
           >
             {(props: FormikProps<any>) => (
               <Form>
