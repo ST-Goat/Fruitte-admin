@@ -8,10 +8,17 @@ import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import Text from "pages/common/components/Text";
 import ButtonCustomizer from "pages/common/Button";
+import ConfirmModal from "pages/common/ConfirmModal";
+import PasswordModal from "./PasswordModal";
+
+import { deleteUserWithId } from "services/userManagement";
 
 import { userManagementUrl } from "routes";
 import type { User } from "services/userManagement";
-import PasswordModal from "./PasswordModal";
+import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
+import { useHistory } from "react-router-dom";
+import { useAppDispatch } from "utilities/useHook";
+import { enqueueSnackbar } from "redux/slices/snackbar";
 
 function UserDetailHeader({
   data,
@@ -23,6 +30,8 @@ function UserDetailHeader({
   onChangeSearch: (text: string) => void;
 }) {
   const { t } = useTranslation();
+  const history = useHistory();
+  const dispatch = useAppDispatch();
   const breadCrumbs: BreadItem[] = [
     { keyLabel: "pages.userManagement.title", href: userManagementUrl },
     {
@@ -32,7 +41,25 @@ function UserDetailHeader({
   ];
   const [isOpenModal, setIsOpenModal] = useState({
     changePassword: false,
+    deletedUser: false,
   });
+
+  const handleDeleteUser = async (_id: string | number) => {
+    try {
+      const response = await deleteUserWithId(_id);
+      if (response.status === HttpStatus.OK) {
+        dispatch(
+          enqueueSnackbar({
+            message: "Success!",
+            variant: SNACKBAR_VARIANTS.SUCCESS,
+          })
+        );
+        history.push(userManagementUrl);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <BreadCrumb data={breadCrumbs} />
@@ -83,7 +110,12 @@ function UserDetailHeader({
             xs={8}
           >
             <div className="w-full flex justify-end">
-              <p className="ml-8 hover:underline text-xl hover:font-bold cursor-pointer">
+              <p
+                className="ml-8 hover:underline text-xl hover:font-bold cursor-pointer"
+                onClick={() => {
+                  setIsOpenModal((prev) => ({ ...prev, deletedUser: true }));
+                }}
+              >
                 {t("pages.userManagement.deleteMember")}
               </p>
               <p
@@ -120,6 +152,17 @@ function UserDetailHeader({
           </Grid>
         </Grid>
       </div>
+      <ConfirmModal
+        open={isOpenModal.deletedUser}
+        handleAccepted={() => {
+          setIsOpenModal((prev) => ({ ...prev, deletedUser: false }));
+          handleDeleteUser(data.id);
+        }}
+        handleClose={() => {
+          setIsOpenModal((prev) => ({ ...prev, deletedUser: false }));
+        }}
+        title={t("pages.userManagement.deleteModalTitle")}
+      />
 
       <PasswordModal
         userId={data?.id}
