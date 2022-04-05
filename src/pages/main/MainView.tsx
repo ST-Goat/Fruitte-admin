@@ -1,7 +1,27 @@
+import { format } from "date-fns";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { getDashboardDetail, DashboardDetail } from "services/dashboard";
+import { HttpStatus } from "shared/comom.enum";
 
 const MainView: React.FC = () => {
   const { t } = useTranslation();
+  const [detail, setDetail] = useState<DashboardDetail | null>(null);
+
+  useEffect(() => {
+    async function getDetail() {
+      try {
+        const res = await getDashboardDetail();
+        if (res.status === HttpStatus.OK) {
+          setDetail(res.data.content);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getDetail();
+  }, []);
+
   return (
     <div>
       <h1 className="font-bold text-lg">{t("pages.dashboard.title")}</h1>
@@ -21,19 +41,38 @@ const MainView: React.FC = () => {
         </thead>
         <tbody>
           <tr>
-            <td>{`${t("pages.dashboard.settlementDay")} : 21/12/12`}</td>
-            <td>{`${t("pages.dashboard.settlementDay")}: 21/12/12`}</td>
-            <td>{`${t("pages.dashboard.question")} : 21`}</td>
+            <td>{`${t("pages.dashboard.settlementDay")} : ${
+              detail
+                ? format(
+                    new Date(detail?.incomingReservationDate),
+                    "yyyy/MM/dd"
+                  )
+                : ""
+            }`}</td>
+            <td>{`${t("pages.dashboard.settlementDay")}: ${
+              detail
+                ? format(new Date(detail?.recentReservationDate), "yyyy/MM/dd")
+                : ""
+            }`}</td>
+            <td>{`${t("pages.dashboard.question")} : ${
+              detail?.remainInquiry
+            }`}</td>
           </tr>
           <tr>
-            <td>{`${t("pages.dashboard.totalAmount")} : 21/12/12`}</td>
-            <td>{`${t("pages.dashboard.totalAmount")}: 21/12/12`}</td>
-            <td>{`${t("pages.dashboard.proposal")} : 1`}</td>
+            <td>{`${t("pages.dashboard.totalAmount")} : ${
+              detail?.incomingAmount
+            }`}</td>
+            <td>{`${t("pages.dashboard.totalAmount")}: ${
+              detail?.recentAmount
+            }`}</td>
+            <td>{`${t("pages.dashboard.proposal")} : ${
+              detail?.remainRequestPartner
+            }`}</td>
           </tr>
           <tr>
             <td></td>
             <td></td>
-            <td className="text-left">feedback: feedback</td>
+            <td className="text-left">feedback: {detail?.remainFeedback}</td>
           </tr>
         </tbody>
       </table>
