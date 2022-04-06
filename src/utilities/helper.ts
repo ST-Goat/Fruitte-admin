@@ -42,8 +42,8 @@ export const removeTokenInStorage = () => {
 export const validatePhone = (phone: string) => {
   let error;
   if (!phone) error = "Phone is required!";
-  if (!/[0-9]{3}-[0-9]{3}-[0-9]{4}/g.test(phone))
-    error = "Phone format is incorrect!";
+  if (!/[0-9]{3}-[0-9]{4}-[0-9]{4}/g.test(phone))
+    error = "Phone format is incorrect! (XXX-XXXX-XXXX)";
   return error;
 };
 
