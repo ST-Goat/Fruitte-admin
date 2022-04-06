@@ -101,7 +101,7 @@ function FarmDetail() {
       {
         id: 0,
         children: isLoading ? (
-          <>...loading</>
+          <>{t("common.loading")}</>
         ) : (
           <FarmForm farmId={farmId} isCreate={false} initData={detail} />
         ),

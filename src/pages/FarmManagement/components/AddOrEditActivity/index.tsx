@@ -412,7 +412,7 @@ function ActivityFormItem() {
     });
   };
 
-  if (isLoading) return <>...Loading</>;
+  if (isLoading) return <>{t("common.loading")}</>;
   if (!initialFormData || isErrorActivityDetail)
     return (
       <Grid container spacing={3}>

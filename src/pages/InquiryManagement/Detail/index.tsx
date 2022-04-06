@@ -41,7 +41,7 @@ const InqiuryDetail = () => {
   }, [id]);
 
   if (!detail) return <>Something was wrong!...</>;
-  if (isLoading) return <>Loading...</>;
+  if (isLoading) return <>{t("common.loading")}</>;
   return (
     <div>
       <div>
