@@ -39,7 +39,7 @@ const headers = [
   },
   {
     id: "CreationDate-col",
-    keyLabel: "pages.announcement.title",
+    keyLabel: "pages.farmManagement.sendDate",
     keyData: "creationDate",
   },
   {
