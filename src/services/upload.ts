@@ -31,7 +31,8 @@ export const uploadFileToAws3 = async ({
 }) => {
   const formData = new FormData();
   formData.append("Content-Type", fileType);
-  Object.entries(JSON.parse(presignedPostUrl.fields)).forEach(([k, v]) => {
+  const presignedFields = JSON.parse(presignedPostUrl.fields);
+  Object.entries(presignedFields).forEach(([k, v]) => {
     formData.append(k, v as any);
   });
   formData.append("file", fileContents);
@@ -39,13 +40,11 @@ export const uploadFileToAws3 = async ({
   const response = await axios.post(presignedPostUrl.url, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
-  const nameFile = fileContents.name;
-  if (!nameFile) return null;
+  let nameFile = null;
   if (response.status === HttpStatus.NO_CONTENT) {
-    const newNameFile = nameFile.replaceAll(" ", "+");
-    return `${presignedPostUrl.url}/${newNameFile}`;
+    nameFile = `${presignedPostUrl.url}/${presignedFields.key}`;
   }
-  return null;
+  return nameFile;
 };
 
 export type UploadFileResponse = {

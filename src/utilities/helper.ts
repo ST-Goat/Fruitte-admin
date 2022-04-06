@@ -1,3 +1,4 @@
+import { EVENT_TYPES } from "shared/comom.enum";
 import CONFIGS from "shared/configs";
 
 export const guid = () => {
@@ -41,8 +42,8 @@ export const removeTokenInStorage = () => {
 export const validatePhone = (phone: string) => {
   let error;
   if (!phone) error = "Phone is required!";
-  if (!/[0-9]{3}-[0-9]{3}-[0-9]{4}/g.test(phone))
-    error = "Phone format is incorrect!";
+  if (!/[0-9]{3}-[0-9]{4}-[0-9]{4}/g.test(phone))
+    error = "Phone format is incorrect! (XXX-XXXX-XXXX)";
   return error;
 };
 
@@ -87,4 +88,13 @@ export const getValueWithKeyAdvance = (
   };
 
   return calculateValue(obj, arr);
+};
+
+export const triggerEvent = (
+  eventType: EVENT_TYPES,
+  data?: any,
+  element = window
+) => {
+  const event = new CustomEvent(eventType, { detail: data });
+  element.dispatchEvent(event);
 };

@@ -32,7 +32,9 @@
     "from": "에서",
     "to": "에",
     "before": "전에",
-    "loading": "로딩"
+    "loading": "로딩",
+    "open": "처리중",
+    "resolved": "처리완료"
   },
   "pages": {
     "login": {
@@ -73,7 +75,8 @@
       "inActive": "비활성",
       "reservationList": "예약 목록",
       "changePasswordTitle": "비밀번호 변경",
-      "newPassword": "새 비밀번호"
+      "newPassword": "새 비밀번호",
+      "deleteModalTitle": "정말로 이 사용자를 삭제하시겠습니까?"
     },
     "requestPartner": {
       "title": "제안 관리",
@@ -124,7 +127,10 @@
       "threePerson": "3인 요금",
       "fourPerson": "4인 요금",
       "twoWeeks": "2주",
-      "fourWeeks": "4주"
+      "fourWeeks": "4주",
+      "feedbackDetails": "피드백 상세",
+      "deleteFarmModalTitle": "정말로 이 농장을 삭제하시겠습니까?",
+      "markAsResolved": "처리완로 표시"
     },
     "farmActivity": {
       "title": "농장 체험",

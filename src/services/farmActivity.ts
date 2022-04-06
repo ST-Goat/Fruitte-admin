@@ -3,12 +3,6 @@ import axiosServices from "services/axiosServices";
 import { ScheduleInfor } from "./farmSchedules";
 
 // this if fix for during servicePrice is not done.
-const FIX_PREV_PRICE = {
-  oneMemberPrice: 0,
-  twoMembersPrice: 0,
-  threeMembersPrice: 0,
-  fourMembersPrice: 0,
-};
 
 export enum FarmActivityStatus {
   ACTIVE = 1,
@@ -148,6 +142,7 @@ export type ExistedActivityData = {
   openDays: string;
   maxEnrolment: number;
   activityImages: Array<any>;
+  delImageLinks: Array<any>;
   newActivityAdditionalServices: Array<{
     name: string;
     price: number;
@@ -170,7 +165,7 @@ export const updateExistedActivityByFarmId = async ({
 }) => {
   return axiosServices.put(
     `admin/farms/${farmId}/activities/${activityId}`,
-    { ...data, ...FIX_PREV_PRICE },
+    { ...data },
     { params: { id: farmId, activityId: activityId } }
   );
 };

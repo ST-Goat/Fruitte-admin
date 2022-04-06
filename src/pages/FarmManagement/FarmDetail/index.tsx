@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import LeftHeader from "../components/LeftHeader";
 import Feedback from "./Feedback";
@@ -9,11 +10,18 @@ import Reservation from "./Reservation";
 import Activities from "./Activities";
 import Text from "pages/common/components/Text";
 import Schedule from "./Schedule";
+import ConfirmModal from "pages/common/ConfirmModal";
 
-import { RouteParams } from "shared/comom.enum";
-import { fetchFarmDetail, FarmerItem } from "services/farmManagement";
+import { HttpStatus, RouteParams, SNACKBAR_VARIANTS } from "shared/comom.enum";
+import {
+  fetchFarmDetail,
+  FarmerItem,
+  deleteFarmWithId,
+} from "services/farmManagement";
 import { changeTabWithId } from "redux/slices/farm";
 import { useAppDispatch, useAppSelector } from "utilities";
+import { enqueueSnackbar } from "redux/slices/snackbar";
+import { farmManagementUrl } from "routes";
 
 type TabPanelProps = {
   children?: React.ReactNode;
@@ -51,13 +59,16 @@ export const initialFarmDetails = {
 };
 
 function FarmDetail() {
+  const { t } = useTranslation();
   const { id: farmId } = useParams<RouteParams>();
   const dispatch = useAppDispatch();
+  const history = useHistory();
   const tabIdCurrent = useAppSelector(
     (state) => state.farm.tabControllers.selected
   );
   const [isLoading, setIsLoading] = useState(false);
   const [detail, setDetail] = useState(initialFarmDetails);
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   useEffect(() => {
     async function getFarmData(farmId: string) {
@@ -120,11 +131,34 @@ function FarmDetail() {
     [isLoading, detail, farmId]
   );
 
+  const handleDeleteFarm = async (_id: string) => {
+    try {
+      const response = await deleteFarmWithId(_id);
+      if (response.status === HttpStatus.OK) {
+        dispatch(
+          enqueueSnackbar({
+            message: "Success!",
+            variant: SNACKBAR_VARIANTS.SUCCESS,
+          })
+        );
+        history.push(farmManagementUrl);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
       <div className="flex justify-between items-center w-full">
         <LeftHeader />
-        <Text className="underline cursor-pointer">미사용 처리</Text>
+        <Text
+          className="hover:underline cursor-pointer"
+          onClick={() => {
+            setIsOpenModal(true);
+          }}
+        >
+          {t("common.delete")}
+        </Text>
       </div>
       <TabHeader
         tabs={tabList}
@@ -145,6 +179,17 @@ function FarmDetail() {
           );
         })}
       </TabHeader>
+      <ConfirmModal
+        open={isOpenModal}
+        handleAccepted={() => {
+          setIsOpenModal(false);
+          handleDeleteFarm(farmId);
+        }}
+        handleClose={() => {
+          setIsOpenModal(false);
+        }}
+        title={t("pages.farmManagement.deleteFarmModalTitle")}
+      />
     </div>
   );
 }

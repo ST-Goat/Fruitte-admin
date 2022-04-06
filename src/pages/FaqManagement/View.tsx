@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { faqDetailUrl } from "routes";
 import { useTranslation } from "react-i18next";
+import DOMPurify from "dompurify";
 
 import TableCustomizer from "pages/common/Table";
 import { deleteFaq, FaqItem } from "services/faq";
@@ -92,7 +93,11 @@ const convertFaqToViews = (
     id: item.id,
     no: (page - 1) * pageSize + index + 1,
     question: item.question,
-    answer: () => <div dangerouslySetInnerHTML={{ __html: item.answer }} />,
+    answer: () => (
+      <div
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.answer) }}
+      />
+    ),
     createAt: "#fake",
     editAction: () => (
       <EditIcon

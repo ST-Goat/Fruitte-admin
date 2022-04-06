@@ -8,6 +8,10 @@ function CheckBoxCustomizer(props: any) {
         "&.Mui-checked": {
           color: "#4C9C2E",
         },
+        "&.Mui-disabled": {
+          color: "#828282",
+          opacity: 0.6,
+        },
       }}
     />
   );

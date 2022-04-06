@@ -142,3 +142,11 @@ export const updateFarmWithData = async ({
     districtId: 1,
   });
 };
+
+export const deleteFarmWithId = async (farmId: string | number) => {
+  return axiosServices.delete(`admin/farms/${farmId}`, {
+    params: {
+      id: farmId,
+    },
+  });
+};
