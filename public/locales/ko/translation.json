@@ -32,9 +32,10 @@
     "from": "에서",
     "to": "에",
     "before": "전에",
-    "loading": "로딩",
+    "loading": "로딩중",
     "open": "처리중",
-    "resolved": "처리완료"
+    "resolved": "처리완료",
+    "process": "처리"
   },
   "pages": {
     "login": {
@@ -49,10 +50,11 @@
       "settlementDay": "정산일",
       "totalAmount": "총 금액",
       "question": "문의",
-      "proposal": "제안"
+      "proposal": "제안",
+      "feedback": "피드백"
     },
     "userManagement": {
-      "title": "회원 관리",
+      "title": "회원관리",
       "searchPlaceHolder": "이름, 이메일, 전화번호로 검색...",
       "name": "이름",
       "email": "이메일",
@@ -79,7 +81,7 @@
       "deleteModalTitle": "정말로 이 사용자를 삭제하시겠습니까?"
     },
     "requestPartner": {
-      "title": "제안 관리",
+      "title": "제안관리",
       "name": "이름",
       "description": "내용",
       "phone": "전화번호",
@@ -93,7 +95,7 @@
       "acceptedTitle": "정말 파드너십을 수락 하시겠습니까?"
     },
     "farmManagement": {
-      "title": "농장 관리",
+      "title": "농장관리",
       "farmList": "농장 목록",
       "farmName": "농장명",
       "activityName": "체험명",
@@ -109,7 +111,7 @@
       "cancelReservation": "예약취소",
       "complete": "완료",
       "process": "처리",
-      "activityList": "농장 목록 보기",
+      "activityList": "체험 목록",
       "activities": "체험",
       "settlementCycle": "정산주기",
       "accountHolder": "예금주",
@@ -137,7 +139,7 @@
       "reservationList": "예약 목록",
       "farmName": "농장명",
       "activityName": "체험명",
-      "userName": "유저명",
+      "userName": "이름",
       "productName": "상품명",
       "price": "가격",
       "paymentStatus": "결제 상태",
@@ -168,7 +170,7 @@
       "createdSchedule": "확정된 일정"
     },
     "announcement": {
-      "title": "알림 관리",
+      "title": "공지사항",
       "createDate": "생성일",
       "createAnnouncement": "공지사항 생성",
       "createModalTitle": "정말 해당 공지사항을 생성 하시겠습니까?",
@@ -176,7 +178,7 @@
       "deleteModalTitle": "정말 해당 공지사항을 삭제 하시겠습니까?"
     },
     "settlement": {
-      "title": "정산 관리",
+      "title": "정산관리",
       "unsettled": "미정산",
       "settlementProcessing": "정산 처리",
       "unsettlementProcessing": "미정산 처리",
@@ -197,7 +199,7 @@
       "settlementDay": "정산일"
     },
     "reservation": {
-      "title": "예약 관리",
+      "title": "예약관리",
       "bookingDate": "예약 날짜",
       "user": "유저",
       "activityName": "체험",
@@ -215,7 +217,7 @@
       "viewBill": "결제 내역"
     },
     "inquiry": {
-      "title": "문의 관리",
+      "title": "문의관리",
       "sendDate": "받은 날짜",
       "action": "액션",
       "sender": "발송자",
@@ -227,7 +229,7 @@
       "messageBody": "문의내역"
     },
     "faq": {
-      "title": "FAQ 관리",
+      "title": "FAQ",
       "createFaq": "FAQ 생성",
       "question": "질문",
       "answer": "답변",

@@ -134,7 +134,7 @@ function Reservation() {
       </div>
       <div>
         {isLoading ? (
-          <>...Loading</>
+          <>{t("common.loading")}</>
         ) : (
           reservations.map((item: any) => (
             <ReservationItem

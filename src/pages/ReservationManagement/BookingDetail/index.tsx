@@ -68,7 +68,7 @@ function BookingDetail() {
           {t("pages.reservation.title")}
         </h1>
         {isLoading ? (
-          <>...Loading</>
+          <>{t("common.loading")}</>
         ) : (
           <BookingInformation
             handleCancel={() => {

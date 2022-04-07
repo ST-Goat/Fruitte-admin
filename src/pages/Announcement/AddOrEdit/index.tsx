@@ -181,7 +181,7 @@ function AddOrEdit() {
           </Formik>
         </div>
       ) : (
-        <div>Loading...</div>
+        <div>{t("common.loading")}</div>
       )}
     </>
   );
