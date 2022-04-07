@@ -72,7 +72,9 @@ const MainView: React.FC = () => {
           <tr>
             <td></td>
             <td></td>
-            <td className="text-left">feedback: {detail?.remainFeedback}</td>
+            <td>{`${t("pages.dashboard.feedback")} : ${
+              detail?.remainRequestPartner
+            }`}</td>
           </tr>
         </tbody>
       </table>
