@@ -98,3 +98,9 @@ export const triggerEvent = (
   const event = new CustomEvent(eventType, { detail: data });
   element.dispatchEvent(event);
 };
+
+export const formatNumber = (num?: number): string => {
+  if (!num || typeof num !== "number") return "";
+  const str = num.toString();
+  return str.replace(/(.)(?=(\d{3})+$)/g, "$1,");
+};

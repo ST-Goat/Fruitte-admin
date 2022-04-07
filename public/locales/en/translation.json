@@ -49,7 +49,8 @@
             "settlementDay": "Settlement day",
             "totalAmount": "Total amount",
             "question": "Inquiry",
-            "proposal": "Proposal"
+            "proposal": "Proposal",
+            "feedback": "Feedback"
         },
         "userManagement": {
             "title": "Common User Management",
