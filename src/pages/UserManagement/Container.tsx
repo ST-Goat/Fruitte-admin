@@ -50,8 +50,8 @@ function UserManagementContainer() {
       });
       setUsers({
         data: response.content,
-        // total: response.metadata.total,
-        total: response.content.length,
+        total: response.metadata.total,
+        // total: response.content.length,
       });
     } catch (error) {
       console.log(error);
