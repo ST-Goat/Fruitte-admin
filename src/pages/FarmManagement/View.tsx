@@ -146,8 +146,8 @@ const convertFarmDataView = (
         }
       >
         {Boolean(item.status)
-          ? translate("common.normal")
-          : translate("common.unused")}
+          ? translate("common.unused")
+          : translate("common.normal")}
       </span>
     ),
     createAt: format(new Date(item.createdAt), "yyyy/MM/dd"),
