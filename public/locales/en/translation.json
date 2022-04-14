@@ -60,6 +60,7 @@
             "phone": "Phone",
             "status": "Status",
             "createDate": "Create Date",
+            "totalBooked":"Total reservations",
             "userDetails": "User Details",
             "deleteMember": "Delete member",
             "resetPassword": "Change Password",

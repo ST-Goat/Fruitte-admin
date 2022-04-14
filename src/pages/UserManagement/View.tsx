@@ -58,6 +58,11 @@ const headers = [
     keyData: "phone",
   },
   {
+    id: "Total-Reservation-col",
+    keyLabel: "pages.userManagement.totalBooked",
+    keyData: "totalBookedReservations",
+  },
+  {
     id: "Status-col",
     keyLabel: "pages.userManagement.status",
     keyData: "status",
@@ -85,7 +90,11 @@ const ItemStatus = ({ status }: { status: boolean }) => {
         </span>
       );
     default:
-      return <></>;
+      return (
+        <span className="font-bold text-green-700">
+          {t("pages.userManagement.active")}
+        </span>
+      );
   }
 };
 
