@@ -8,6 +8,7 @@
     "goBack": "뒤로",
     "send": "전송",
     "farm": "농장",
+    "district": "구역",
     "reservation": "예약",
     "phoneNumber": "전화번호",
     "address": "주소",
@@ -132,7 +133,17 @@
       "fourWeeks": "4주",
       "feedbackDetails": "피드백 상세",
       "deleteFarmModalTitle": "정말로 이 농장을 삭제하시겠습니까?",
-      "markAsResolved": "처리완료 표시"
+      "markAsResolved": "처리완료 표시",
+      "seoul": "서울",
+      "gyeonggi": "경기도",
+      "gangwon": "강원도",
+      "chung_cheong": "충청북도",
+      "chungcheongnam": "충청남도",
+      "jeollabuk": "전라북도",
+      "jeollanam": "전라남도",
+      "gyeongsangbuk": "경상북도",
+      "gyeongsangnam": "경상남도",
+      "jeju": "제주도"
     },
     "farmActivity": {
       "title": "농장 체험",

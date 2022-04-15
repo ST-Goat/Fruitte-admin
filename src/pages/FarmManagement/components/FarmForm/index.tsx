@@ -69,6 +69,13 @@ const ListField = [
     component: InputWithLabel,
   },
   {
+    id: "district__field",
+    keyLabel: "common.district",
+    name: "district",
+    type: "text",
+    component: SelectAdvance,
+  },
+  {
     id: "settlementCycle__field",
     keyLabel: "pages.farmManagement.settlementCycle",
     name: "settlementCycle",
@@ -169,6 +176,19 @@ function FarmForm({
     { label: t("pages.farmManagement.fourWeeks"), value: 1 },
   ];
 
+  const districtOptions = [
+    { label: t("pages.farmManagement.seoul"), value: "서울" },
+    { label: t("pages.farmManagement.gyeonggi"), value: "경기도" },
+    { label: t("pages.farmManagement.gangwon"), value: "강원도" },
+    { label: t("pages.farmManagement.chung_cheong"), value: "충청북도" },
+    { label: t("pages.farmManagement.chungcheongnam"), value: "충청남도" },
+    { label: t("pages.farmManagement.jeollabuk"), value: "전라북도" },
+    { label: t("pages.farmManagement.jeollanam"), value: "전라남도" },
+    { label: t("pages.farmManagement.gyeongsangbuk"), value: "경상북도" },
+    { label: t("pages.farmManagement.gyeongsangnam"), value: "경상남도" },
+    { label: t("pages.farmManagement.jeju"), value: '제주도' },
+  ]
+
   let ignore = false;
   useEffect(() => {
     async function fetchAllUsers() {
@@ -259,6 +279,8 @@ function FarmForm({
         return settlementCycleOptions;
       case "farmUser__field":
         return allUsers;
+      case "district__field":
+        return districtOptions;
       default:
         return [];
     }
