@@ -71,7 +71,7 @@ const ListField = [
   {
     id: "district__field",
     keyLabel: "common.district",
-    name: "district",
+    name: "districtName",
     type: "select",
     component: SelectAdvance,
   },
@@ -221,7 +221,7 @@ function FarmForm({
       address: values.address,
       bankName: values.bankName,
       description: "",
-      districtName: values.district.value,
+      districtName: values.districtName.value,
       email: values.email,
       incomeRate: JSON.parse(values.incomeRate),
       name: values.name,
@@ -296,7 +296,7 @@ function FarmForm({
       settlementCycle: settlementCycleOptions.find(
         (item) => item.value === initData.settlementCycle
       ),
-      district: districtOptions.find(i => i.value === initData.district),
+      districtName: districtOptions.find(i => i.value === initData.districtName),
       farmers: filter(allUsers, (o) => listIdInitFamers.includes(o.id)),
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
