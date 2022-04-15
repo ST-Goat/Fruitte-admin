@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "./Login.scss";
 
@@ -17,6 +17,9 @@ import ButtonCustomizer from "pages/common/Button";
 import { loginRequest } from "redux/slices/auth";
 import { useAppDispatch } from "utilities/useHook";
 import { validateEmail } from "utilities/helper";
+import CONFIGS from "shared/configs";
+import { homepageUrl } from "routes";
+import { useHistory } from "react-router-dom";
 
 function validatePassword(value: string) {
   let error;
@@ -35,6 +38,7 @@ const Login: React.FC = () => {
   const { t } = useTranslation();
   const [passIsShowred, setPassIsShowred] = useState(false);
   const dispatch = useAppDispatch();
+  const history = useHistory();
 
   const hideOrShowPass = () => {
     setPassIsShowred(!passIsShowred);
@@ -51,6 +55,15 @@ const Login: React.FC = () => {
     );
     actions.setSubmitting(false);
   };
+
+  useEffect(() => {
+    const isHavedToken = Boolean(
+      localStorage.getItem(CONFIGS.HEADER_PAYLOAD_KEY)
+    );
+    if (isHavedToken) {
+      history.push(homepageUrl);
+    }
+  }, []);
 
   return (
     <div className="login__wrapper">
