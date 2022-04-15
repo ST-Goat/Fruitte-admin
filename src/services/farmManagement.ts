@@ -78,6 +78,7 @@ export type FarmDetail = {
   description: string;
   email: string;
   phone: string;
+  districtName: string;
   settlementCycle: number;
   accountHolder: string;
   bankName: string;
@@ -102,7 +103,7 @@ export type NewFarmData = {
   description: string;
   email: string;
   phone: string;
-  district: string;
+  districtName: string;
   settlementCycle: number;
   accountHolder: string;
   bankName: string;
@@ -123,6 +124,7 @@ export type FarmDataEdit = {
   description: string;
   email: string;
   phone: string;
+  districtName: string;
   settlementCycle: number;
   accountHolder: string;
   bankName: string;

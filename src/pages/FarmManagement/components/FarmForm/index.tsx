@@ -21,7 +21,6 @@ import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
 import { useAppDispatch } from "utilities";
 import { enqueueSnackbar } from "redux/slices/snackbar";
 import { validatePhone, validateEmail } from "utilities/helper";
-import { CatchingPokemonSharp } from "@mui/icons-material";
 
 const validateRequired = (text: string) => {
   let error;
@@ -215,7 +214,6 @@ function FarmForm({
   }, []);
 
   const handleSubmit = async (values: any) => {
-    console.log({ values })
     setIsLoadingProcess(true);
     const commonData = {
       accountHolder: values.accountHolder,
@@ -223,7 +221,7 @@ function FarmForm({
       address: values.address,
       bankName: values.bankName,
       description: "",
-      district: values.district.value,
+      districtName: values.district.value,
       email: values.email,
       incomeRate: JSON.parse(values.incomeRate),
       name: values.name,
