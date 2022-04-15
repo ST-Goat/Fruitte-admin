@@ -221,6 +221,7 @@ function FarmForm({
       address: values.address,
       bankName: values.bankName,
       description: "",
+      district: values.district,
       email: values.email,
       incomeRate: JSON.parse(values.incomeRate),
       name: values.name,
