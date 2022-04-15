@@ -21,6 +21,7 @@ import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
 import { useAppDispatch } from "utilities";
 import { enqueueSnackbar } from "redux/slices/snackbar";
 import { validatePhone, validateEmail } from "utilities/helper";
+import { CatchingPokemonSharp } from "@mui/icons-material";
 
 const validateRequired = (text: string) => {
   let error;
@@ -72,7 +73,7 @@ const ListField = [
     id: "district__field",
     keyLabel: "common.district",
     name: "district",
-    type: "text",
+    type: "select",
     component: SelectAdvance,
   },
   {
@@ -214,6 +215,7 @@ function FarmForm({
   }, []);
 
   const handleSubmit = async (values: any) => {
+    console.log({ values })
     setIsLoadingProcess(true);
     const commonData = {
       accountHolder: values.accountHolder,
@@ -221,7 +223,7 @@ function FarmForm({
       address: values.address,
       bankName: values.bankName,
       description: "",
-      district: values.district,
+      district: values.district.value,
       email: values.email,
       incomeRate: JSON.parse(values.incomeRate),
       name: values.name,
@@ -296,6 +298,7 @@ function FarmForm({
       settlementCycle: settlementCycleOptions.find(
         (item) => item.value === initData.settlementCycle
       ),
+      district: districtOptions.find(i => i.value === initData.district),
       farmers: filter(allUsers, (o) => listIdInitFamers.includes(o.id)),
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

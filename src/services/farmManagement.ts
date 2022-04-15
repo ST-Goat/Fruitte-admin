@@ -37,14 +37,14 @@ export const fetchFarmList = async (
       keywork: string;
     };
   } = {
-    pagination: {
-      page: PaginationDefault.PAGE,
-      pageSize: PaginationDefault.PAGE_SIZE,
-    },
-    filters: {
-      keywork: "",
-    },
-  }
+      pagination: {
+        page: PaginationDefault.PAGE,
+        pageSize: PaginationDefault.PAGE_SIZE,
+      },
+      filters: {
+        keywork: "",
+      },
+    }
 ): Promise<FarmListResponse> => {
   const { page, pageSize } = params.pagination;
   return axiosServices
@@ -102,6 +102,7 @@ export type NewFarmData = {
   description: string;
   email: string;
   phone: string;
+  district: string;
   settlementCycle: number;
   accountHolder: string;
   bankName: string;
