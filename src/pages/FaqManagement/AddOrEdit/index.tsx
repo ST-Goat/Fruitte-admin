@@ -6,7 +6,7 @@ import { isEqual } from "lodash";
 import InputWithLabel, {
   MIN_LEFT_WIDTH,
 } from "pages/common/Formik/Input/InputWithLabel";
-import EditIcon from "@mui/icons-material/Edit";
+
 import {
   Form,
   Formik,

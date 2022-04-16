@@ -1,4 +1,4 @@
-import { Field, FieldInputProps } from "formik";
+import { Field, FieldInputProps, FieldMetaProps } from "formik";
 import AutoCompleteCustomizer, {
   Option,
   SelectProps,
@@ -9,15 +9,23 @@ function Select({
   onChange,
   fullWidth = true,
   options,
+  validate,
   ...props
 }: SelectProps) {
   return (
     <div>
-      <Field name={name}>
-        {({ field }: { field: FieldInputProps<any> }) => (
+      <Field name={name} validate={validate}>
+        {({
+          field,
+          meta,
+        }: {
+          field: FieldInputProps<any>;
+          meta: FieldMetaProps<any>;
+        }) => (
           <AutoCompleteCustomizer
             field={field}
             name={name}
+            meta={meta}
             options={options}
             onChange={onChange}
             fullWidth={fullWidth}

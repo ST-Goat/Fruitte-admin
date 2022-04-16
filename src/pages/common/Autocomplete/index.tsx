@@ -27,9 +27,12 @@ function AutoCompleteCustomizer({
   fullWidth = true,
   options,
   field,
+  meta,
   placeholder,
   ...props
 }: SelectProps) {
+  const isError = meta.touched && meta.error;
+
   return (
     <div>
       <Autocomplete
@@ -72,15 +75,17 @@ function AutoCompleteCustomizer({
           <TextField
             placeholder={placeholder ?? ""}
             sx={{
-              border: "1px solid #76848d",
+              border: `1px solid ${isError ? "#EB5757" : "#76848d"}`,
               borderRadius: "0.75rem",
               "& fieldset": { borderRadius: "0.7rem" },
               "&": {
-                borderColor: "#4C9C2E",
+                borderColor: isError ? "#EB5757" : "#4C9C2E",
               },
               "& .Mui-focused": {
                 ".MuiOutlinedInput-notchedOutline": {
-                  border: "1px solid #4C9C2E !important",
+                  border: `1px solid ${
+                    isError ? "#EB5757" : "#4C9C2E"
+                  } !important`,
                 },
               },
             }}
@@ -88,6 +93,9 @@ function AutoCompleteCustomizer({
           />
         )}
       />
+      {isError && (
+        <div className="error ml-2 text-red-700 italic">{meta.error}</div>
+      )}
     </div>
   );
 }

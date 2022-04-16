@@ -99,6 +99,19 @@ export enum EVENT_TYPES {
   FEEDBACK_RESOLVED = "FEEDBACK_RESOLVED",
 }
 
+export enum DISTRICTS {
+  "seoul" = "서울",
+  "gyeonggi" = "경기도",
+  "gangwon" = "강원도",
+  "chung_cheong" = "충청북도",
+  "chungcheongnam" = "충청남도",
+  "jeollabuk" = "전라북도",
+  "jeollanam" = "전라남도",
+  "gyeongsangbuk" = "경상북도",
+  "gyeongsangnam" = "경상남도",
+  "jeju" = "제주도",
+}
+
 export type Pagination = {
   page: number;
   pageSize: number;

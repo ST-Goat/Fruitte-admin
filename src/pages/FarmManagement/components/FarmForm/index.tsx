@@ -17,7 +17,7 @@ import {
   updateFarmWithData,
 } from "services/farmManagement";
 import { fetchUserList, User } from "services/userManagement";
-import { HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
+import { DISTRICTS, HttpStatus, SNACKBAR_VARIANTS } from "shared/comom.enum";
 import { useAppDispatch } from "utilities";
 import { enqueueSnackbar } from "redux/slices/snackbar";
 import { validatePhone, validateEmail } from "utilities/helper";
@@ -73,6 +73,7 @@ const ListField = [
     keyLabel: "common.district",
     name: "districtName",
     type: "select",
+    validate: validateRequired,
     component: SelectAdvance,
   },
   {
@@ -149,12 +150,6 @@ const SubmitOrCancel = ({
   );
 };
 
-// id must same value
-const fakeFamers = [
-  { id: 0, label: "fake famer 1", value: 0 },
-  { id: 1, label: "fake famer 2", value: 1 },
-  { id: 2, label: "fake famer 3", value: 2 },
-];
 function FarmForm({
   isCreate,
   initData,
@@ -170,6 +165,7 @@ function FarmForm({
   const [allUsers, setAllUsers] = useState<
     Array<{ id: number; label: string; value: any }>
   >([]);
+  const [isLoadingInit, setIsLoadingInit] = useState(false);
 
   const settlementCycleOptions = [
     { label: t("pages.farmManagement.twoWeeks"), value: 15 },
@@ -177,21 +173,34 @@ function FarmForm({
   ];
 
   const districtOptions = [
-    { label: t("pages.farmManagement.seoul"), value: "서울" },
-    { label: t("pages.farmManagement.gyeonggi"), value: "경기도" },
-    { label: t("pages.farmManagement.gangwon"), value: "강원도" },
-    { label: t("pages.farmManagement.chung_cheong"), value: "충청북도" },
-    { label: t("pages.farmManagement.chungcheongnam"), value: "충청남도" },
-    { label: t("pages.farmManagement.jeollabuk"), value: "전라북도" },
-    { label: t("pages.farmManagement.jeollanam"), value: "전라남도" },
-    { label: t("pages.farmManagement.gyeongsangbuk"), value: "경상북도" },
-    { label: t("pages.farmManagement.gyeongsangnam"), value: "경상남도" },
-    { label: t("pages.farmManagement.jeju"), value: '제주도' },
-  ]
+    { label: t("pages.farmManagement.seoul"), value: DISTRICTS.seoul },
+    { label: t("pages.farmManagement.gyeonggi"), value: DISTRICTS.gyeonggi },
+    { label: t("pages.farmManagement.gangwon"), value: DISTRICTS.gangwon },
+    {
+      label: t("pages.farmManagement.chung_cheong"),
+      value: DISTRICTS.chung_cheong,
+    },
+    {
+      label: t("pages.farmManagement.chungcheongnam"),
+      value: DISTRICTS.chungcheongnam,
+    },
+    { label: t("pages.farmManagement.jeollabuk"), value: DISTRICTS.jeollabuk },
+    { label: t("pages.farmManagement.jeollanam"), value: DISTRICTS.jeollanam },
+    {
+      label: t("pages.farmManagement.gyeongsangbuk"),
+      value: DISTRICTS.gyeongsangbuk,
+    },
+    {
+      label: t("pages.farmManagement.gyeongsangnam"),
+      value: DISTRICTS.chungcheongnam,
+    },
+    { label: t("pages.farmManagement.jeju"), value: DISTRICTS.jeju },
+  ];
 
   let ignore = false;
   useEffect(() => {
     async function fetchAllUsers() {
+      setIsLoadingInit(true);
       try {
         const response = await fetchUserList({});
         if (!ignore)
@@ -204,6 +213,8 @@ function FarmForm({
           );
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoadingInit(false);
       }
     }
     fetchAllUsers();
@@ -296,11 +307,15 @@ function FarmForm({
       settlementCycle: settlementCycleOptions.find(
         (item) => item.value === initData.settlementCycle
       ),
-      districtName: districtOptions.find(i => i.value === initData.districtName),
+      districtName: districtOptions.find(
+        (i) => i.value === initData.districtName
+      ),
       farmers: filter(allUsers, (o) => listIdInitFamers.includes(o.id)),
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initData, allUsers]);
+
+  if (isLoadingInit) return <>...Loading</>;
   return (
     <div className="px-16">
       <Text className="m-auto text-center font-bold text-4xl">

@@ -15,6 +15,7 @@ const SelectAdvance = ({
   name: string;
   options: Option[];
   placeholder?: string;
+  validate?: any;
 }) => {
   return (
     <div className="flex flex-start items-center">
@@ -33,7 +34,7 @@ const SelectAdvance = ({
           options={options}
           placeholder={placeholder}
           isOptionEqualToValue={(option: Option, value: Option) =>
-            option.value === value.value
+            option.value === value?.value
           }
         />
       </div>
