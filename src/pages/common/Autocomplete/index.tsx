@@ -31,7 +31,7 @@ function AutoCompleteCustomizer({
   placeholder,
   ...props
 }: SelectProps) {
-  const isError = meta.touched && meta.error;
+  const isError = meta?.touched && meta?.error;
 
   return (
     <div>
