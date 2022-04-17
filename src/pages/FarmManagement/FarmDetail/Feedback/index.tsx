@@ -118,7 +118,7 @@ const convertFeedbackData = (
     id: item.id,
     no: (page - 1) * pageSize + index + 1,
     farmName: item.farmName,
-    user: item?.user.name,
+    user: item?.user?.name,
     sendDate: format(new Date(item?.createdAt), "yyyy/MM/dd"),
     activityName: item.farmActivityName,
     status: () => (
@@ -177,6 +177,7 @@ function Feedback() {
         limit: pageSize,
         skip: (page - 1) * pageSize,
         status: status,
+        farmId
       });
       setFeedbacks({
         data: response.data,
