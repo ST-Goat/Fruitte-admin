@@ -248,6 +248,13 @@
       "delete": "삭제",
       "edit": "수정",
       "deleteModalTitle": "정말 해당 FAQ를 삭제 하시겠습니까?"
+    },
+    "settings": {
+      "title": "Settings",
+      "aboutUsDetail": "About us detail",
+      "aboutUs": "About us",
+      "serviceFruitPicnic": "Service fruit picnic",
+      "serviceFruitStore": "Service fruit store"
     }
   }
 }
