@@ -27,3 +27,5 @@ export const faqDetailUrl = `${faqManagementUrl}/detail`;
 export const requestPartnerUrl = "/request-partner";
 
 export const farmActivityUrl = "/farm-activity";
+
+export const settingUrl = "/setting";
