@@ -248,6 +248,13 @@
             "delete": "Delete",
             "edit": "Edit",
             "deleteModalTitle": "Are you sure you want to delete this question?"
+        },
+        "settings": {
+            "title": "Settings",
+            "aboutUsDetail": "About us detail",
+            "aboutUs": "About us",
+            "serviceFruitPicnic": "Service fruit picnic",
+            "serviceFruitStore": "Service fruit store"
         }
     }
 }

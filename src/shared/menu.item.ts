@@ -14,6 +14,7 @@ import {
   faqCreateUrl,
   faqDetailUrl,
   requestPartnerUrl,
+  settingUrl,
 } from "routes";
 
 import Main from "pages/main/Main";
@@ -32,6 +33,10 @@ import BookingDetail from "pages/ReservationManagement/BookingDetail";
 import InquiryManagement from "pages/InquiryManagement";
 import InquiryDetail from "pages/InquiryManagement/Detail";
 import FaqManagement from "pages/FaqManagement";
+import FaqAddOrEdit from "pages/FaqManagement/AddOrEdit";
+import RequestPartner from "pages/RequestPartner";
+import FeedbackDetail from "pages/FarmManagement/FarmDetail/Feedback/Detail";
+import Settings from "pages/Settings";
 
 import PeopleIcon from "@mui/icons-material/People";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -42,9 +47,7 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import BookOnlineIcon from "@mui/icons-material/BookOnline";
 import CoPresentIcon from "@mui/icons-material/CoPresent";
 import QuizIcon from "@mui/icons-material/Quiz";
-import FaqAddOrEdit from "pages/FaqManagement/AddOrEdit";
-import RequestPartner from "pages/RequestPartner";
-import FeedbackDetail from "pages/FarmManagement/FarmDetail/Feedback/Detail";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 export type MenuItemProps = {
   key: string;
@@ -210,5 +213,13 @@ export const menuItems: MenuItemProps[] = [
         component: FaqAddOrEdit,
       },
     ],
+  },
+  {
+    key: "settings",
+    label: "pages.settings.title",
+    to: settingUrl,
+    icon: SettingsIcon,
+    component: Settings,
+    exact: true,
   },
 ];
