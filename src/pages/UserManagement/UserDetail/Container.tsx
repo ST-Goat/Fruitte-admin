@@ -73,12 +73,11 @@ function UserDetailContainer() {
         skip: (_page - 1) * _pageSize,
         search: _search,
       });
-      if (response.status === HttpStatus.OK) {
-        setReservations({
-          data: response.content,
-          total: response.total,
-        });
-      }
+      setReservations({
+        data: response.content,
+        total: response.total,
+      });
+
     } catch (error) {
       console.log(error);
     } finally {
