@@ -35,7 +35,8 @@
         "before": "Before",
         "loading": "Loading",
         "open": "Open",
-        "resolved": "Resolved"
+        "resolved": "Resolved",
+        "process": "Process"
     },
     "pages": {
         "login": {

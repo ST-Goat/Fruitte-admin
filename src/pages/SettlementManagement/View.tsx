@@ -1,12 +1,20 @@
+import { format } from "date-fns";
+import CheckBoxCustomizer from "pages/common/CheckBox";
 import TableCustomizer from "pages/common/Table";
+import { useState } from "react";
+import { PaymentStatus } from "services/settlements";
+import { Pagination } from "shared/comom.enum";
 
-import { gettotalRowCurrent } from "utilities";
+import { formatNumber, gettotalRowCurrent } from "utilities";
 
 const headers = [
   {
-    id: "No-col",
-    label: "No",
-    keyData: "no",
+    id: "Check-box",
+    label: "",
+    keyData: "checkBox",
+    styledHead: {
+      width: '50px'
+    }
   },
   {
     id: "Farm-col",
@@ -39,11 +47,6 @@ const headers = [
     keyData: "price",
   },
   {
-    id: "Settlement-cycle-col",
-    keyLabel: "pages.settlement.settlementCycle",
-    keyData: "settlementCycle",
-  },
-  {
     id: "State-col",
     keyLabel: "pages.settlement.state",
     keyData: "state",
@@ -55,30 +58,47 @@ const headers = [
   },
 ];
 
-const fakeData = [
-  {
-    id: 123123,
-    no: 1,
-    farmName: "농장명",
-    name: "홍길동",
-    accountHolder: "홍길동",
-    bankName: "농협",
-    accountNumber: "123-45-6789",
-    price: "10,000원",
-    settlementCycle: "2주",
-    state: "정산 가능",
-    settlementDay: "2021/01/01",
-  },
-];
+const convertDataToView = (data: any[], page: number, pageSize: number, listIdSelected: Array<number | string>, callbackCheckBox: (id: string | number) => void) => {
 
-function SettlementManagementView() {
+  return data.map((item, i) => ({
+    ...item,
+    checkBox: () => <CheckBoxCustomizer
+      checked={listIdSelected.includes(item.id)}
+      onClick={(event: React.ChangeEvent<HTMLInputElement>) => {
+        event.stopPropagation();
+        callbackCheckBox(item.id)
+      }}
+    />,
+    name: item.bookedUser.name,
+    accountNumber: item.bankAccountNumber,
+    price: `${formatNumber(item.farmerReceive)}원`,
+    state: item.billStatus === PaymentStatus.SETTLED ? "정산 가능" : "결제불가",
+    settlementDay: format(new Date(item.settlementDay), "yyyy/MM/dd")
+  }))
+}
+
+function SettlementManagementView({
+  loading,
+  data,
+  total,
+  pagination,
+  listIdSelected,
+  callbackCheckBox
+}: {
+  loading: boolean,
+  data: any[];
+  total: number;
+  pagination: Pagination,
+  callbackCheckBox: (id: string | number) => void;
+  listIdSelected: Array<string | number>
+}) {
   return (
     <div>
       <TableCustomizer
         headers={headers}
-        loading={false}
-        totalRow={gettotalRowCurrent(100, 1, 10)}
-        data={fakeData}
+        loading={loading}
+        totalRow={gettotalRowCurrent(total, pagination.page, pagination.pageSize)}
+        data={convertDataToView(data, pagination.page, pagination.pageSize, listIdSelected, callbackCheckBox)}
       />
     </div>
   );
