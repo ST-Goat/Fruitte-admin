@@ -17,7 +17,7 @@ import {
   PaginationDefault,
   SNACKBAR_VARIANTS,
 } from "shared/comom.enum";
-import { format } from "date-fns";
+import { addDays, endOfDay, format, startOfDay } from "date-fns";
 import { useAppDispatch } from "utilities";
 import { enqueueSnackbar } from "redux/slices/snackbar";
 
@@ -28,6 +28,8 @@ export const initialPagination = {
 export type Filters = {
   search: string;
   status: ReservationStatus | undefined;
+  startDate: string;
+  endDate: string;
 };
 
 function ReservationContainer() {
@@ -42,6 +44,8 @@ function ReservationContainer() {
   const [filters, setFilters] = useState<Filters>({
     search: "",
     status: undefined,
+    startDate: format(startOfDay(new Date()), 'yyyy-MM-dd'),
+    endDate: format(endOfDay(addDays(new Date(), 7)), 'yyyy-MM-dd')
   });
   const [idCancelled, setIdCancelled] = useState<string | number | null>(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -52,15 +56,19 @@ function ReservationContainer() {
     skip,
     search,
     status,
+    startDate,
+    endDate
   }: {
     limit: number;
     skip: number;
     search: string;
     status?: ReservationStatus;
+    startDate: string;
+    endDate: string;
   }) => {
     setIsLoading(true);
     try {
-      const response = await fetchReservations({ limit, skip, search, status });
+      const response = await fetchReservations({ limit, skip, search, status, startDate, endDate });
       setReservations({
         data: response.content.map((item: any, index: number) => {
           return {
@@ -143,6 +151,8 @@ function ReservationContainer() {
           skip: (pagination.page - 1) * pagination.pageSize,
           search: filters.search,
           status: filters.status,
+          startDate: filters.startDate,
+          endDate: filters.endDate
         });
         dispatch(
           enqueueSnackbar({
@@ -162,8 +172,10 @@ function ReservationContainer() {
       skip: (pagination.page - 1) * pagination.pageSize,
       search: filters.search,
       status: filters.status,
+      startDate: filters.startDate,
+      endDate: filters.endDate
     });
-  }, [pagination.page, pagination.pageSize, filters.status, reload]);
+  }, [pagination.page, pagination.pageSize, filters.status, filters.startDate, filters.endDate, reload]);
 
   return (
     <>
@@ -174,6 +186,7 @@ function ReservationContainer() {
             setPagination(initialPagination);
             setReload(!reload);
           }}
+          filters={filters}
           setFilters={setFilters}
           setPagination={setPagination}
         />
