@@ -10,15 +10,19 @@ import { ReservationStatus } from "services/reservation";
 import type { Filters } from "../Container";
 import type { Pagination } from "shared/comom.enum";
 import { initialPagination } from "../Container";
+import DateRangePickerCustomizer from "pages/common/DateRangePicker";
+import { format } from "date-fns";
 
 function Controller({
   handleSearchString,
   setFilters,
   setPagination,
+  filters
 }: {
   handleSearchString: () => void;
   setFilters: React.Dispatch<React.SetStateAction<Filters>>;
   setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
+  filters: any;
 }) {
   const { t } = useTranslation();
 
@@ -42,6 +46,14 @@ function Controller({
       </Grid>
       <Grid item xs={6}>
         <div className="flex justify-end">
+          <div className="mr-4">
+            <DateRangePickerCustomizer
+              defaultValue={[filters.startDate, filters.endDate]}
+              onChange={([start, end]) => {
+                setFilters((prev) => ({ ...prev, startDate: format(new Date(start), 'yyyy-MM-dd'), endDate: format(new Date(end), 'yyyy-MM-dd') }))
+              }}
+            />
+          </div>
           <AutoCompleteCustomizer
             name="sort"
             placeholder="sort by"
