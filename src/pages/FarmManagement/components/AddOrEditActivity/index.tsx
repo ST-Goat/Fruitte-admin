@@ -32,6 +32,8 @@ import { differenceBy, difference, isEqual, without } from "lodash";
 import { enqueueSnackbar } from "redux/slices/snackbar";
 import { useAppDispatch } from "utilities";
 import { uploadFiles } from "services/upload";
+import { changeTabWithId } from "redux/slices/farm";
+import { TabIds } from "pages/FarmManagement/FarmDetail";
 
 type FieldItem = {
   id: string;
@@ -385,6 +387,7 @@ function ActivityFormItem() {
           data: newData as ExistedActivityData,
         });
       }
+      dispatch(changeTabWithId(TabIds.ACTIVITIES));
       history.push(`${farmDetailUrl}/${farmId}`);
       dispatch(
         enqueueSnackbar({

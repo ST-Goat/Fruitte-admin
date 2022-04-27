@@ -29,6 +29,14 @@ type TabPanelProps = {
   id: number;
 };
 
+export enum TabIds {
+  FARM = 0,
+  ACTIVITIES = 1,
+  SCHEDULE = 2,
+  RESERVATION = 3,
+  FEEDBACK = 4
+}
+
 function TabPanel(props: TabPanelProps) {
   const { children, id, current, ...other } = props;
 
@@ -101,7 +109,7 @@ function FarmDetail() {
   const tabList = useMemo(
     () => [
       {
-        id: 0,
+        id: TabIds.FARM,
         children: isLoading ? (
           <>{t("common.loading")}</>
         ) : (
@@ -110,22 +118,22 @@ function FarmDetail() {
         keyLabel: "common.farm",
       },
       {
-        id: 1,
+        id: TabIds.ACTIVITIES,
         children: <Activities farmId={farmId} />,
         keyLabel: "pages.farmManagement.activities",
       },
       {
-        id: 2,
+        id: TabIds.SCHEDULE,
         children: <Schedule farmId={farmId} />,
         keyLabel: "pages.farmManagement.schedule",
       },
       {
-        id: 3,
+        id: TabIds.RESERVATION,
         children: <Reservation />,
         keyLabel: "common.reservation",
       },
       {
-        id: 4,
+        id: TabIds.FEEDBACK,
         children: <Feedback />,
         keyLabel: "pages.farmManagement.feedback",
       },

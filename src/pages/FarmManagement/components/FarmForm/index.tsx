@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Form, Formik, FormikProps } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { difference, filter } from "lodash";
 
 import InputWithLabel from "pages/common/Formik/Input/InputWithLabel";
@@ -166,6 +166,7 @@ function FarmForm({
     Array<{ id: number; label: string; value: any }>
   >([]);
   const [isLoadingInit, setIsLoadingInit] = useState(false);
+  const history = useHistory();
 
   const settlementCycleOptions = [
     { label: t("pages.farmManagement.twoWeeks"), value: 15 },
@@ -278,6 +279,7 @@ function FarmForm({
           );
         }
       }
+      history.push(farmManagementUrl);
     } catch (error) {
       console.log(error);
     } finally {
