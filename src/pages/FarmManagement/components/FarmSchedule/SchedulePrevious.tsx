@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import format from "date-fns/format";
+import DOMPurify from "dompurify";
 
 import RowStyled from "./RowStyled";
 import Text from "pages/common/components/Text";
@@ -50,7 +51,9 @@ const SchedulePrevious = ({
           rightContent={
             <div className="h-full py-8 border-b border-grey-300">
               <Text className="font-bold text-lg">{activityDetail.name}</Text>
-              <Text>{activityDetail.description}</Text>
+              <div
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(activityDetail.description) }}
+              />
             </div>
           }
         />
