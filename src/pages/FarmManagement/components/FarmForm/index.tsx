@@ -32,7 +32,7 @@ const validateRequired = (text: string) => {
 
 const validateSettlementRate = (num: number) => {
   let error;
-  if (num < 0 || num > 100) error = "Percent must be between 0 and 100!";
+  if (num < 0 || num > 100) error = "0~100사이를 입력해 주세요";
   return error;
 };
 

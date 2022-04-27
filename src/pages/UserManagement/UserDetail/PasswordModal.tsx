@@ -81,7 +81,7 @@ const PasswordModal = ({
                     validate={(value: string) => {
                       let error = "";
                       if (!value) {
-                        error = "New password cannot be empty!";
+                        error = "새 비밀번호는 비워둘 수 없습니다.";
                       }
                       return error;
                     }}

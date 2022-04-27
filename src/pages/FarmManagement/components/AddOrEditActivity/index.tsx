@@ -44,27 +44,27 @@ type FieldItem = {
 
 const validateInterger = (text: string) => {
   let error = "";
-  if (!/^\d+$/g.test(text)) error = "This must be number and integer number!";
+  if (!/^\d+$/g.test(text)) error = "이 숫자는 양수여야 합니다!";
   return error;
 };
 
 const validatePositiveNumber = (text: string) => {
   let error = "";
   if (!text || Number(text) < 0)
-    error = "This number must be a positive number!";
+    error = "이 숫자는 양수여야 합니다!";
   return error;
 };
 
 const requiredField = (text: string) => {
   let error = "";
-  if (!text) error = "This field is required!";
+  if (!text) error = "필수정보 입니다";
   return error;
 };
 
 const validateMaxEnrolment = (text: string) => {
   let error = "";
   if (!text || Number(text) < 0 || Number(text) > 4)
-    error = "This number must be bigger 0 and maximum is 4";
+    error = "이 숫자는 0보다 커야 하고 최대값은 4입니다.";
   return error;
 };
 
@@ -218,8 +218,8 @@ const handleUploadImageAws3 = async (
       typeof item === "string"
         ? new Promise((resolve) => resolve(item))
         : uploadFiles({ file: item }).then((response) =>
-            response.isSuccess ? response.data?.link : null
-          )
+          response.isSuccess ? response.data?.link : null
+        )
     )
   ).finally(() => {
     if (callback) callback({ loading: false });

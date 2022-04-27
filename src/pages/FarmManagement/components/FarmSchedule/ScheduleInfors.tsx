@@ -29,21 +29,21 @@ const validateStartAt = (
 ) => {
   let error = "";
   if (!isDate(value)) {
-    error = "This value must be Date yyyy/MM/dd";
+    error = "이 값은 날짜 yyyy/MM/dd여야 합니다.";
     return error;
   }
   const hours = getHours(value);
   const minutes = getMinutes(value);
   const dateValue = setHours(setMinutes(selectedDate, minutes), hours);
   if (isAfter(lastBookingTime, dateValue))
-    error = "StartAt must be after last booking time (Before Field)";
+    error = "시작 시간과 예약 마감시간을 확인해 주세요";
   return error;
 };
 
 const validateLastBookingTime = (value: Date) => {
   let error = "";
   if (!isDate(value)) {
-    error = "This value must be Date yyyy/MM/dd";
+    error = "이 값은 날짜 yyyy/MM/dd여야 합니다.";
     return error;
   }
   return error;
