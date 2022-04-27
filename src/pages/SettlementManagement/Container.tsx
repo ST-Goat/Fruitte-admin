@@ -7,6 +7,11 @@ import Controller from "./Controller";
 import TablePaginations from "pages/common/Paginations";
 import ConfirmModal, { ModalType } from "./ConfirmModal";
 
+import { editSettlements, fetchPayments, PaymentStatus } from "services/settlements"
+import { HttpStatus, PaginationDefault, SNACKBAR_VARIANTS } from "shared/comom.enum";
+import { enqueueSnackbar } from "redux/slices/snackbar";
+import { useAppDispatch } from "utilities";
+
 const Header = ({
   title,
   subTitle,
@@ -37,6 +42,16 @@ const Header = ({
   );
 };
 
+const initFilters = {
+  keyword: "",
+  farmId: undefined,
+  status: PaymentStatus.UNSETTLED,
+}
+
+const initialPagination = {
+  page: PaginationDefault.PAGE,
+  pageSize: PaginationDefault.PAGE_SIZE,
+}
 function SettlementManagementContainer() {
   const { t } = useTranslation();
   const translationText = {
@@ -46,22 +61,22 @@ function SettlementManagementContainer() {
     viewUnsettledList: t("pages.settlement.viewUnsettledList"),
   };
   const [isViewUnsettled, setIsViewUnsettled] = useState(true);
-  const [filters, setFilters] = useState({
-    keyword: "",
-  });
+  const [filters, setFilters] = useState<{
+    keyword: string,
+    farmId?: string | number,
+    status?: PaymentStatus,
+  }>(initFilters);
   const [settlement, setSettlement] = useState({
     data: [],
     total: 0,
   });
   const [modal, setModal] = useState<ModalType | null>(null);
+  const [reload, setReload] = useState(false);
+  const [pagination, setPagination] = useState(initialPagination);
+  const [listIdSelected, setListIdSelected] = useState<Array<string | number>>([]);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (isViewUnsettled) {
-      // fetch unsettled
-    } else {
-      // fetch completed
-    }
-  }, [isViewUnsettled]);
 
   const handleProgress = () => {
     setModal(isViewUnsettled ? ModalType.settle : ModalType.unsettled);
@@ -70,6 +85,72 @@ function SettlementManagementContainer() {
   const handleCloseModal = () => {
     setModal(null);
   };
+
+  const getSettlements = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchPayments({
+        limit: pagination.pageSize,
+        skip: (pagination.page - 1) * pagination.pageSize,
+        status: filters.status,
+        farmId: filters.farmId,
+        farmName: filters.keyword
+      });
+      if (response.status === HttpStatus.OK) {
+        setSettlement({
+          data: response.data.content,
+          total: response.data.total
+        })
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false)
+    }
+  }
+
+
+  const editPaymentStatus = async () => {
+    try {
+      if (listIdSelected.length > 0) {
+        const body: {
+          settlementBillIds: any[],
+          unsettlementBillIds: any[]
+        } = {
+          settlementBillIds: [],
+          unsettlementBillIds: []
+        }
+        if (isViewUnsettled) body.settlementBillIds = listIdSelected
+        else body.unsettlementBillIds = listIdSelected;
+        const response = await editSettlements(body);
+        if (response.status === HttpStatus.OK) {
+          dispatch(
+            enqueueSnackbar({
+              message: "Success!",
+              variant: SNACKBAR_VARIANTS.SUCCESS,
+            })
+          );
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setListIdSelected([]);
+      getSettlements();
+      handleCloseModal();
+    }
+  }
+
+  useEffect(() => {
+    getSettlements();
+  }, [
+    isViewUnsettled,
+    reload,
+    filters.status,
+    filters.farmId,
+    pagination
+  ]);
+
 
   return (
     <div>
@@ -87,29 +168,54 @@ function SettlementManagementContainer() {
         }
         onChange={() => {
           setIsViewUnsettled(!isViewUnsettled);
+          setFilters(prev => ({
+            ...initFilters,
+            status: prev.status !== PaymentStatus.SETTLED
+              ? PaymentStatus.SETTLED : PaymentStatus.UNSETTLED
+          }));
+          setListIdSelected([]);
         }}
       />
       <div className="mt-8">
         <Controller
           isViewUnsettled={isViewUnsettled}
+          listIdSelected={listIdSelected}
           filters={filters}
-          onChange={null}
+          onChange={(name: string, value: any) => {
+            setFilters(prev => ({ ...prev, [name]: value }))
+          }}
+          handleSubmitSearch={() => { setReload(prev => !prev) }}
           handleProgress={handleProgress}
         />
       </div>
       <div className="mt-4">
         <TablePaginations
-          count={100}
-          rowsPerPage={10}
-          page={1}
-          handleChangePage={() => {}}
+          count={settlement.total}
+          rowsPerPage={pagination.pageSize}
+          page={pagination.page}
+          handleChangePage={(newPage) => {
+            setPagination(prev => ({ ...prev, page: newPage }))
+          }}
         >
-          <SettlementManagementView />
+          <SettlementManagementView
+            loading={loading}
+            data={settlement.data}
+            total={settlement.total}
+            pagination={pagination}
+            listIdSelected={listIdSelected}
+            callbackCheckBox={(_id: string | number) => {
+              if (listIdSelected.includes(_id)) {
+                setListIdSelected(prev => prev.filter(item => item !== _id));
+              } else {
+                setListIdSelected(prev => [...prev, _id])
+              }
+            }}
+          />
         </TablePaginations>
       </div>
       <ConfirmModal
         open={Boolean(modal)}
-        handleAccepted={() => {}}
+        handleAccepted={() => { editPaymentStatus() }}
         handleClose={handleCloseModal}
         type={modal}
       />
