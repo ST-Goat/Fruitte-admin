@@ -96,6 +96,7 @@ function Controller({
       <Grid item xs={8}>
         <div className="flex justify-between">
           <div className="flex">
+
             <ButtonCustomizer
               className="mr-4"
               onClick={() => {
@@ -104,32 +105,8 @@ function Controller({
             >
               {t("common.search")}
             </ButtonCustomizer>
-            <AutoCompleteCustomizer
-              name="farmId"
-              value={farmOptions.find((item) => item.value === filters.farmId)}
-              onChange={(newValue) => {
-                onChange("farmId", newValue?.value ?? undefined);
-              }}
-              fullWidth
-              options={farmOptions}
-              size="small"
-              style={{ minWidth: 150 }}
-            />
-          </div>
-          <ButtonCustomizer
-            onClick={handleProgress}
-            color="secondary"
-            className="rounded rounded-xl"
-            disabled={listIdSelected.length === 0}
-          >
-            {isViewUnsettled
-              ? t("pages.settlement.settlementProcessing")
-              : t("pages.settlement.unsettlementProcessing")}
-          </ButtonCustomizer>
-          <Grid item>
             <ButtonCustomizer
-              variant="other"
-              className="text-white font-bold"
+              className="text-white font-bold mr-4"
               bgColor="secondary"
               onClick={() =>
                 exportExcelFile({
@@ -158,7 +135,30 @@ function Controller({
             >
               {t("common.export")}
             </ButtonCustomizer>
-          </Grid>
+            <AutoCompleteCustomizer
+              name="farmId"
+              value={farmOptions.find((item) => item.value === filters.farmId)}
+              onChange={(newValue) => {
+                onChange("farmId", newValue?.value ?? undefined);
+              }}
+              fullWidth
+              options={farmOptions}
+              size="small"
+              style={{ minWidth: 150 }}
+            />
+          </div>
+          <ButtonCustomizer
+            onClick={handleProgress}
+            color="secondary"
+            className="rounded rounded-xl mr-4"
+            disabled={listIdSelected.length === 0}
+          >
+            {isViewUnsettled
+              ? t("pages.settlement.settlementProcessing")
+              : t("pages.settlement.unsettlementProcessing")}
+          </ButtonCustomizer>
+
+
         </div>
       </Grid>
     </Grid>
