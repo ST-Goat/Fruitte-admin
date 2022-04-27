@@ -110,7 +110,6 @@ function UserManagementView({
 }: UserManagementViewProps) {
   const history = useHistory();
   const location = useLocation();
-
   return (
     <div>
       <BreadCrumb />
@@ -118,6 +117,7 @@ function UserManagementView({
         filters={filters}
         onSubmit={submitFilters}
         onChange={onChangeFilters}
+        users={users}
       />
       <div className="mt-6">
         <TablePaginations

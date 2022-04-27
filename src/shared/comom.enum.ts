@@ -120,3 +120,14 @@ export type Pagination = {
 export type RouteParams = {
   id: string;
 };
+
+export const HEADER_EXPORT_EXCEL_FILE = {
+  USER: {
+    name: "pages.userManagement.name",
+    email: "pages.userManagement.email",
+    phone: "pages.userManagement.phone",
+    totalBookedReservations: "pages.userManagement.totalBooked",
+    isActive: "pages.userManagement.status",
+    updatedAt: "pages.userManagement.createDate",
+  },
+};

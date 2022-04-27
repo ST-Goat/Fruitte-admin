@@ -89,6 +89,7 @@ export type User = {
   updatedAt: Date;
   name: string;
   avatarUrl?: string;
+  totalBookedReservations?: number;
 };
 
 export const fetchUserList = async (params: {

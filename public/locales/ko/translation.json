@@ -36,7 +36,8 @@
     "loading": "로딩중",
     "open": "처리중",
     "resolved": "처리완료",
-    "process": "처리"
+    "process": "처리",
+    "export": "내보내다"
   },
   "pages": {
     "login": {
@@ -63,6 +64,7 @@
       "status": "상태",
       "createDate": "생성일",
       "userDetails": "회원 상세",
+      "totalBooked": "총 예약",
       "deleteMember": "회원 삭제",
       "resetPassword": "비밀번호 변경",
       "farmAuthorization": "농장 권한",
@@ -79,7 +81,8 @@
       "reservationList": "예약 목록",
       "changePasswordTitle": "비밀번호 변경",
       "newPassword": "새 비밀번호",
-      "deleteModalTitle": "정말로 이 사용자를 삭제하시겠습니까?"
+      "deleteModalTitle": "정말로 이 사용자를 삭제하시겠습니까?",
+      "excelFileName": "회원관리"
     },
     "requestPartner": {
       "title": "제안관리",

@@ -36,7 +36,8 @@
         "loading": "Loading",
         "open": "Open",
         "resolved": "Resolved",
-        "process": "Process"
+        "process": "Process",
+        "export": "Export"
     },
     "pages": {
         "login": {
@@ -80,7 +81,8 @@
             "reservationList": "Reservation list",
             "changePasswordTitle": "Do you want to change this password?",
             "newPassword": "New password",
-            "deleteModalTitle": "Are you sure you want to delete this user?"
+            "deleteModalTitle": "Are you sure you want to delete this user?",
+            "excelFileName": "Common User Management"
         },
         "requestPartner": {
             "title": "Request Partner",
