@@ -25,7 +25,7 @@ import { validatePhone, validateEmail } from "utilities/helper";
 const validateRequired = (text: string) => {
   let error;
   if (!text) {
-    error = "This field is required!";
+    error = "필수정보 입니다";
   }
   return error;
 };

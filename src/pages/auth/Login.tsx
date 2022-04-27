@@ -24,7 +24,7 @@ import { useHistory } from "react-router-dom";
 function validatePassword(value: string) {
   let error;
   if (!value) {
-    error = "Required";
+    error = "필수정보 입니다";
   }
   return error;
 }
