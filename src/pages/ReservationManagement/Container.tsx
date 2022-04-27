@@ -72,6 +72,7 @@ function ReservationContainer() {
       setReservations({
         data: response.content.map((item: any, index: number) => {
           return {
+            ...item,
             id: item.id,
             no: (pagination.page - 1) * pagination.pageSize + index + 1,
             bookingDate: format(
@@ -189,6 +190,7 @@ function ReservationContainer() {
           filters={filters}
           setFilters={setFilters}
           setPagination={setPagination}
+          reservations={reservations.data}
         />
       </div>
       <div className="mt-4">

@@ -7,19 +7,27 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { Filters, FilterStatus } from "services/farmActivity";
 import ButtonCustomizer from "pages/common/Button";
 
-import { FarmItem, fetchAllFarm } from "services/farmManagement";
+import {
+  FarmItem,
+  FarmListResponse,
+  fetchAllFarm,
+} from "services/farmManagement";
 import { useEffect, useState } from "react";
+import { exportExcelFile, transformObject } from "utilities/helper";
+import { HEADER_EXPORT_EXCEL_FILE } from "shared/comom.enum";
 
 function Controller({
   filters,
   onChange,
   onSubmit,
   rightController = false,
+  farms,
 }: {
   filters: Filters;
   onChange: (name: string, value: string | undefined) => void;
   onSubmit: (newFilter: Filters) => void;
   rightController?: boolean;
+  farms: FarmListResponse;
 }) {
   const { t } = useTranslation();
   const listStatus = [
@@ -85,6 +93,40 @@ function Controller({
               onClick={() => onSubmit(filters)}
             >
               {t("common.search")}
+            </ButtonCustomizer>
+          </Grid>
+          <Grid item>
+            <ButtonCustomizer
+              variant="other"
+              className="text-white font-bold"
+              bgColor="secondary"
+              onClick={() =>
+                exportExcelFile({
+                  data: farms.data.map((item) => ({
+                    ...transformObject(
+                      {
+                        name: item.name,
+                        ownerName: item.owner.name,
+                        phone: item.owner.phone,
+                        status: Boolean(item.status)
+                          ? "common.unused"
+                          : "common.normal",
+                        createdAt: new Date(
+                          item.createdAt
+                        ).toLocaleDateString(),
+                      },
+                      t
+                    ),
+                  })),
+                  header: transformObject(
+                    HEADER_EXPORT_EXCEL_FILE.FARM_MANAGEMENT,
+                    t
+                  ),
+                  fileName: t("pages.farmManagement.excelFileName"),
+                })
+              }
+            >
+              {t("common.export")}
             </ButtonCustomizer>
           </Grid>
         </Grid>

@@ -13,7 +13,9 @@ import { fetchAllFarm } from "services/farmManagement";
 
 import type { Option } from "pages/common/Autocomplete";
 import type { FarmItem } from "services/farmManagement";
-
+import { exportExcelFile, transformObject } from "utilities/helper";
+import { HEADER_EXPORT_EXCEL_FILE } from "shared/comom.enum";
+import { PaymentStatus } from "services/settlements";
 
 function Controller({
   isViewUnsettled,
@@ -21,7 +23,8 @@ function Controller({
   onChange,
   filters,
   handleProgress,
-  handleSubmitSearch
+  handleSubmitSearch,
+  settlement,
 }: {
   isViewUnsettled: boolean;
   listIdSelected: Array<string | number>;
@@ -29,6 +32,7 @@ function Controller({
   filters: any;
   handleProgress: () => void;
   handleSubmitSearch: () => void;
+  settlement: any[];
 }) {
   const { t } = useTranslation();
   const [farmOptions, setFarmOptions] = useState<Option[]>([]);
@@ -41,26 +45,26 @@ function Controller({
         const response = await fetchAllFarm();
         setFarmOptions([
           {
-            id: 'all',
+            id: "all",
             label: t("common.all"),
-            value: undefined
+            value: undefined,
           },
           ...response.map((farm: FarmItem) => ({
             id: farm.id,
             label: farm.name,
-            value: farm.id
-          }))
-        ])
+            value: farm.id,
+          })),
+        ]);
       } catch (error) {
         console.log(error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
     getAllFarmOptions();
   }, [t]);
 
-  if (loading) return <>...{t('common.loading')}</>;
+  if (loading) return <>...{t("common.loading")}</>;
   return (
     <Grid container spacing={2}>
       <Grid item xs={4}>
@@ -92,14 +96,17 @@ function Controller({
       <Grid item xs={8}>
         <div className="flex justify-between">
           <div className="flex">
-            <ButtonCustomizer className="mr-4" onClick={() => {
-              handleSubmitSearch();
-            }}>
+            <ButtonCustomizer
+              className="mr-4"
+              onClick={() => {
+                handleSubmitSearch();
+              }}
+            >
               {t("common.search")}
             </ButtonCustomizer>
             <AutoCompleteCustomizer
               name="farmId"
-              value={farmOptions.find(item => item.value === filters.farmId)}
+              value={farmOptions.find((item) => item.value === filters.farmId)}
               onChange={(newValue) => {
                 onChange("farmId", newValue?.value ?? undefined);
               }}
@@ -108,7 +115,6 @@ function Controller({
               size="small"
               style={{ minWidth: 150 }}
             />
-
           </div>
           <ButtonCustomizer
             onClick={handleProgress}
@@ -120,6 +126,39 @@ function Controller({
               ? t("pages.settlement.settlementProcessing")
               : t("pages.settlement.unsettlementProcessing")}
           </ButtonCustomizer>
+          <Grid item>
+            <ButtonCustomizer
+              variant="other"
+              className="text-white font-bold"
+              bgColor="secondary"
+              onClick={() =>
+                exportExcelFile({
+                  data: settlement.map((item) => ({
+                    farmName: item.farmName,
+                    name: item.bookedUser.name,
+                    accountHolder: item.accountHolder,
+                    bankName: item.bankName,
+                    bankAccountNumber: item.bankAccountNumber,
+                    price: `${item.farmerReceive}원`,
+                    state:
+                      item.billStatus === PaymentStatus.SETTLED
+                        ? "정산 가능"
+                        : "결제불가",
+                    settlementDay: new Date(
+                      item.settlementDay
+                    ).toLocaleDateString(),
+                  })),
+                  header: transformObject(
+                    HEADER_EXPORT_EXCEL_FILE.SETTLEMENT_MANAGEMENT,
+                    t
+                  ),
+                  fileName: t("pages.settlement.excelFileName"),
+                })
+              }
+            >
+              {t("common.export")}
+            </ButtonCustomizer>
+          </Grid>
         </div>
       </Grid>
     </Grid>

@@ -295,6 +295,7 @@ function FarmManagementView({
         onSubmit={submitFilters}
         onChange={onChangeFilters}
         rightController={showRightController}
+        farms={farms}
       />
       <div className="mt-6">
         <TablePaginations

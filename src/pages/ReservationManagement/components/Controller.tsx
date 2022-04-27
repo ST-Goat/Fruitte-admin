@@ -8,21 +8,40 @@ import AutoCompleteCustomizer from "pages/common/Autocomplete";
 
 import { ReservationStatus } from "services/reservation";
 import type { Filters } from "../Container";
-import type { Pagination } from "shared/comom.enum";
+import { HEADER_EXPORT_EXCEL_FILE, Pagination } from "shared/comom.enum";
 import { initialPagination } from "../Container";
 import DateRangePickerCustomizer from "pages/common/DateRangePicker";
 import { format } from "date-fns";
+import { exportExcelFile, transformObject } from "utilities/helper";
+
+const getReservationStatus = (status: string) => {
+  switch (status) {
+    case ReservationStatus.BOOKING:
+      return "pages.reservation.bookingStatus";
+
+    case ReservationStatus.CANCELLED:
+      return "pages.reservation.cancelStatus";
+
+    case ReservationStatus.COMPLETED:
+      return "pages.reservation.completeStatus";
+
+    default:
+      return "-";
+  }
+};
 
 function Controller({
   handleSearchString,
   setFilters,
   setPagination,
-  filters
+  filters,
+  reservations,
 }: {
   handleSearchString: () => void;
   setFilters: React.Dispatch<React.SetStateAction<Filters>>;
   setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
   filters: any;
+  reservations: any[];
 }) {
   const { t } = useTranslation();
 
@@ -43,6 +62,43 @@ function Controller({
             {t("common.search")}
           </ButtonCustomizer>
         </div>
+      </Grid>
+      <Grid item>
+        <ButtonCustomizer
+          variant="other"
+          className="text-white font-bold"
+          bgColor="secondary"
+          onClick={() =>
+            exportExcelFile({
+              data: reservations.map((item) => ({
+                ...transformObject(
+                  {
+                    bookingDate: new Date(
+                      item.bookingDate
+                    ).toLocaleDateString(),
+                    user: item.user,
+                    activityName: [item.farmInfo.name, item.farmActivity.name]
+                      .map((item) => `- ${item}`)
+                      .join("\n"),
+                    status: getReservationStatus(item.reservationStatus),
+                    cancel:
+                      item.reservationStatus === ReservationStatus.BOOKING
+                        ? "CANCEL"
+                        : "-",
+                  },
+                  t
+                ),
+              })),
+              header: transformObject(
+                HEADER_EXPORT_EXCEL_FILE.RESERVATION_MANAGEMENT,
+                t
+              ),
+              fileName: t("pages.reservation.excelFileName"),
+            })
+          }
+        >
+          {t("common.export")}
+        </ButtonCustomizer>
       </Grid>
       <Grid item xs={6}>
         <div className="flex justify-end">

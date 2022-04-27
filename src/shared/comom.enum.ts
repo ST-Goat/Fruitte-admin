@@ -130,4 +130,28 @@ export const HEADER_EXPORT_EXCEL_FILE = {
     isActive: "pages.userManagement.status",
     updatedAt: "pages.userManagement.createDate",
   },
+  FARM_MANAGEMENT: {
+    name: "pages.farmManagement.farmName",
+    ownerName: "pages.farmManagement.userName",
+    phone: "common.phoneNumber",
+    status: "pages.farmManagement.state",
+    createdAt: "pages.farmManagement.createDate",
+  },
+  SETTLEMENT_MANAGEMENT: {
+    farmName: "pages.settlement.farmName",
+    name: "pages.settlement.name",
+    accountHolder: "pages.settlement.accountHolder",
+    bankName: "pages.settlement.bank",
+    bankAccountNumber: "pages.settlement.accountNumber",
+    price: "pages.settlement.price",
+    state: "pages.settlement.state",
+    settlementDay: "pages.settlement.settlementDay",
+  },
+  RESERVATION_MANAGEMENT: {
+    bookingDate: "pages.reservation.bookingDate",
+    user: "pages.reservation.user",
+    activityName: "pages.reservation.activityName",
+    status: "common.status",
+    cancel: "common.cancel",
+  },
 };
