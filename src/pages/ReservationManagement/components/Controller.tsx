@@ -61,44 +61,41 @@ function Controller({
           <ButtonCustomizer onClick={handleSearchString}>
             {t("common.search")}
           </ButtonCustomizer>
-        </div>
-      </Grid>
-      <Grid item>
-        <ButtonCustomizer
-          variant="other"
-          className="text-white font-bold"
-          bgColor="secondary"
-          onClick={() =>
-            exportExcelFile({
-              data: reservations.map((item) => ({
-                ...transformObject(
-                  {
-                    bookingDate: new Date(
-                      item.bookingDate
-                    ).toLocaleDateString(),
-                    user: item.user,
-                    activityName: [item.farmInfo.name, item.farmActivity.name]
-                      .map((item) => `- ${item}`)
-                      .join("\n"),
-                    status: getReservationStatus(item.reservationStatus),
-                    cancel:
-                      item.reservationStatus === ReservationStatus.BOOKING
-                        ? "CANCEL"
-                        : "-",
-                  },
+          <ButtonCustomizer
+            className="text-white font-bold ml-4"
+            bgColor="secondary"
+            onClick={() =>
+              exportExcelFile({
+                data: reservations.map((item) => ({
+                  ...transformObject(
+                    {
+                      bookingDate: new Date(
+                        item.bookingDate
+                      ).toLocaleDateString(),
+                      user: item.user,
+                      activityName: [item.farmInfo.name, item.farmActivity.name]
+                        .map((item) => `- ${item}`)
+                        .join("\n"),
+                      status: getReservationStatus(item.reservationStatus),
+                      cancel:
+                        item.reservationStatus === ReservationStatus.BOOKING
+                          ? "CANCEL"
+                          : "-",
+                    },
+                    t
+                  ),
+                })),
+                header: transformObject(
+                  HEADER_EXPORT_EXCEL_FILE.RESERVATION_MANAGEMENT,
                   t
                 ),
-              })),
-              header: transformObject(
-                HEADER_EXPORT_EXCEL_FILE.RESERVATION_MANAGEMENT,
-                t
-              ),
-              fileName: t("pages.reservation.excelFileName"),
-            })
-          }
-        >
-          {t("common.export")}
-        </ButtonCustomizer>
+                fileName: t("pages.reservation.excelFileName"),
+              })
+            }
+          >
+            {t("common.export")}
+          </ButtonCustomizer>
+        </div>
       </Grid>
       <Grid item xs={6}>
         <div className="flex justify-end">
