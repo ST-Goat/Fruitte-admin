@@ -99,7 +99,7 @@ const convertFaqToViews = (
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.answer) }}
       />
     ),
-    createAt: format(new Date(item.createdAt), "yyyy/MM/dd"),
+    createAt: format(new Date(item.createdAt as Date), "yyyy/MM/dd"),
     editAction: () => (
       <EditIcon
         className="cursor-pointer active:transform active:scale-75"
