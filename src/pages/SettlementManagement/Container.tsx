@@ -19,6 +19,7 @@ import {
 } from "shared/comom.enum";
 import { enqueueSnackbar } from "redux/slices/snackbar";
 import { useAppDispatch } from "utilities";
+import { difference, union, xor } from "lodash";
 
 const Header = ({
   title,
@@ -209,14 +210,16 @@ function SettlementManagementContainer() {
             total={settlement.total}
             pagination={pagination}
             listIdSelected={listIdSelected}
-            callbackCheckBox={(_id: string | number) => {
-              if (listIdSelected.includes(_id)) {
-                setListIdSelected((prev) =>
-                  prev.filter((item) => item !== _id)
-                );
-              } else {
-                setListIdSelected((prev) => [...prev, _id]);
+            callbackCheckBox={(_ids: Array<string | number>, type) => {
+              if (type === 'selectALl') {
+                setListIdSelected((prev) => union(prev, _ids));
+                return;
               }
+              if (type === "unSelectAll") {
+                setListIdSelected((prev) => difference(prev, _ids));
+                return;
+              }
+              setListIdSelected((prev) => xor(prev, _ids));
             }}
           />
         </TablePaginations>

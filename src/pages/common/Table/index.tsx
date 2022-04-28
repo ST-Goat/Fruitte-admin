@@ -17,7 +17,7 @@ import { getValueWithKeyAdvance } from "utilities/helper";
 
 import "./index.scss";
 
-const StyledTableCell = styled(TableCell)(({ theme, ...props }) => ({
+const StyledTableCell = styled(TableCell)(({ theme, children, ...props }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#483729",
     color: theme.palette.grey[100],
@@ -45,7 +45,7 @@ type StyledBodyCol = {
 
 export type HeaderItem = {
   id: string | number;
-  label?: string;
+  label?: string | React.ReactNode;
   keyLabel?: string;
   keyData: string;
   styledHead?: StyledHead;
@@ -101,14 +101,14 @@ export default function TableCustomizer({
                   {Boolean(RowLoadingCustom)
                     ? RowLoadingCustom
                     : headers.map((head, i) => (
-                        <TableCell align="center" key={i}>
-                          <Skeleton
-                            sx={{ bgcolor: "grey.400" }}
-                            variant="rectangular"
-                            animation="wave"
-                          />
-                        </TableCell>
-                      ))}
+                      <TableCell align="center" key={i}>
+                        <Skeleton
+                          sx={{ bgcolor: "grey.400" }}
+                          variant="rectangular"
+                          animation="wave"
+                        />
+                      </TableCell>
+                    ))}
                 </TableRow>
               ))}
             </>

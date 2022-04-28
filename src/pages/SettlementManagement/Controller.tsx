@@ -119,8 +119,8 @@ function Controller({
                     price: `${item.farmerReceive}원`,
                     state:
                       item.billStatus === PaymentStatus.SETTLED
-                        ? "정산 가능"
-                        : "결제불가",
+                        ? "정산완료"
+                        : "미정산",
                     settlementDay: new Date(
                       item.settlementDay
                     ).toLocaleDateString(),
