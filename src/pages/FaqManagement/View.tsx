@@ -15,6 +15,7 @@ import { gettotalRowCurrent, useAppDispatch } from "utilities";
 import { Faqs } from "./Container";
 import { getAllFaq } from "redux/slices/faq";
 import { enqueueSnackbar } from "redux/slices/snackbar";
+import { format } from 'date-fns';
 
 const headers = [
   {
@@ -98,7 +99,7 @@ const convertFaqToViews = (
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.answer) }}
       />
     ),
-    createAt: "#fake",
+    createAt: format(new Date(item.createdAt), "yyyy/MM/dd"),
     editAction: () => (
       <EditIcon
         className="cursor-pointer active:transform active:scale-75"

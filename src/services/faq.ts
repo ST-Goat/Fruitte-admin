@@ -1,20 +1,23 @@
-import axiosServices from "./axiosServices";
+/** @format */
+
+import axiosServices from './axiosServices';
 
 export type FaqItem = {
   id: number | string;
   question: string;
   answer: string;
+  createdAt?: Date;
 };
 
 export const fetchAllFaq = async (): Promise<FaqItem[]> => {
   return axiosServices
-    .get("admin/faqs")
-    .then((response) => response.data.content);
+    .get('admin/faqs')
+    .then(response => response.data.content);
 };
 
-type DataFaqForm = Pick<FaqItem, Exclude<keyof FaqItem, "id">>;
+type DataFaqForm = Pick<FaqItem, Exclude<keyof FaqItem, 'id'>>;
 export const createNewFaq = async ({ data }: { data: DataFaqForm }) => {
-  return axiosServices.post("admin/faqs", { ...data });
+  return axiosServices.post('admin/faqs', { ...data });
 };
 
 export const editExistingFaq = async ({
