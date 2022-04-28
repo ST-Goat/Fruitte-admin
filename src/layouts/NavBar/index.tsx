@@ -48,9 +48,9 @@ function NavBar({
         {!sideBarExpend && <LogoHeader />}
       </div>
       <div className="flex items-center navbar__right">
-        <div className="navbar__locale-trans">
+        {/* <div className="navbar__locale-trans">
           <LocaleTrans />
-        </div>
+        </div> */}
         {Boolean(location.pathname !== loginUrl) && (
           <div className="cursor-pointer ml-4">
             <AccountMenu />
