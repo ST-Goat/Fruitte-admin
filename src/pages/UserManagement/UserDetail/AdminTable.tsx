@@ -5,6 +5,8 @@ import TableCustomizer from "pages/common/Table";
 import Text from "pages/common/components/Text";
 import ButtonCustomizer from "pages/common/Button";
 import { Pagination } from "shared/comom.enum";
+import format from "date-fns/format";
+import { formatNumber } from 'utilities/helper';
 
 const headers = [
   {
@@ -53,25 +55,23 @@ const convertDataToView = (
     ...item,
     date: () => (
       <div>
-        <Text className="font-bold text-base">19:00</Text>
-        <Text className="font-bold text-base">2021/10/10</Text>
-        <Text className="mt-4 font-bold text-base">예약일: 10/09/2021 </Text>
+        <Text className="font-bold text-base">{format(new Date(item.farmSchedule?.startAt), "HH:mm")}</Text>
+        <Text className="font-bold text-base">{format(new Date(item.farmSchedule?.startAt), "yyyy/MM/dd")}</Text>
+        <Text className="mt-4 font-bold text-base">예약일: {format(new Date(item.farmSchedule?.createdAt), "yyyy/MM/dd")} </Text>
       </div>
     ),
     farmInformation: () => (
       <div>
-        <Text className="text-left font-bold text-base">농장명</Text>
-        <Text className="text-left font-bold text-base">체험명</Text>
+        <Text className="text-left font-bold text-base">{item.farmInfo?.name}</Text>
+        <Text className="text-left font-bold text-base">{item.farmActivity?.name}</Text>
         <Text className="mt-6 text-left text-base pr-32">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quod commodi
-          velit eum voluptatem non saepe totam. Excepturi, molestiae! Molestias
-          alia
+          {item.farmActivity?.note}
         </Text>
       </div>
     ),
     price: () => (
       <div>
-        <Text className="mb-4 font-bold text-base">10.000 원</Text>
+        <Text className="mb-4 font-bold text-base">{formatNumber(item.bill?.totalPrice)}</Text>
         <ButtonCustomizer
           color="red"
           variant="primary"
