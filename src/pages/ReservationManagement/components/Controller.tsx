@@ -110,7 +110,7 @@ function Controller({
           <AutoCompleteCustomizer
             name="sort"
             placeholder="sort by"
-            defaultValue={{ label: "None", value: undefined }}
+            defaultValue={{ label: "전체", value: undefined }}
             isOptionEqualToValue={(option: any, value: any) =>
               option.value === value.value
             }
@@ -123,10 +123,10 @@ function Controller({
             }}
             fullWidth={false}
             options={[
-              { label: "None", value: undefined },
-              { label: "Booked", value: ReservationStatus.BOOKING },
-              { label: "Completed", value: ReservationStatus.COMPLETED },
-              { label: "Cancelled", value: ReservationStatus.CANCELLED },
+              { label: "전체", value: undefined },
+              { label: "예약", value: ReservationStatus.BOOKING },
+              { label: "완료", value: ReservationStatus.COMPLETED },
+              { label: "취소", value: ReservationStatus.CANCELLED },
             ]}
             size="small"
             style={{ minWidth: 200 }}

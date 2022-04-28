@@ -82,7 +82,7 @@
       "changePasswordTitle": "비밀번호 변경",
       "newPassword": "새 비밀번호",
       "deleteModalTitle": "정말로 이 사용자를 삭제하시겠습니까?",
-      "excelFileName": "회원관리"
+      "excelFileName": "엑셀 다운로드"
     },
     "requestPartner": {
       "title": "제안관리",

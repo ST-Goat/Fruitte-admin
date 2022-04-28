@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import format from "date-fns/format";
-import DOMPurify from "dompurify";
 
 import RowStyled from "./RowStyled";
 import Text from "pages/common/components/Text";
@@ -51,9 +50,23 @@ const SchedulePrevious = ({
           rightContent={
             <div className="h-full py-8 border-b border-grey-300">
               <Text className="font-bold text-lg">{activityDetail.name}</Text>
-              <div
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(activityDetail.description) }}
-              />
+              <ul>
+                <li>
+                  {t("common.from")}{": "}{format(new Date(item.startAt), 'yyyy/MM/dd')}{" "}  {t("common.before")}{": "} {format(new Date(item.lastBookingTime), 'yyyy/MM/dd')}
+                </li>
+                <li>
+                  {t("pages.farmSchedule.onePerson")}{": "}{item.oneMemberCapacity}
+                </li>
+                <li>
+                  {t("pages.farmSchedule.twoPerson")}{": "}{item.twoMembersCapacity}
+                </li>
+                <li>
+                  {t("pages.farmSchedule.threePerson")}{": "}{item.threeMembersCapacity}
+                </li>
+                <li>
+                  {t("pages.farmSchedule.fourPerson")}{": "}{item.fourMembersCapacity}
+                </li>
+              </ul>
             </div>
           }
         />

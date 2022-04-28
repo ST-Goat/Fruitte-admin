@@ -38,31 +38,6 @@ const headers = [
   },
 ];
 
-const fakeData = [
-  {
-    id: 123123,
-    no: 1,
-    bookingDate: "1/12/2021",
-    user: "junghaein123",
-    activityName: () => (
-      <div>
-        <p className="text-blue-300">Happy Farm</p>
-        <p>Plant trees</p>
-      </div>
-    ),
-    status: "Booked",
-    view: () => (
-      <span className="underline active:transform active:scale-95 cursor-pointer inline-block">
-        View Details
-      </span>
-    ),
-    cancel: () => (
-      <span className="underline active:transform active:scale-95 cursor-pointer inline-block">
-        Cancel
-      </span>
-    ),
-  },
-];
 
 function ReservationView({
   isLoading,
