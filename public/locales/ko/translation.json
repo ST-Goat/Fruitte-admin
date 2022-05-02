@@ -37,7 +37,7 @@
     "open": "처리중",
     "resolved": "처리완료",
     "process": "처리",
-    "export": "내보내다"
+    "export": "엑셀 다운로드"
   },
   "pages": {
     "login": {

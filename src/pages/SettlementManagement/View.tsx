@@ -10,7 +10,6 @@ import { formatNumber, gettotalRowCurrent } from "utilities";
 
 
 const convertDataToView = (data: any[], page: number, pageSize: number, listIdSelected: Array<number | string>, callbackCheckBox: (ids: Array<string | number>) => void) => {
-
   return data.map((item, i) => ({
     ...item,
     checkBox: () => <CheckBoxCustomizer
@@ -24,7 +23,7 @@ const convertDataToView = (data: any[], page: number, pageSize: number, listIdSe
     accountNumber: item.bankAccountNumber,
     price: `${formatNumber(item.farmerReceive)}원`,
     state: item.billStatus === PaymentStatus.SETTLED ? "정산완료" : "미정산",
-    settlementDay: format(new Date(item.settlementDay), "yyyy/MM/dd")
+    settlementDay: item?.settlementDay ? format(new Date(item?.settlementDay), "yyyy/MM/dd") : '농장이 삭제되었습니다'
   }))
 }
 
